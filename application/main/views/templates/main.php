@@ -25,7 +25,7 @@
 			
 		<!-- Header -->
 		<div id="header">
-			<a href="#"><img src="<?php echo public_url(); ?>resources/images/ambilis-header.png" /></a>
+			<a href="<?php echo site_url()?>"><img src="<?php echo public_url(); ?>resources/images/ambilis-header.png" /></a>
 		</div>
 	  <!-- Header End -->
 
