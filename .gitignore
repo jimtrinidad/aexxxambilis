@@ -1,0 +1,26 @@
+*/config/development
+*/logs/log-*.php
+!*/logs/index.html
+*/cache/*
+!*/cache/index.html
+!*/cache/.htaccess
+
+user_guide_src/build/*
+user_guide_src/cilexer/build/*
+user_guide_src/cilexer/dist/*
+user_guide_src/cilexer/pycilexer.egg-info/*
+
+#codeigniter 3
+application/main/logs/*
+!application/main/logs/index.html
+!application/main/logs/.htaccess
+application/admin/logs/*
+!application/admin/logs/index.html
+!application/admin/logs/.htaccess
+/vendor/
+
+# /public/assets/logo/*
+# /public/assets/products/*
+# /public/assets/profile/*
+# /public/assets/qr/*
+# /public/assets/uploads/*

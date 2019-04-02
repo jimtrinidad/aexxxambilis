@@ -1,0 +1,222 @@
+* { margin: 0px; padding: 0px;}
+
+body{ background-color: #000; font-family: helvetica; }
+
+#header{ text-align: center; background-color: #000; background: url('../images/header-bg.jpg') no-repeat; background-size: cover; padding: 25px 0px;
+    height: 150px;}
+#header a img{ max-width: 100%;max-height: 100%;}
+
+#mobile-menu{position: relative; background: #fddd04; text-align: center;  padding: 5px 20px; text-transform: uppercase; font-weight: bold; font-size: 20px;}
+
+#main-content{background: #000 url(../images/body-bg.png) no-repeat;background-size: cover;padding-left: 10px; padding-right: 10px;}
+#main-content .page-title{ color: #fff; text-align: center; font-size: 28px; }
+
+.user-logged-in{ font-size: 15px; font-weight:bold; margin-top: 20px;}
+.user-logged-in a{ color: #f71005; }
+
+.menu-icon{ width: 30px; position:absolute; top: 6px; left: 20px;}
+.menu-icon div{
+	width: 30px;
+	height: 5px;
+	background-color: black;
+	margin: 4px 0;
+}
+
+.dropmenu{ display: none; background-color: rgba(0, 0, 0, 0.8); position:absolute; top: 34px; left: 0px; width: 100%; z-index: 999;}
+.dropmenu ul{ list-style: none; text-align: left;}
+.dropmenu ul li a{ color: #fff; padding: 10px 20px 10px 20px; display:block; border-top: 1px solid #575757; text-transform: capitalize; font-size: 15px;}
+.dropmenu ul li a:hover{ color: #de0100; text-decoration: none;}
+
+
+/* Helpers */
+.rounded-box{ -webkit-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px;  height: 80px; padding: 0px 10px; }
+.rounded-box:hover{ background: #fff!important;}
+
+.rounded-box img{ position:relative; top: -15px;}
+
+.bg-white{ background: #fff;}
+.bg-trans-white{ background-color: rgba(255, 255, 255, 0.6); }
+
+.text-white{ color: #fff; }
+.text-black{ color: #000; }
+
+
+.registration ul{ list-style: none; }
+.registration ul li{ background: url('../images/bullet-list-icon.png') no-repeat 0px 3px; padding-left: 23px;}
+
+
+/* Responsive */
+@media (max-width: 560px) {
+	.icon-title{ font-size: 15px; font-weight: bold;}
+	#mobile-menu{ font-size: 16px;}
+	.menu-icon{ width: 35px; position:absolute; top: 2px; left: 20px;}
+	
+	#main-content{ background-position: 20px 0px; background-size: 95% 100%;}
+}
+
+
+/**
+* my styles
+*/
+
+#main-container {
+	/*background: #fff; */
+}
+
+#main-content{background: #000 url(../images/body-bg.png) no-repeat;background-size: cover;padding: 10px;}
+
+.user-logged-in{ margin-top: 0px;}
+
+.form-control:read-only {
+	background-color: #fff !important;
+}
+.hide {
+  display: none !important;
+}
+
+
+.gutter-5 {
+  margin-right: -5px;
+  margin-left: -5px;
+}
+.gutter-5>.col, .gutter-5>[class*=col-] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+/**
+* upload image
+*/
+
+.image-upload-container {
+	width: 145px;
+	height: 172px;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.logo .image-upload-container {
+  width: 120px;
+  height: 120px;
+}
+
+.bigger.image-upload-container {
+  width: 170px;
+  height: 180px;
+  margin-top: 0;
+}
+
+.smaller.image-upload-container {
+  width: 50px;
+  height: 50px;
+  margin-top: 0;
+}
+
+.small.image-upload-container {
+  width: 75px;
+  height: 75px;
+  margin-top: 0;
+}
+
+.banner.image-upload-container {
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+}
+
+.image-preview{
+	width: 145px;
+	height: 150px;
+	min-height: 150px;
+  cursor: pointer;
+}
+
+.logo .image-preview{
+  width: 120px;
+  height: 120px;
+  min-height: 120px;
+}
+
+.bigger .image-preview{
+  width: 170px;
+  height: 170px;
+  min-height: 50px;
+}
+
+.smaller .image-preview{
+  width: 50px;
+  height: 50px;
+  min-height: 50px;
+}
+
+.small .image-preview{
+  width: 75px;
+  height: 75px;
+  min-height: 75px;
+}
+
+.banner .image-preview{
+  width: auto;
+  height: auto;
+  min-height: 0;
+  max-height: 200px;
+  margin: 0 auto;
+}
+
+.hiddenFileInput > input{
+  height: 100%;
+  width: 145px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.logo .hiddenFileInput > input{
+  width: 120px;
+}
+
+.smaller .hiddenFileInput > input{
+  width: 50px;
+}
+
+.banner .hiddenFileInput > input{
+  width: 600px;
+}
+
+.hiddenFileInput{
+  border: 0;
+  width: 145px;
+  height: 30px;
+  display: inline-block;
+  overflow: hidden;
+  
+  /*for the background, optional*/
+  background: center center no-repeat;
+  background-size: 100% 100%;
+  background-image:  url('../images/upload-button.png');
+}
+
+.logo .hiddenFileInput{
+  width: 120px;
+  height: 30px;
+}
+
+.smaller .hiddenFileInput{
+  width: 50px;
+  height: 30px;
+}
+
+.banner .hiddenFileInput{
+  width: 600px;
+  height: 30px;
+}
+
+
+.hiddenFileInput.hide {
+  width: 0 !important;
+  height: 0 !important;
+}
+.hiddenFileInput.hide > input {
+  width: 0 !important;
+  height: 0 !important;
+}
+/* END */
