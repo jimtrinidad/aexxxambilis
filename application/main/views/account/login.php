@@ -2,7 +2,7 @@
 	<div class="col-md-4">
 		<h3>Login</h3>
 		<form id="loginForm" action="<?php echo site_url('account/login') ?>" autocomplete="off" >
-			<div id="error_message_box" class="hide alert alert-danger" role="alert"></div>
+			<div id="error_message_box" class="hide alert alert-danger text-danger" role="alert"></div>
 			<div class="form-group mb-1">
 				<label class="mb-0">Email Address</label>
 				<input type="text" name="username" id="username" class="form-control" placeholder="Email Address">
