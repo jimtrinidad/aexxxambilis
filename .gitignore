@@ -19,8 +19,8 @@ application/admin/logs/*
 !application/admin/logs/.htaccess
 /vendor/
 
-# /public/assets/logo/*
-# /public/assets/products/*
-# /public/assets/profile/*
-# /public/assets/qr/*
-# /public/assets/uploads/*
+/public/assets/logo/*
+/public/assets/products/*
+/public/assets/profile/*
+/public/assets/qr/*
+/public/assets/uploads/*
