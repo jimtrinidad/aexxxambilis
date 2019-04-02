@@ -30,7 +30,7 @@ if (SUBDOMAIN == 'localhost') {
 } else if (SUBDOMAIN !== false) {
 	$config['base_url'] = 'https://'. SUBDOMAIN .'.mgov.cloud/';
 } else {
-	$config['base_url'] = 'https://3.1.116.169/';
+	$config['base_url'] = 'http://3.1.116.169/';
 }
 
 /*
