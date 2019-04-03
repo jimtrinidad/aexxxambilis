@@ -22,7 +22,6 @@
 	var $global = {
 		csrfName: '<?php echo $this->security->get_csrf_token_name(); ?>',
 		csrfVal: '<?php echo $this->security->get_csrf_hash(); ?>',
-
 	}
 
 </script>

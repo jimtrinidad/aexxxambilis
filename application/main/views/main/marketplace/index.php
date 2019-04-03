@@ -1,8 +1,8 @@
 <form id="searchProducts" action="<?php echo site_url('marketplace') ?>" method="get">
    <div class="row justify-content-center">
       <div class="col-md-8 text-center">
-        <h3>Marketplace</h3>
-         <div>
+        <!-- <h3>Marketplace</h3> -->
+         <!-- <div>
             <div class="row no-gutters">
               <div class="col-8">
                 <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Search Product or Service" value="<?php echo get_post('search') ?>">
@@ -14,40 +14,30 @@
                 <button type="submit" class="btn btn-danger btn-block text-bold"><i class="fa fa-shopping-cart"></i></button>
               </div>
             </div>
-         </div>
+         </div> -->
+         <h5 class="secondary-title text-red text-center mt-4">My Market Place</h5>
+         <div class="row text-center">
+          <div class="col-md-12 float-none center-block">
+            <div class="input-group">
+              <input type="text" class="form-control bg-cream" name="search" placeholder="Search Items" value="<?php echo get_post('search') ?>">
+              <div class="input-group-append" id="button-addon4">
+              <button type="submit" class="btn bg-d-purple text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+              <button class="btn bg-red text-white" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+              </div>
+            </div>  
+          </div>
+        </div>
       </div>
    </div>
 </form>
 
 <div class="product-listing mt-4">
-  <div class="row gutter-5">
     <?php
     if (count($products)) {
     ?>
-    <div class="col-sm-12">
       <div class="row gutter-5 itemcont">
       <?php foreach ($products as $item) { ?>
-        <div class="col-6 col-sm-4 col-md-3 item">
-          <!-- <span class="card" data-id="<?php echo $item['id'] ?>" onclick="Marketplace.viewItem(this, event)">
-      			<img class="card-img-top" title="<?php echo $item['Description'] ?>" src="<?php echo public_url('assets/products/') . $item['Image'] ?>">
-      			<div title="<?php echo $item['Description'] ?>" class="info">
-	      			<h4 class="text-blue"><?php echo $item['Name'] ?></h4>
-	      			<span class="seller text-cyan">
-	      				<?php echo $item['seller']['Name']; ?>
-	      			</span>
-      			</div>
-      			<div class="bottom">
-	      			<hr class="line">
-  					   <p class="price">
-    						<span class="text-orange"><?php echo peso($item['Price']) ?></span> 
-    						<span class="uom"><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></span>
-    					</p>
-      			</div>
-      			<div class="button-cont">
-    					<a title="Call" href="tel:<?php echo $item['seller']['Contact']; ?>"><i class="fa fa-phone"></i></a>
-    					<a href="mail:<?php echo $item['seller']['Email']; ?>" title="Send a message to the seller"><i class="fa fa-envelope"></i></a>
-    				</div>
-    		  </span> -->
+<!--         <div class="col-6 col-sm-4 col-md-3 item">
           <div class="card">
             <img class="card-img-top" src="<?php echo public_url('assets/products/') . $item['Image']  ?>" alt="Card image cap">
             <div class="card-body p-2">
@@ -65,6 +55,31 @@
               </div>
             </div>
           </div>
+        </div> -->
+        <div class="col-6 mb-4">
+          <div class="product-img">
+            <img src="<?php echo public_url('assets/products/') . $item['Image']  ?>" width="100%">
+          </div>
+          <div class="product-detail">
+            <div class="row">
+              <div class="col-7">
+                <h2><span class="text-red"><?php echo $item['Name'] ?></span><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></h2>
+                <p><?php echo $item['seller']['Name'] ?></p>
+              </div>
+              <div class="col-5 text-right">
+                <strong class="price text-red"><?php echo peso($item['Price']) ?></strong>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7">
+                <p class="sub-details">30 Pts. 4.0 Shared 20.0 Cashback</p>
+              </div>
+              <div class="col-5 text-right">
+                <a href="javascript:;" class="pr-button bg-red text-white mb-2"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                <a href="tel:<?php echo $item['seller']['Contact']; ?>"  class="pr-button bg-yellow text-black mb-2"><i class="fa fa-phone" aria-hidden="true"></i></a>
+              </div>
+            </div>
+          </div>
         </div>
         <?php } ?>
       </div>
@@ -73,13 +88,11 @@
       		<?php echo $pagination ?>
       	</div>
       </div>
-    </div>
     <?php
     } else {
         echo '<div class="col-sm-12"><h4 class="h4">No record found.</h4></div>';
     }
     ?>
-  </div>
 </div>
 
 <div class="modal fade" id="viewItemModal" tabindex="-1" role="dialog" aria-labelledby="viewItemModal">

@@ -1,11 +1,11 @@
 
 <!-- Logo -->
-<!-- <a href="" class="logo"> -->
+<a href="" class="logo">
   <!-- mini logo for sidebar mini 50x50 pixels -->
-  <!-- <span class="logo-mini"><b>M</b>Gov</span> -->
+  <span class="logo-mini"><b>Ambilis</b></span>
   <!-- logo for regular state and mobile devices -->
-  <!-- <span class="logo-lg"><b>MGov</b>PH Admin</span> -->
-<!-- </a> -->
+  <span class="logo-lg"><b>Ambilis.com</b> Admin</span>
+</a>
 <!-- Header Navbar -->
 <nav class="navbar navbar-static-top" role="navigation">
   <!-- Sidebar toggle button-->
@@ -31,7 +31,7 @@
                 <a href="#">
                   <div class="pull-left">
                     <!-- User Image -->
-                    <img src="<?php echo public_url('assets/profile/') . $accountInfo->Photo; ?>" class="img-circle" alt="User Image">
+                    <img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="img-circle" alt="User Image">
                   </div>
                   <!-- Message title and timestamp -->
                   <h4>
@@ -115,23 +115,19 @@
         <!-- Menu Toggle Button -->
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           <!-- The user image in the navbar-->
-          <img src="<?php echo public_url('assets/profile/') . $accountInfo->Photo; ?>" class="user-image" alt="User Image">
+          <img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="user-image" alt="User Image">
           <!-- hidden-xs hides the username on small devices so only the image appears. -->
           <span class="hidden-xs"><?php echo user_full_name($accountInfo, false); ?></span>
         </a>
         <ul class="dropdown-menu">
           <!-- The user image in the menu -->
           <li class="user-header">
-            <img src="<?php echo public_url('assets/profile/') . $accountInfo->Photo; ?>" class="img-circle" alt="User Image">
+            <img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="img-circle" alt="User Image">
             <p>
               <?php 
-                echo user_full_name($accountInfo, false); 
-                $level = lookup_row('UserAccountLevel', $accountInfo->AccountLevelID);
-                if ($level) {
-                  echo ' - ' . $level->LevelName;
-                }
+                echo user_full_name($accountInfo, false);
               ?>
-              <small>Member since <?php echo date('M. Y', strtotime($accountInfo->RegistrationDate)); ?></small>
+              <small>Member since <?php echo date('M. Y', strtotime($accountInfo->DateAdded)); ?></small>
             </p>
           </li>
           <!-- Menu Footer-->

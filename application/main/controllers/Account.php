@@ -29,7 +29,8 @@ class Account extends CI_Controller
             )
         );
 
-        view('account/login', $viewData, 'templates/account');
+        // view('account/login', $viewData, 'templates/account');
+        view('account/login2', $viewData);
     }
 
     /**
@@ -99,7 +100,8 @@ class Account extends CI_Controller
             )
         );
 
-        view('account/registration', $viewData, 'templates/account');
+        // view('account/registration', $viewData, 'templates/account');
+        view('account/registration2', $viewData);
     }
 
     /**

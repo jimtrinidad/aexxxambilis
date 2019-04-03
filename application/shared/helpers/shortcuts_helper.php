@@ -235,7 +235,7 @@ function logo_filename($filename)
 	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default.png');
 }
 
-function uploads_filename($filename)
+function upload_filename($filename)
 {
 	$filepath = PUBLIC_DIRECTORY . 'assets/uploads/' . $filename;
 	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default.png');

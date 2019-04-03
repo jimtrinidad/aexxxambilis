@@ -39,3 +39,17 @@ $config['save_store_item'] = array(
 	array('Price', 'Price', 'trim|required|numeric'),
 	array('Commission', 'Commission', 'trim|required|numeric'),
 );
+
+
+
+
+// ADMIN 
+
+$config['save_product_category'] = array(
+	array('Name', 'Category name', 'trim|required'),
+);
+
+$config['save_product_sub_category'] = array(
+	array('Name', 'Sub category name', 'trim|required'),
+	array('CategoryID', 'Parent category', 'required'),
+);

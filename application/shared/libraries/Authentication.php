@@ -107,7 +107,7 @@ class Authentication
         if ($isAdmin) {
             // 2 - admin
             // 3 - super admin (hidden in options)
-            $this->ci->db->where_in('AccountLevel', array(3));
+            // $this->ci->db->where_in('AccountLevel', array(2,3));
         }
 
         $user = $this->ci->db->get($this->user_table);
