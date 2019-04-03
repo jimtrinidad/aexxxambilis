@@ -28,9 +28,9 @@ date_default_timezone_set('Asia/Manila');
 if (SUBDOMAIN == 'localhost') {
 	$config['base_url'] = 'http://localhost/Projects/Aexponents/ambilis/public/';
 } else if (SUBDOMAIN !== false) {
-	$config['base_url'] = 'https://'. SUBDOMAIN .'.mgov.cloud/';
+	$config['base_url'] = 'https://'. SUBDOMAIN .'.ambilis.com/';
 } else {
-	$config['base_url'] = 'http://3.1.116.169/';
+	$config['base_url'] = 'http://ambilis.com/';
 }
 
 /*
