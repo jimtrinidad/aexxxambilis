@@ -76,7 +76,6 @@ function Store() {
     // product setup - prepare sub category on category change
     this.get_sub_categories = function(category, selected = false) 
     {
-        console.log(self.sub_categories[category]);
         $('#itemForm').find('#SubCategory').html('<option value=""></option>');
         if (typeof(self.sub_categories[category]) !== 'undefined') {
             $.each(self.sub_categories[category], function(i, e) {
@@ -96,6 +95,9 @@ function Store() {
         var modal = '#itemModal';
         Utils.show_form_modal(modal, form, 'Add Store Product', function(){
             $(form).find('.image-preview').prop('src', window.public_url() + 'assets/products/default.png');
+
+            self.get_sub_categories(0);
+
             $(form).find('#SearchKeywords').tagsinput('destroy');
             $(form).find('#SearchKeywords').tagsinput();
             $(form).find('#Description').summernote('destroy');
