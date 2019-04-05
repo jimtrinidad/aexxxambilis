@@ -37,7 +37,10 @@ $config['save_store_item'] = array(
 	array('Name', 'Product name', 'trim|required'),
 	array('Description', 'Product description', 'trim'),
 	array('Price', 'Price', 'trim|required|numeric'),
-	array('Commission', 'Commission', 'trim|required|numeric'),
+	array('CommissionType', 'Commission type', 'trim|required|numeric'),
+	array('CommissionValue', 'Commission value', 'trim|required|numeric'),
+	array('MinimumQuantity', 'Minimum Quantity', 'trim|numeric'),
+	array('Stock', 'Stock', 'trim|numeric'),
 );
 
 

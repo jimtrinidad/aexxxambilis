@@ -76,7 +76,11 @@ function Store() {
         var form  = '#itemForm';
         var modal = '#itemModal';
         Utils.show_form_modal(modal, form, 'Add Store Product', function(){
-            $('#itemForm .image-preview').prop('src', window.public_url() + 'assets/products/default.png');
+            $(form).find('.image-preview').prop('src', window.public_url() + 'assets/products/default.png');
+            $(form).find('#SearchKeywords').tagsinput('destroy');
+            $(form).find('#SearchKeywords').tagsinput();
+            $(form).find('#Description').summernote('destroy');
+            $(form).find('#Description').summernote('reset');
         });
     }
 
@@ -92,8 +96,17 @@ function Store() {
                 Utils.set_form_input_value(form, data);
                 $('#itemForm .image-preview').prop('src', window.public_url() + 'assets/products/default.png');
                 if (data.Image) {
-                    $('#itemForm .image-preview').prop('src', window.public_url() + 'assets/products/' + data.Image);
+                    $('#itemForm .product_image').prop('src', window.public_url() + 'assets/products/' + data.Image);
                 }
+                if (data.PartnerImage) {
+                    $('#itemForm .partner_image').prop('src', window.public_url() + 'assets/products/' + data.PartnerImage);
+                }
+
+                console.log($(form).find('#SearchKeywords').val());
+                $(form).find('#SearchKeywords').tagsinput('destroy');
+                $(form).find('#SearchKeywords').tagsinput();
+                $(form).find('#Description').summernote('destroy');
+                $(form).find('#Description').summernote();
             });
         }
     }

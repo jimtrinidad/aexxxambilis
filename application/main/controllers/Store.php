@@ -84,44 +84,73 @@ class Store extends CI_Controller
             $Store = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
             if ($Store) {
 
-                $randomLogoName = md5(microsecID());
+                $upload_status = true;
+                $uploadData    = array();
 
-                // validate file upload
-                $this->load->library('upload', array(
-                    'upload_path'   => PRODUCTS_DIRECTORY,
-                    'allowed_types' => 'gif|jpg|png',
-                    'max_size'      => '1000', // 1mb
-                    'max_width'     => '1024',
-                    'max_height'    => '768',
-                    'overwrite'     => true,
-                    'file_name'     => $randomLogoName
-                ));
+                if(!empty($_FILES['Image']['name'])) {
+                    foreach ($_FILES['Image']['name'] as $i => $name) {
 
-                if (!empty($_FILES['Logo']['name']) && $this->upload->do_upload('Logo') == false) {
-                    $return_data = array(
-                        'status'    => false,
-                        'message'   => 'Uploading logo failed.',
-                        'fields'    => array('Logo' => $this->upload->display_errors('',''))
-                    );
-                } else {
+                        $randomLogoName = md5(microsecID());
 
-                    // do save
-                    $uploadData     = $this->upload->data();
+                        // validate file upload
+                        $this->load->library('upload', array(
+                            'upload_path'   => PRODUCTS_DIRECTORY,
+                            'allowed_types' => 'gif|jpg|png',
+                            // 'max_size'      => '1000', // 1mb
+                            // 'max_width'     => '1024',
+                            // 'max_height'    => '768',
+                            'overwrite'     => true,
+                            'file_name'     => $randomLogoName
+                        ));
+
+                        $_FILES['userFile']['name'] = $_FILES['Image']['name'][$i];
+                        $_FILES['userFile']['type'] = $_FILES['Image']['type'][$i];
+                        $_FILES['userFile']['tmp_name'] = $_FILES['Image']['tmp_name'][$i];
+                        $_FILES['userFile']['error'] = $_FILES['Image']['error'][$i];
+                        $_FILES['userFile']['size'] = $_FILES['Image']['size'][$i];
+
+                        if (!empty($_FILES['userFile']['name']) && $this->upload->do_upload('userFile') == false) {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Uploading image failed.',
+                                'fields'    => array($i => $this->upload->display_errors('',''))
+                            );
+                            $upload_status = false;
+                        } else {
+                            if (!empty($_FILES['userFile']['name'])) {
+                                $fileData = $this->upload->data();
+                                $uploadData[$i]['file_name'] = $fileData['file_name'];
+                            }
+                        }
+                    }
+                }
+
+                if ($upload_status) {
 
                     $saveData = array(
                         'Category'          => get_post('Category'),
+                        'SubCategory'       => get_post('SubCategory'),
                         'Name'              => get_post('Name'),
                         'Description'       => get_post('Description'),
                         'Measurement'       => get_post('Measurement'),
                         'Price'             => get_post('Price'),
-                        'Commission'        => get_post('Commission'),
+                        'CommissionType'    => get_post('CommissionType'),
+                        'CommissionValue'   => get_post('CommissionValue'),
+                        'Manufacturer'      => get_post('Manufacturer'),
+                        'ModelName'         => get_post('ModelName'),
+                        'MinimumQuantity'   => get_post('MinimumQuantity'),
+                        'Stock'             => get_post('Stock'),
                         'DeliveryMethod'    => get_post('DeliveryMethod'),
                         'Warranty'          => get_post('Warranty'),
+                        'SearchKeywords'    => get_post('SearchKeywords'),
                         'LastUpdate'        => date('Y-m-d H:i:s')
                     );
 
-                    if (!empty($_FILES['Logo']['name'])) {
-                        $saveData['Image'] = $uploadData['file_name'];
+                    if (isset($uploadData['ProductImage'])) {
+                        $saveData['Image'] = $uploadData['ProductImage']['file_name'];
+                    }
+                    if (isset($uploadData['PartnerImage'])) {
+                        $saveData['PartnerImage'] = $uploadData['PartnerImage']['file_name'];
                     }
 
                     $itemData = $this->appdb->getRowObject('StoreItems', get_post('Code'), 'Code');

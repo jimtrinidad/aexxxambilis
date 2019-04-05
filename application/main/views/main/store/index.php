@@ -30,6 +30,7 @@
             <th scope="col">Price</th>
             <th scope="col">UoM</th>
             <th scope="col">Commission</th>
+            <th scope="col">Commission Value</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -43,7 +44,8 @@
               echo '<td>' . ($categories[$i['Category']] ?? '') . '</td>';
               echo '<td>' . peso($i['Price']) . '</td>';
               echo '<td>' . $i['Measurement'] . '</td>';
-              echo '<td>' . peso($i['Commission']) . '</td>';
+              echo '<td>' . $i['CommissionType'] . '</td>';
+              echo '<td>' . $i['CommissionValue'] . '</td>';
               echo '<td class="text-right">
                     <a href="javascript:;" onclick="Store.editProduct('. $i['id'] . ')" class="text-info"><i class="fa fa-pencil"></i></a>
                     <a href="javascript:;" onclick="Store.deleteProduct('. $i['id'] . ')" class="text-danger"><i class="fa fa-trash"></i></a>
@@ -58,6 +60,11 @@
 </div>
 
 <?php view('main/store/modals'); ?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.min.js"></script>
+<link rel="stylesheet" href="<?php echo public_url('resources/libraries/tagsinput')?>tagsinput.css" />
+<script src="<?php echo public_url('resources/libraries/tagsinput')?>tagsinput.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {

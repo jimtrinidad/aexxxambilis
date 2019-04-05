@@ -15,8 +15,13 @@ $config['account_level'] = array(
     3 => 'Super Admin'
 );
 
+$config['commission_type'] = array(
+	1 => 'Transaction Fee',
+	2 => 'Commission Percent'
+);
 
 $config['delivery_methods'] = array(
-	1 => 'Personal Delivery',
-	2 => 'Ambilis Logistics'
+	1 => 'Company Delivery',
+	2 => 'Ambilis Delivery',
+	3 => 'Not Applicable'
 );

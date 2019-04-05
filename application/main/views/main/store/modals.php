@@ -37,7 +37,7 @@
 
 
 <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModal">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <form id="itemForm" class="modalForm" name="itemForm" action="<?php echo site_url('store/saveitem') ?>">
         <div class="modal-header">
@@ -50,92 +50,166 @@
           <div id="error_message_box" class="hide">
 		        <div class="error_messages alert alert-danger text-danger" role="alert"></div>
 		      </div>
-          <div class="">
-	          <div class="row gutter-5">
-	            <div class="col-7 padding-top-15">
-	              <div class="row">
-	                <div class="col-12">
-	                  <div class="form-group">
-	                    <label class="control-label" for="Name">Name</label>
-	                    <input type="text" class="form-control" id="Name" name="Name" placeholder="Product name">
-	                    <span class="help-block hidden"></span>
-	                  </div>
-	                </div>
-	                <div class="col-12">
-	                  <div class="form-group">
-	                    <label class="control-label" for="Category">Category</label>
-	                    <select class="form-control" id="Category" name="Category">
-	                    	<option value=""></option>
-	                    	<?php
-	                        foreach(lookup_all('ProductCategories', false, 'Name', false) as $item) {
-	                          echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
-	                        }
-	                    	?>
-	                    </select>
-	                    <span class="help-block hidden"></span>
-	                  </div>
-	                </div>
-	              </div>
-	            </div>
-	            <div class="col-5 logo pt-4">
-	              <div class="image-upload-container">
-	                <img class="image-preview" src="<?php echo public_url(); ?>assets/products/default">
-	                <span class="hiddenFileInput hide">
-	                  <input type="file" data-default="<?php echo public_url(); ?>assets/products/default" accept="image/*" class="image-upload-input" id="Logo" name="Logo"/>
-	                </span>
-	              </div>
-	            </div>
-	            <div class="col-12">
-                <div class="form-group">
-                  <label class="control-label" for="Description">Description</label>
-                  <textarea class="form-control" id="Description" name="Description" placeholder="Product description"></textarea>
-                  <span class="help-block hidden"></span>
-                </div>
+		      <div class="row pb-4">
+
+		      	<div class="col-6 logo text-center">
+              <div class="image-upload-container">
+		      			<label class="control-label" for="ProductImage">Product Image</label>
+                <img class="image-preview product_image" src="<?php echo public_url(); ?>assets/products/default.png">
+                <span class="hiddenFileInput hide">
+                  <input type="file" data-default="<?php echo public_url(); ?>assets/products/default.png" accept="image/*" class="image-upload-input" id="product_image" name="Image[ProductImage]"/>
+                </span>
               </div>
-	            <div class="col-6">
-	              <div class="form-group">
-	                <label class="control-label" for="Price">Unit Price</label>
-	                <input type="number" class="form-control" id="Price" name="Price" placeholder="Unit price">
-	                <span class="help-block hidden"></span>
-	              </div>
-	            </div>
-	            <div class="col-6">
-	              <div class="form-group">
-	                <label class="control-label" for="Commission">Commission</label>
-	                <input type="text" class="form-control" id="Commission" name="Commission" placeholder="Commission">
-	                <span class="help-block hidden"></span>
-	              </div>
-	            </div>
-	            <div class="col-6">
-	              <div class="form-group">
-	                <label class="control-label" for="Measurement">Unit of measurement</label>
-	                <input type="text" class="form-control" id="Measurement" name="Measurement" placeholder="Unit of measurement">
-	                <span class="help-block hidden"></span>
-	              </div>
-	            </div>
-	            <div class="col-6">
-	              <div class="form-group">
-	                <label class="control-label" for="DeliveryMethod">Delivery Method</label>
-	                <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
-                  	<option value=""></option>
-                  	<?php
-                      foreach(lookup('delivery_methods') as $k => $v) {
-                        echo '<option value="' . $k . '">' . $v . '</option>';
-                      }
-                  	?>
-                  </select>
-	                <span class="help-block hidden"></span>
-	              </div>
-	            </div>
-	            <div class="col-12">
-	              <div class="form-group">
-	                <label class="control-label" for="Warranty">Warranty</label>
-	                <input type="text" class="form-control" id="Warranty" name="Warranty" placeholder="Warranty">
-	                <span class="help-block hidden"></span>
-	              </div>
+            </div>
+            <div class="col-6 logo text-center">
+              <div class="image-upload-container">
+            		<label class="control-label" for="PartnerImage">Parner Image</label>
+                <img class="image-preview partner_image" src="<?php echo public_url(); ?>assets/products/default.png">
+                <span class="hiddenFileInput hide">
+                  <input type="file" data-default="<?php echo public_url(); ?>assets/products/default.png" accept="image/*" class="image-upload-input" id="partner_image" name="Image[PartnerImage]"/>
+                </span>
+              </div>
+            </div>
+
+		      </div>
+		      <div class="row gutter-5 mt-3">
+
+		      	<div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Name">Product Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" placeholder="Product name">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+		      	<div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="control-label" for="Manufacturer">Manufacturer / Origin</label>
+                <input type="text" class="form-control" id="Manufacturer" name="Manufacturer" placeholder="Manufacturer / Origin">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label class="control-label" for="ModelName">Model Name</label>
+                <input type="text" class="form-control" id="ModelName" name="ModelName" placeholder="Model name">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Category">Category</label>
+                <select class="form-control" id="Category" name="Category">
+                	<option value=""></option>
+                	<?php
+                    foreach(lookup_all('ProductCategories', false, 'Name', false) as $item) {
+                      echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
+                    }
+                	?>
+                </select>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="SubCategory">Sub Category</label>
+                <select class="form-control" id="SubCategory" name="SubCategory">
+                	<option value=""></option>
+                	<?php
+                    foreach(lookup_all('ProductCategories', false, 'Name', false) as $item) {
+                      echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
+                    }
+                	?>
+                </select>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="Price">Unit Price</label>
+                <input type="number" class="form-control" id="Price" name="Price" placeholder="Unit price">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="Measurement">Unit of measurement</label>
+                <input type="text" class="form-control" id="Measurement" name="Measurement" placeholder="Unit of measurement">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="MinimumQuantity">Minimum Quantity</label>
+                <input type="number" class="form-control" id="MinimumQuantity" name="MinimumQuantity" placeholder="Minimum Quantity">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="Stock">Number of Stock</label>
+                <input type="number" class="form-control" id="Stock" name="Stock" placeholder="Number of Stock">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="CommissionType">Commission Type</label>
+                <select class="form-control" id="CommissionType" name="CommissionType">
+                	<option value=""></option>
+                	<?php
+                    foreach(lookup('commission_type') as $k => $v) {
+                      echo '<option value="' . $k . '">' . $v . '</option>';
+                    }
+                	?>
+                </select>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="CommissionValue">Commission Value</label>
+                <input type="text" class="form-control" id="CommissionValue" name="CommissionValue" placeholder="Commission">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+	            <div class="form-group">
+	              <label class="control-label" for="DeliveryMethod">Delivery Method</label>
+	              <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
+	              	<option value=""></option>
+	              	<?php
+	                  foreach(lookup('delivery_methods') as $k => $v) {
+	                    echo '<option value="' . $k . '">' . $v . '</option>';
+	                  }
+	              	?>
+	              </select>
+	              <span class="form-text text-muted"></span>
 	            </div>
 	          </div>
-	        </div>
+	          <div class="col-6">
+	            <div class="form-group">
+	              <label class="control-label" for="Warranty">Warranty</label>
+	              <input type="text" class="form-control" id="Warranty" name="Warranty" placeholder="Warranty">
+	              <span class="form-text text-muted"></span>
+	            </div>
+	          </div>
+	          <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="SearchKeywords">Search Keywords</label>
+                <input type="text" class="form-control" id="SearchKeywords" name="SearchKeywords" placeholder="Search Keywords">
+                <span class="form-text text-muted small">Type the keyword then press entry to add.</span>
+              </div>
+            </div>
+	          <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Description">Description</label>
+                <textarea class="form-control" id="Description" name="Description" placeholder="Product description"></textarea>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+
+		      </div>
+
           <input type="hidden" name="Code" id="Code" value="">
         </div>
         <div class="modal-footer">
