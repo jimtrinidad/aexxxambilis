@@ -98,7 +98,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class="control-label" for="Category">Category</label>
-                <select class="form-control" id="Category" name="Category" onchange="Store.get_sub_categories(this)">
+                <select class="form-control" id="Category" name="Category" onchange="Store.get_sub_categories(this.value)">
                 	<option value=""></option>
                 	<?php
                     foreach($categories as $item) {

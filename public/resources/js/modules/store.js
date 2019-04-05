@@ -74,14 +74,17 @@ function Store() {
 
 
     // product setup - prepare sub category on category change
-    this.get_sub_categories = function(elem) 
+    this.get_sub_categories = function(category, selected = false) 
     {
-        var category = $(elem).val();
         console.log(self.sub_categories[category]);
         $('#itemForm').find('#SubCategory').html('<option value=""></option>');
         if (typeof(self.sub_categories[category]) !== 'undefined') {
             $.each(self.sub_categories[category], function(i, e) {
-                $('#itemForm').find('#SubCategory').append(`<option value="${e.id}">${e.Name}</option>`);
+                var selected_text = '';
+                if (selected && selected == e.id) {
+                    selected_text = 'selected="selected"';
+                }
+                $('#itemForm').find('#SubCategory').append(`<option value="${e.id}" ${selected_text} >${e.Name}</option>`);
             });
         }
     }
@@ -118,7 +121,8 @@ function Store() {
                     $('#itemForm .partner_image').prop('src', window.public_url() + 'assets/products/' + data.PartnerImage);
                 }
 
-                console.log($(form).find('#SearchKeywords').val());
+                self.get_sub_categories(data.Category, data.SubCategory);
+
                 $(form).find('#SearchKeywords').tagsinput('destroy');
                 $(form).find('#SearchKeywords').tagsinput();
                 $(form).find('#Description').summernote('destroy');
