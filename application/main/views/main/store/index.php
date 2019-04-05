@@ -70,5 +70,7 @@
 	$(document).ready(function() {
 		Store.profile = <?php echo json_encode($StoreData, JSON_HEX_TAG); ?>;
     Store.itemData = <?php echo json_encode($items, JSON_HEX_TAG); ?>;
+    Store.categories = <?php echo json_encode($categories, JSON_HEX_TAG); ?>;
+    Store.sub_categories = <?php echo json_encode($sub_categories, JSON_HEX_TAG); ?>;
 	});
 </script>

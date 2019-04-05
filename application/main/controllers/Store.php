@@ -32,7 +32,15 @@ class Store extends CI_Controller
         $viewData['items']     = $storeItems;
         $viewData['StoreData'] = $storeData;
 
-        // print_data($viewData);
+        $categories  = lookup_all('ProductCategories', false, 'Name', false);
+        $sub_cat_rsp = lookup_all('ProductSubCategories', false, 'Name', false);
+        $sub_categories = array();
+        foreach ($sub_cat_rsp as $i) {
+            $sub_categories[$i['CategoryID']][] = $i;
+        }
+
+        $viewData['categories']     = $categories;
+        $viewData['sub_categories'] = $sub_categories;
         view('main/store/index', $viewData, 'templates/main');
     }
 

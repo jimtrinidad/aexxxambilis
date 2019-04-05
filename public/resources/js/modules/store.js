@@ -4,6 +4,8 @@ function Store() {
     
     this.itemData = {};
     this.profile = false;
+    this.categories = [];
+    this.sub_categories = [];
 
     /**
      * Initialize events
@@ -68,6 +70,20 @@ function Store() {
                 });
             }
         });
+    }
+
+
+    // product setup - prepare sub category on category change
+    this.get_sub_categories = function(elem) 
+    {
+        var category = $(elem).val();
+        console.log(self.sub_categories[category]);
+        $('#itemForm').find('#SubCategory').html('<option value=""></option>');
+        if (typeof(self.sub_categories[category]) !== 'undefined') {
+            $.each(self.sub_categories[category], function(i, e) {
+                $('#itemForm').find('#SubCategory').append(`<option value="${e.id}">${e.Name}</option>`);
+            });
+        }
     }
 
 

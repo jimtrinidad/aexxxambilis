@@ -98,10 +98,10 @@
             <div class="col-12">
               <div class="form-group">
                 <label class="control-label" for="Category">Category</label>
-                <select class="form-control" id="Category" name="Category">
+                <select class="form-control" id="Category" name="Category" onchange="Store.get_sub_categories(this)">
                 	<option value=""></option>
                 	<?php
-                    foreach(lookup_all('ProductCategories', false, 'Name', false) as $item) {
+                    foreach($categories as $item) {
                       echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
                     }
                 	?>
@@ -113,12 +113,6 @@
               <div class="form-group">
                 <label class="control-label" for="SubCategory">Sub Category</label>
                 <select class="form-control" id="SubCategory" name="SubCategory">
-                	<option value=""></option>
-                	<?php
-                    foreach(lookup_all('ProductCategories', false, 'Name', false) as $item) {
-                      echo '<option value="' . $item['id'] . '">' . $item['Name'] . '</option>';
-                    }
-                	?>
                 </select>
                 <span class="form-text text-muted"></span>
               </div>
