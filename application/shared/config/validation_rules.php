@@ -44,6 +44,25 @@ $config['save_store_item'] = array(
 );
 
 
+$config['add_deposit'] = array(
+	array('Bank', 'Bank', 'trim|required'),
+	array('Branch', 'Branch', 'trim|required'),
+	array('ReferenceNo', 'Reference Number', 'trim|required'),
+	array('Date', 'Deposit Date', 'trim|required'),
+	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+);
+
+$config['add_payment'] = array(
+	array('Biller', 'Biller', 'trim|required'),
+	array('ReferenceNo', 'Reference Number', 'trim|required'),
+	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+);
+
+$config['send_eload'] = array(
+	array('ServiceProvider', 'Service provider', 'trim|required'),
+	array('Number', 'Mobile number', 'trim|required|numeric|min_length[11]|max_length[11]'),
+	array('Amount', 'Load amount', 'trim|required|numeric'),
+);
 
 
 // ADMIN 

@@ -4,16 +4,16 @@
       <div class="box-header">
         <h3 class="box-title">Categories</h3>
         <div class="box-tools">
-          <form action="" method="post">
+          <!-- <form action="" method="get">
             <div class="input-group input-group-sm" style="width: 250px;">
-              <input type="text" autocomplete="off" id="searchKeyword" name="searchKeyword" value="<?php echo get_post('searchKeyword'); ?>" class="form-control pull-right" placeholder="Search">
+              <input type="text" autocomplete="off" id="search" name="search" value="<?php echo get_post('search'); ?>" class="form-control pull-right" placeholder="Search">
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                 <button type="button" class="btn btn-success" onClick="Products.addCategory();" title="Add Category"><i class="fa fa-plus"></i> Add</button>
               </div>
             </div>
-          </form>
-          
+          </form> -->
+          <button type="button" class="btn btn-success" onClick="Products.addCategory();" title="Add Category"><i class="fa fa-plus"></i> Add</button>
         </div>
       </div>
       <!-- /.box-header -->

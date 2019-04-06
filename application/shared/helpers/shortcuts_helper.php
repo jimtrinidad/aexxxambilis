@@ -318,3 +318,26 @@ function user_full_name($data, $m = 1)
 	}
 	return ucwords($data['Firstname'] . $middle . $data['Lastname']);
 }
+
+// wallet latest balance
+function get_latest_wallet_balance($userID = false)
+{
+	if (!$userID) {
+		$userID = current_user();
+	}
+
+	$ci =& get_instance();
+
+	$sql = "SELECT EndingBalance
+            FROM WalletTransactions
+            WHERE AccountID = {$userID}
+            ORDER BY id DESC
+            LIMIT 1";
+
+    $latest = $ci->db->query($sql)->row();
+    if ($latest) {
+    	return $latest->EndingBalance;
+    } else {
+    	return 0;
+    }
+}

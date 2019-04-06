@@ -1,5 +1,5 @@
 /**
-* my styles
+* overwrite
 */
 
 label {margin-bottom: 0px;}
@@ -13,6 +13,16 @@ label {margin-bottom: 0px;}
 #main-content{background: #000 url(../images/body-bg.png) no-repeat;background-size: cover;padding: 10px;}
 
 .user-logged-in{ margin-top: 0px;}
+
+
+.left-button a {
+    text-decoration: none;
+}
+
+
+/*end*/
+
+
 
 .form-control:read-only {
 	background-color: #fff !important;

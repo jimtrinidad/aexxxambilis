@@ -71,7 +71,7 @@
           'icon'  => 'mywallet-rewards.png',
           'bg'    => '#fe6b3e',
           'label' => 'MyWallet & Rewards',
-          'href'  => site_url('wallet')
+          'href'  => site_url('ewallet')
         ),
         array(
           'icon'  => 'bills-payment.png',
