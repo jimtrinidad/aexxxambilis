@@ -44,7 +44,7 @@ class Deposits extends CI_Controller
         }
         $viewData['requests']   = $requests;
 
-        print_data($viewData);
+        // print_data($viewData);
 
         view('pages/deposits/requests', $viewData, 'templates/main');
     }
