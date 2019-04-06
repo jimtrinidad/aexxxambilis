@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap-editable/css/bootstrap-editable.css" />
 
-    <link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/admin.css">
+    <link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/admin.css?<?php echo recache()?>">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -90,12 +90,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.6/loadingoverlay.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.min.js"></script>
-    <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/admin/utils.js""></script>
+    <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/admin/utils.js?<?php echo recache()?>""></script>
 
     <?php
       if (isset($jsModules)) {
         foreach ($jsModules as $jsModule) {
-          echo '<script src="'. public_url() .'resources/js/modules/admin/'. $jsModule .'.js?'. time() .'"></script>';
+          echo '<script src="'. public_url() .'resources/js/modules/admin/'. $jsModule .'.js?'. recache() .'"></script>';
         }
       }
     ?>
