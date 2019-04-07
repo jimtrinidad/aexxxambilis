@@ -84,7 +84,7 @@
 		foreach ($categories as $k => $c) {
 
 			if ($k > 0 && $k % 3 == 0) {
-				echo '</div><div class="row">';
+				echo '</div><div class="row mt-2">';
 			}
 
 			echo '<div class="col-4 menu-categories">
