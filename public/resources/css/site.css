@@ -13,6 +13,9 @@ a:hover {text-decoration: none;}
 
 .user-logged-in{ margin-top: 0px;}
 
+#main-content {
+  padding-top: 10px;
+}
 
 .left-button a {
     text-decoration: none;
