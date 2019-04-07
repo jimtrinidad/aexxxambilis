@@ -12,6 +12,20 @@ class Account extends CI_Controller
     public function test() {
     }
 
+    public function index()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        $viewData = array(
+            'pageTitle'     => 'Account',
+            'accountInfo'   => user_account_details()
+        );
+
+        view('account/index', $viewData, 'templates/main');
+    }
+
     /**
      * Open login page
      */

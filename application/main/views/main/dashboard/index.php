@@ -27,7 +27,7 @@
   }
 
   .menu-box .menu-box-label {
-    color: white;
+    color: gray;
     margin-top: 10px;
     text-align: center;
     font-size: 12px;
@@ -46,27 +46,27 @@
           'label' => 'My Business',
           'href'  => site_url('store')
         ),
-        array(
-          'icon'  => 'eloading.png',
-          'bg'    => '#fab33b',
-          'label' => 'eLoad',
-          'attr'  => array(
-            'onclick' => 'Wallet.sendELoad()'
-          )
-        ),
-        array(
-          'icon'  => 'remittance.png',
-          'bg'    => '#005f96',
-          'label' => 'Fund MyWallet',
-          'attr'  => array(
-            'onclick' => 'Wallet.addDeposit()'
-          )
-        ),
-        array(
-          'icon'  => 'payment-services.png',
-          'bg'    => '#004b68',
-          'label' => 'Encash from MyWallet',
-        ),
+        // array(
+        //   'icon'  => 'eloading.png',
+        //   'bg'    => '#fab33b',
+        //   'label' => 'eLoad',
+        //   'attr'  => array(
+        //     'onclick' => 'Wallet.sendELoad()'
+        //   )
+        // ),
+        // array(
+        //   'icon'  => 'remittance.png',
+        //   'bg'    => '#005f96',
+        //   'label' => 'Fund MyWallet',
+        //   'attr'  => array(
+        //     'onclick' => 'Wallet.addDeposit()'
+        //   )
+        // ),
+        // array(
+        //   'icon'  => 'payment-services.png',
+        //   'bg'    => '#004b68',
+        //   'label' => 'Encash from MyWallet',
+        // ),
         array(
           'icon'  => 'mywallet-rewards.png',
           'bg'    => '#fe6b3e',
@@ -81,11 +81,11 @@
             'onclick' => 'Wallet.addPayment()'
           )
         ),
-        array(
-          'icon'  => 'ticketing.png',
-          'bg'    => '#8c9ca1',
-          'label' => 'Ticketing',
-        ),
+        // array(
+        //   'icon'  => 'ticketing.png',
+        //   'bg'    => '#8c9ca1',
+        //   'label' => 'Ticketing',
+        // ),
         array(
           'icon'  => 'market.png',
           'bg'    => '#fd423e',

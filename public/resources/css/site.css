@@ -4,13 +4,10 @@
 
 label {margin-bottom: 0px;}
 
-.menu-icon{ top: 6px; left: 20px;}
-
-#main-container {
-	/*background: #fff; */
+@media (min-width: 576px) {
+  .menu-icon{ top: 6px; left: 20px;}
+  .dropmenu { top: 39px; }
 }
-
-#main-content{background: #000 url(../images/body-bg.png) no-repeat;background-size: cover;padding: 10px;}
 
 .user-logged-in{ margin-top: 0px;}
 

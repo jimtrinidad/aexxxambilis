@@ -8,10 +8,10 @@
   <div class="col-8 col-sm-9 col-md-10">
     <img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="profile-pic"/>
     <h3>Hi, <?php echo user_full_name($accountInfo, 0); ?></h3>
-    <p>Balance: <?php echo peso($summary['balance']) ?></p>
-    <p>Total Transactions: <?php echo number_format($summary['transactions']) ?></p>
-    <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
-    <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
+    <div>Balance: <?php echo peso($summary['balance']) ?></div>
+    <div>Total Transactions: <?php echo number_format($summary['transactions']) ?></div>
+    <div>Total Debits: <?php echo peso($summary['debit']) ?></div>
+    <div>Total Credits: <?php echo peso($summary['credit']) ?></div>
   </div>
   <div class="col-4 col-sm-3 col-md-2">
     <div class="left-button text-right">
@@ -33,7 +33,7 @@
 
 <div class="row">
   <div class="col-12">
-    <div class=" bg-trans-80-white p-3">
+    <div>
       <h5>My Transactions</h5>
       <?php if (count($transactions)) { ?>
       <div class="table-responsive">
