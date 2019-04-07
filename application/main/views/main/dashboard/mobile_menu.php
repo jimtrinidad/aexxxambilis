@@ -82,6 +82,11 @@
 		<?php
 		$categories  = lookup_all('ProductCategories', false, 'Name', false);
 		foreach ($categories as $k => $c) {
+
+			if ($k > 0 && $k % 3 == 0) {
+				echo '</div><div class="row">';
+			}
+
 			echo '<div class="col-4 menu-categories">
 							<div class="product-img">
 								<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
@@ -93,7 +98,6 @@
 		}
 		?>
 
-		
 	</div>
 	
 </div>
