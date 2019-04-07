@@ -20,13 +20,9 @@
   </head>
   <body class="login">
 		
-		<header>
-			<!--
-			<div class="login-logo">
-				<img src="library/images/login-logo-bg.png" width="350" />
-			</div> -->
-			
-		</header>
+		<div id="header">
+			<a href="#" class="login-logo"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png" width="350" /></a>
+		</div>
 		
 		<div class="content">
 			<div class="container">

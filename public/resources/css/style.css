@@ -55,13 +55,13 @@ body.market-place{ background-color: #fff;}
 .registration ul li{ background: url('../images/bullet-list-icon.png') no-repeat 0px 3px; padding-left: 23px;}
 
 .login{ background: #fff; }
-.login header{background: url('../images/loginbanner.png') no-repeat; background-size: contain; background-position: center 0px; height: 300px; width: 100%; }
 
-.login-logo{ position: absolute; top: 170px; left: 50%; margin-left: -175px;}
-.login .content{ margin-top: 50px; }
+.login .content{ margin-top: 70px; }
 .login .content .btn-auth{ color: #9b9b9b; font-size: 13px;}
 .login .content .btn-auth img{ position:relative; top: -3px;}
 .login .content .btn-auth span{ width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; position:relative; top: 5px;}
+
+.login #header a img{ width: 100%!important; top: 100px;}
 
 .main-login{ margin-top: 60px;}
 
