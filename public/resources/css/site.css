@@ -3,6 +3,8 @@
 */
 
 label {margin-bottom: 0px;}
+a { text-decoration: none; }
+a:hover {text-decoration: none;}
 
 @media (min-width: 576px) {
   .menu-icon{ top: 6px; left: 20px;}

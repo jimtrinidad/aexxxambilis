@@ -72,6 +72,15 @@ function random_letters($length = 8)
     return implode($letters); 
 }
 
+
+function account_public_id()
+{
+    if (current_user()) {
+        return '09' . str_pad(current_user(), 4, '0', STR_PAD_LEFT);
+    }
+    return false;
+}
+
 /**
 * get qr file
 * generate new if not exists

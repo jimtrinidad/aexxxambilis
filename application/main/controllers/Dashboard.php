@@ -22,7 +22,7 @@ class Dashboard extends CI_Controller
             ),
         );        
 
-        view('main/dashboard/index', $viewData, 'templates/main');
+        view('main/dashboard/mobile_menu', $viewData, 'templates/main');
     }
 
 }
