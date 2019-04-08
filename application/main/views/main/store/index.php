@@ -1,24 +1,63 @@
-<h3>Store Profile</h3>
-<?php if ($StoreData) { ?>
-  <h1><?php echo $StoreData->Name ?? ''; ?></h1>
-  <hr class="my-2">
-  <p class="lead">
-  <?php echo $StoreData->Address ?? ''; ?>
-  <span class="d-block"><?php echo $StoreData->Contact ?? ''; ?></span>
-  <span class="d-block"><?php echo $StoreData->Email ?? ''; ?></span>
-  </p>
-<?php } else { echo '<h4 class="text-danger">You need to setup your store profile first.</h4>'; } ?>
-<button class="btn btn-info" onClick="Store.updateProfile()">Update</button>
-
-<hr>
-
-<div class="row">
-  <div class="col-8"><h3>Products</h3></div>
-  <div class="col-4 text-right">
-    <button class="btn btn-sm btn-success" onClick="Store.addProduct()"><i class="fa fa-plus"></i> Add</button>
-  </div>
+<div class="mobile-menu-top container">
+		
+	<div class="mobile-menu-info">
+		<div class="row">
+			<div class="col-12">
+				<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" style="float: left;width: 90px;margin-right: 5px;"/>
+				<?php if ($StoreData) { ?>
+				  <h3 class="mb-0"><?php echo $StoreData->Name ?? ''; ?></h3>
+				  <p class="lead small">
+				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $StoreData->Address ?? ''; ?></span>
+				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/call.png" /> <?php echo $StoreData->Contact ?? ''; ?></span>
+				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/email.png" /> <?php echo $StoreData->Email ?? ''; ?></span>
+				  </p>
+				<?php } else { echo '<h4 class="text-danger">You need to setup your store profile first before you can add products.</h4>'; } ?>
+			</div>
+		</div>
+	</div>
+	
+	<div class="account-menu mt-3">
+		<div class="header clearfix">
+			<span class="text float-left">All Store Sales</span>
+			<span class="text float-right"><span class="text-gray">P</span> <?php echo number_format(0) ?></span>
+		</div>
+		
+		<div class="content">
+			<div class="row">
+				<div class="col-3 text-center icon-container">
+					<a href="javascript:;" onClick="Store.updateProfile()">
+						<img src="<?php echo public_url(); ?>resources/images/icons/shop.png" class="i-45" />
+						<span>Update Profile</span>
+					</a>
+				</div>
+				<div class="col-3 text-center icon-container">
+					<a href="javascript:;" onClick="Store.addProduct()">
+						<img src="<?php echo public_url(); ?>resources/images/icons/basket.png" class="i-45" />
+						<span>Sell Product or Service</span>
+					</a>
+				</div>
+				<div class="col-3 text-center icon-container">
+					<a href="javascript:;">
+						<img src="<?php echo public_url(); ?>resources/images/icons/cart.png" class="i-45" />
+						<span>Sales Order</span>
+					</a>
+				</div>
+				<div class="col-3 text-center icon-container">
+					<a href="javascript:;">
+						<img src="<?php echo public_url(); ?>resources/images/icons/sales-report.png" class="i-45" />
+						<span>Sales Report</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
 </div>
-<div class="row">
+
+
+<div class="row mt-2">
+	<div class="col-12"><h4>Products</h4></div>
   <div class="col-12">
     <div class="table-responsive">
       <table class="table">
@@ -29,8 +68,8 @@
             <th scope="col">Category</th>
             <th scope="col">Price</th>
             <th scope="col">UoM</th>
+            <th scope="col">Commission Type</th>
             <th scope="col">Commission</th>
-            <th scope="col">Commission Value</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -44,7 +83,7 @@
               echo '<td>' . ($categories[$i['Category']] ?? '') . '</td>';
               echo '<td>' . peso($i['Price']) . '</td>';
               echo '<td>' . $i['Measurement'] . '</td>';
-              echo '<td>' . $i['CommissionType'] . '</td>';
+              echo '<td>' . ($i['CommissionType'] ? lookup('commission_type', $i['CommissionType']) : '') . '</td>';
               echo '<td>' . $i['CommissionValue'] . '</td>';
               echo '<td class="text-right">
                     <a href="javascript:;" onclick="Store.editProduct('. $i['id'] . ')" class="text-info"><i class="fa fa-pencil"></i></a>

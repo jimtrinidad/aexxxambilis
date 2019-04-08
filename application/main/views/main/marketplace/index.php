@@ -36,7 +36,10 @@
     if (count($products)) {
     ?>
       <div class="row gutter-5 itemcont">
-      <?php foreach ($products as $item) { ?>
+      <?php 
+        foreach ($products as $item) { 
+        $distribution = profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']);
+      ?>
 <!--         <div class="col-6 col-sm-4 col-md-3 item">
           <div class="card">
             <img class="card-img-top" src="<?php echo public_url('assets/products/') . $item['Image']  ?>" alt="Card image cap">
@@ -56,7 +59,7 @@
             </div>
           </div>
         </div> -->
-        <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
           <div class="product-img">
             <img src="<?php echo public_url('assets/products/') . $item['Image']  ?>" width="100%">
           </div>
@@ -67,12 +70,18 @@
                 <p><?php echo $item['seller']['Name'] ?></p>
               </div>
               <div class="col-5 text-right">
-                <strong class="price text-red"><?php echo peso($item['Price']) ?></strong>
+                <strong class="price text-red"><?php echo peso($item['Price']); ?></strong>
               </div>
             </div>
             <div class="row">
               <div class="col-7">
-                <p class="sub-details">30 Pts. 4.0 Shared 20.0 Cashback</p>
+                <p class="sub-details">
+                  <?php 
+                    echo '<span class="d-sm-block">' . number_format($distribution['referral'], 1) . ' Points </span>' . 
+                         '<span class="d-sm-block">' . number_format($distribution['shared_rewards'], 1) . ' Shared </span>' . 
+                         '<span class="d-sm-block">' . number_format($distribution['cashback'], 1) . ' Cashback</span>';
+                  ?>
+                </p>
               </div>
               <div class="col-5 text-right">
                 <a href="javascript:;" class="pr-button bg-red text-white mb-2"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>

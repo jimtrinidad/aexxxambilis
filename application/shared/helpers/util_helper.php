@@ -197,3 +197,71 @@ function csrf_token_input_field()
     $ci =& get_instance();
     return '<input type="hidden" name="' . $ci->security->get_csrf_token_name() . '" value="' . $ci->security->get_csrf_hash() . '">';
 }
+
+
+
+/**
+* commision distribution
+* @param item price
+* @param commision value (percent or actual profit)
+* @param commision type (1 - transaction fee, 2 - commision percent)
+*
+* type 1 - get profit first (refer to excel for compuration)
+* type 2 - commission is the profit
+*/
+function profit_distribution($srp, $commision, $type)
+{
+    if ($type == 1) {
+        $profit = $commision;
+    } else {
+        // get profit
+        $supplier_price     = $srp - ($srp * ($commision/100));
+        $discount_rate      = partner_commision_rate($commision);
+        $discount           = ($discount_rate > 0 ? ($srp * ($discount_rate/100)) : 0);
+        $discounted_price   = $srp - $discount;
+        $profit             = $discounted_price - $supplier_price;
+    }
+
+    $data = array(
+        'company'        => $profit * 0.30,
+        'investor'       => $profit * 0.25,
+        'referral'       => $profit * 0.30,
+        'delivery'       => $profit * 0.05,
+        'cashback'       => $profit * 0.02,
+        'shared_rewards' => $profit * 0.08,
+    );
+
+    $data['divided_reward'] = ($data['shared_rewards'] > 0 ? ($data['shared_rewards'] / 8) : 0);
+
+    return $data;
+}
+
+/**
+* return the exact commision percent
+*/
+function partner_commision_rate($c)
+{
+    if ($c >= 1 && $c <= 8) {
+        return 1;
+    } else if ($c >= 9 && $c <= 17) {
+        return 3;
+    } else if ($c >= 18 && $c <= 26) {
+        return 6;
+    } else if ($c >= 27 && $c <= 35) {
+        return 9;
+    } else if ($c >= 36 && $c <= 44) {
+        return 12;
+    } else if ($c >= 45 && $c <= 53) {
+        return 15;
+    } else if ($c >= 54 && $c <= 62) {
+        return 18;
+    } else if ($c >= 63 && $c <= 71) {
+        return 21;
+    } else if ($c >= 72 && $c <= 80) {
+        return 24;
+    } else if ($c >= 80 && $c <= 100) {
+        return 27;
+    }
+
+    return 0;
+}

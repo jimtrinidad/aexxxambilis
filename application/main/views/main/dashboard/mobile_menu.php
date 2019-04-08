@@ -35,7 +35,7 @@
 				<div class="col-3 text-center icon-container">
 					<a href="<?php echo site_url('rewards') ?>">
 						<img src="<?php echo public_url(); ?>resources/images/icons/rewards-money.png" />
-						<span>Encash</span>
+						<span>Rewards</span>
 					</a>
 				</div>
 				<div class="col-3 text-center icon-container">
@@ -83,11 +83,7 @@
 		$categories  = lookup_all('ProductCategories', false, 'Name', false);
 		foreach ($categories as $k => $c) {
 
-			if ($k > 0 && $k % 3 == 0) {
-				echo '</div><div class="row mt-2">';
-			}
-
-			echo '<div class="col-4 menu-categories">
+			echo '<div class="col-12 col-sm-4 menu-categories mt-2">
 							<div class="product-img">
 								<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
 							</div>

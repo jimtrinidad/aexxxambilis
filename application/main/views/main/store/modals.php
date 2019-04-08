@@ -63,7 +63,7 @@
             </div>
             <div class="col-6 logo text-center">
               <div class="image-upload-container">
-            		<label class="control-label" for="PartnerImage">Parner Image</label>
+            		<label class="control-label" for="PartnerImage">Partner Image</label>
                 <img class="image-preview partner_image" src="<?php echo public_url(); ?>assets/products/default.png">
                 <span class="hiddenFileInput hide">
                   <input type="file" data-default="<?php echo public_url(); ?>assets/products/default.png" accept="image/*" class="image-upload-input" id="partner_image" name="Image[PartnerImage]"/>
