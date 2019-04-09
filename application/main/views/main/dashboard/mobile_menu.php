@@ -2,11 +2,11 @@
 		
 	<div class="mobile-menu-info">
 		<div class="row">
-			<div class="col-8">
+			<div class="col-10">
 				<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="profile-pic"/>
 				<span class="pr-id"><?php echo substr($accountInfo->Firstname, 0,1) . '. ' . $accountInfo->Lastname . ' | ID: ' . $accountInfo->PublicID?></span>
 			</div>
-			<div class="col-4 text-right">
+			<div class="col-2 text-right">
 				<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="35" class="pr-qr-code" />
 			</div>
 		</div>
