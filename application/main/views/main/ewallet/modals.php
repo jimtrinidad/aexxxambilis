@@ -3,7 +3,7 @@
     <div class="modal-content">
       <form id="depositForm" name="depositForm" class="modalForm" action="<?php echo site_url('ewallet/add_deposit') ?>">
         <div class="modal-header">
-          <h5 class="modal-title">Fund Wallet</h5>
+          <strong class="modal-title text-b-red">Fund My Wallet</strong>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -52,7 +52,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-success">Send Deposit</button>
+          <button type="submit" class="btn bg-b-red text-white">Send Deposit</button>
         </div>
       </form>
     </div>

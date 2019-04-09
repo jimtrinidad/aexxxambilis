@@ -16,6 +16,7 @@ class Ewallet extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'My Wallet',
+            'pageSubTitle'  => 'AMBILIS NANG E-WALLET',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
                 'wallet'

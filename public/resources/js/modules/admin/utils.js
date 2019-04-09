@@ -122,8 +122,8 @@ function Utils() {
         $(form).find('#error_message_box').addClass('hide');
 
         $.each($(form).find('input,select,textarea'), function(i,e){
-            $(form).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(form).popover('destroy');
+            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
+            $(e).popover('destroy');
         });
     }
 
@@ -207,12 +207,6 @@ function Utils() {
     {   
         // reset form data
         $(formSelector).trigger("reset");
-
-        // reset input erros
-        $.each($(formSelector).find('input, textarea, select'), function(i,e){
-            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(e).popover('destroy');
-        });
 
         self.reset_form_errors(formSelector);
 

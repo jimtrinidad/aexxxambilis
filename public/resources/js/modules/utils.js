@@ -123,14 +123,13 @@ function Utils() {
         $(form).find('#error_message_box').addClass('hide');
 
         $.each($(form).find('input,select,textarea'), function(i,e){
-            $(form).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(form).popover('dispose');
+            $(e).prop('title', '').removeClass('is-invalid').closest('div').find('label').removeClass('text-danger');
+            $(e).popover('dispose');
         });
     }
 
     this.show_form_errors = function(form, fields, message = false)
     {
-        console.log(message);
         var errors = '';
         if (message) {
             errors += '<small class="d-block">' + message + '</small>';
@@ -210,12 +209,6 @@ function Utils() {
     {   
         // reset form data
         $(formSelector).trigger("reset");
-
-        // reset input erros
-        $.each($(formSelector).find('input, textarea, select'), function(i,e){
-            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(e).popover('dispose');
-        });
 
         self.reset_form_errors(formSelector);
 

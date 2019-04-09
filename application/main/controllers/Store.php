@@ -16,6 +16,7 @@ class Store extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'Store',
+            'pageSubTitle'  => 'Ambilis ng Business ko!',
             'accountInfo'   => user_account_details(),
             'jsModules'         => array(
                 'store'

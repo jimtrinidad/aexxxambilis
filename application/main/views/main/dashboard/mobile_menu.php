@@ -2,12 +2,12 @@
 		
 	<div class="mobile-menu-info">
 		<div class="row">
-			<div class="col-10">
+			<div class="col-9">
 				<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" class="profile-pic"/>
-				<span class="pr-id"><?php echo substr($accountInfo->Firstname, 0,1) . '. ' . $accountInfo->Lastname . ' | ID: ' . $accountInfo->PublicID?></span>
+				<span class="pr-id"><?php echo substr($accountInfo->Firstname, 0,1) . '. ' . $accountInfo->Lastname . '<br>' . $accountInfo->PublicID?></span>
 			</div>
-			<div class="col-2 text-right">
-				<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="35" class="pr-qr-code" />
+			<div class="col-3 text-right">
+				<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="40" class="pr-qr-code" />
 			</div>
 		</div>
 	</div>
@@ -84,12 +84,14 @@
 		foreach ($categories as $k => $c) {
 
 			echo '<div class="col-12 col-sm-6 col-md-4 menu-categories mt-2">
-							<div class="product-img">
-								<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
-							</div>
-							<div class="bg-red ' . ($k % 2 == 0 ? 'bg-red text-white' : 'bg-gray text-black') . ' p-2 ">
-								<h3>'. $c['Name'] .'</h3>
-							</div>
+							<a href="'. site_url('marketplace?c=' . $c['id']) .'">
+								<div class="product-img">
+									<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
+								</div>
+								<div class="bg-red ' . ($k % 2 == 0 ? 'bg-red text-white' : 'bg-gray text-black') . ' p-2 ">
+									<h3>'. $c['Name'] .'</h3>
+								</div>
+							</a>
 						</div>';
 		}
 		?>

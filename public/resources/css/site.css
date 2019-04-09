@@ -21,12 +21,20 @@ a:hover {text-decoration: none;}
     text-decoration: none;
 }
 
-.i-15 {width: 15px;height: 15px;}
-.i-45 {width: 45px;height: 45px;}
+.mobile-menu-info .profile-pic {
+     margin-top: 0px; 
+    margin-bottom: 18px;
+}
+
+.mobile-menu-info .pr-qr-code {
+    margin-top: 5px;
+}
 
 /*end*/
 
 
+.i-15 {width: 15px;height: 15px;}
+.i-45 {width: 45px;height: 45px;}
 
 .form-control:read-only {
 	background-color: #fff !important;

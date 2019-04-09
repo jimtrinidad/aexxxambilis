@@ -3,7 +3,7 @@
     <div class="modal-content">
       <form id="storeProfileForm" class="modalForm" action="<?php echo site_url('store/update') ?>">
 	    	<div class="modal-header">
-	        <h5 class="modal-title">Update Store Profile</h5>
+	        <h5 class="modal-title text-b-red">Update Store Profile</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -27,8 +27,8 @@
 					</div>
 				</div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	        <button type="submit" class="btn btn-primary">Save</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        <button type="submit" class="btn bg-b-red text-white">Save</button>
 	      </div>
 			</form>
     </div>
@@ -41,7 +41,7 @@
     <div class="modal-content">
       <form id="itemForm" class="modalForm" name="itemForm" action="<?php echo site_url('store/saveitem') ?>">
         <div class="modal-header">
-	        <h5 class="modal-title">Product Setup</h5>
+	        <h5 class="modal-title text-b-red">Product Setup</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -208,7 +208,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-success">Save</button>
+          <button type="submit" class="btn bg-b-red text-white">Save</button>
         </div>
       </form>
     </div>

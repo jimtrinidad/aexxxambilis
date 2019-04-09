@@ -58,7 +58,7 @@ function Wallet() {
 
         var form  = '#depositForm';
         var modal = '#depositModal';
-        Utils.show_form_modal(modal, form, 'Fund Wallet', function(){
+        Utils.show_form_modal(modal, form, false, function(){
 
         });
 

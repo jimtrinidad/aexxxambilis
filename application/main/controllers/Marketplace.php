@@ -16,6 +16,7 @@ class Marketplace extends CI_Controller
     {
         $viewData = array(
             'pageTitle'     => 'Marketplace',
+            'pageSubTitle'  => 'Ambilis Mag Shopping!',
             'accountInfo'   => user_account_details(),
             'jsModules'         => array(
                 'marketplace',
@@ -31,6 +32,10 @@ class Marketplace extends CI_Controller
         // SET SEARCH FILTER
         if (get_post('search')) {
             $where['CONCAT(Name, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
+        }
+
+        if (get_post('c')) {
+            $where['Category'] = get_post('c');
         }
 
         $paginatationData = $this->appdb->getPaginationData('StoreItems', $page_limit, $page_start, $where, $order);
@@ -56,6 +61,8 @@ class Marketplace extends CI_Controller
 
         $viewData['products']   = $products;
         $viewData['pagination'] = paginate($paginationConfig);
+
+        $viewData['category']   = $this->appdb->getRowObject('ProductCategories', get_post('c'));
         // print_data($products, true);
 
         view('main/marketplace/index', $viewData, 'templates/main');

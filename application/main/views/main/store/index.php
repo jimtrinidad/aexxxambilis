@@ -1,11 +1,13 @@
 <div class="mobile-menu-top container">
 		
 	<div class="mobile-menu-info">
-		<div class="row">
-			<div class="col-12">
-				<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" style="float: left;width: 90px;margin-right: 5px;"/>
+		<div class="row gutter-5">
+			<div class="col-3 col-sm-2">
+				<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" width="100%"/>
+			</div>
+			<div class="col-9 col-sm-10">
 				<?php if ($StoreData) { ?>
-				  <h3 class="mb-0"><?php echo $StoreData->Name ?? ''; ?></h3>
+				  <h4 class="mb-0"><?php echo $StoreData->Name ?? ''; ?></h4>
 				  <p class="lead small">
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $StoreData->Address ?? ''; ?></span>
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/call.png" /> <?php echo $StoreData->Contact ?? ''; ?></span>

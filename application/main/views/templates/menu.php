@@ -6,7 +6,7 @@
 		<div></div>
 	</div>
 
-	Ambilis Mobile Platform
+	<?php echo ($pageSubTitle ?? 'Ambilis Mobile Platform'); ?>
 	
 	<div class="dropmenu">
 		<ul>

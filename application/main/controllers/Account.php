@@ -10,17 +10,6 @@ class Account extends CI_Controller
 	}
 
     public function test() {
-        $users = $this->appdb->getRecords('Users');
-        foreach ($users as $u) {
-            $saveData = array(
-                'id'        => $u['id'],
-                'PublicID'  => generate_public_id($u['Lastname'])
-            );
-
-            if (!$u['PublicID']) {
-                $this->appdb->saveData('Users', $saveData);
-            }
-        }
     }
 
     public function index()
@@ -31,6 +20,7 @@ class Account extends CI_Controller
 
         $viewData = array(
             'pageTitle'     => 'Account',
+            'pageSubTitle'  => 'My Account',
             'accountInfo'   => user_account_details()
         );
 

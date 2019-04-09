@@ -15,7 +15,7 @@
               </div>
             </div>
          </div> -->
-         <h5 class="secondary-title text-red text-center mt-4">My Market Place</h5>
+         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name : 'My Market Place' ?></h5>
          <div class="row text-center">
           <div class="col-md-12 float-none center-block">
             <div class="input-group">
@@ -40,25 +40,6 @@
         foreach ($products as $item) { 
         $distribution = profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']);
       ?>
-<!--         <div class="col-6 col-sm-4 col-md-3 item">
-          <div class="card">
-            <img class="card-img-top" src="<?php echo public_url('assets/products/') . $item['Image']  ?>" alt="Card image cap">
-            <div class="card-body p-2">
-              <span class="text-danger"><?php echo $item['Name'] ?></span>
-              <span class="uom"><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></span>
-              <span class="d-block text-info"><?php echo peso($item['Price']) ?></span>
-              <div class="row no-gutters">
-                <div class="col-8">
-                  <span class="d-block small"><?php echo $item['seller']['Name'] ?></span>
-                </div>
-                <div class="col-4 text-right">
-                  <a title="Call" href="tel:<?php echo $item['seller']['Contact']; ?>"><i class="fa fa-phone"></i></a>
-                  <a href="mail:<?php echo $item['seller']['Email']; ?>" title="Send a message to the seller"><i class="fa fa-envelope"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
           <div class="product-img">
             <img src="<?php echo public_url('assets/products/') . $item['Image']  ?>" width="100%">
