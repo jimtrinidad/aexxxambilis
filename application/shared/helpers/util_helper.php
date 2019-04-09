@@ -6,6 +6,27 @@ function microsecID() {
     return number_format($v, 0, '', '');
 }
 
+function generate_public_id($lastname, $suffix_length = 4)
+{
+    // remove all except letters
+    $clean  = preg_replace("/[^A-Za-z]/", '', $lastname);
+    $name   = strtoupper($clean);
+
+    $randomNumber = random_number($suffix_length);
+
+    $id = $name . $randomNumber;
+
+    // check if not exists
+    $ci =& get_instance();
+    $query = $ci->db->where('PublicID', $id)->get('Users');
+    if ($query->num_rows() > 0) {
+        // retry if exists
+        $id = generate_public_id($lastname);
+    }
+
+    return $id;
+}
+
 function datetime() {
     return date('Y-m-d H:i:s');
 }

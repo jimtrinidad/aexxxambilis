@@ -118,15 +118,21 @@ function Utils() {
 
     this.reset_form_errors = function(form)
     {
+        $(form).find('#error_message_box .error_messages').html('');
+        $(form).find('#error_message_box').addClass('hide');
+
         $.each($(form).find('input,select,textarea'), function(i,e){
             $(form).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
             $(form).popover('destroy');
         });
     }
 
-    this.show_form_errors = function(form, fields)
+    this.show_form_errors = function(form, fields, message = false)
     {
         var errors = '';
+        if (message) {
+            errors += '<p class="small">' + message + '</p>';
+        }
         $.each(fields, function(i,e){
             $('#'+i+',.'+i).prop('title', e).addClass('is-invalid').closest('div').find('label').addClass('text-danger');
             Utils.popover($('#'+i+',.'+i), {
@@ -134,7 +140,7 @@ function Utils() {
                 p: 'top',
                 m: e
             });
-            errors += '<small class="d-block">' + e + '</small>';
+            errors += '<p class="small">' + e + '</p>';
         });
 
         $('#error_message_box .error_messages').html(errors);
@@ -159,10 +165,6 @@ function Utils() {
         
         // reset input erros
         self.reset_form_errors(form);
-        
-        //clean error box
-        // $('#error_message_box .error_messages').html('');
-        // $('#error_message_box').addClass('hide');
 
         $.ajax({
             url: $(form).prop('action'),
@@ -213,10 +215,6 @@ function Utils() {
         });
 
         self.reset_form_errors(formSelector);
-
-        //clean error box
-        $(formSelector).find('#error_message_box .error_messages').html('');
-        $(formSelector).find('#error_message_box').addClass('hide');
 
         if (todo_fnc) {
             todo_fnc();

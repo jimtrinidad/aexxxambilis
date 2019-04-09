@@ -125,10 +125,6 @@ function Account() {
         // reset input erros
         Utils.reset_form_errors(e);
         
-        //clean error box
-        // $('#error_message_box .error_messages').html('');
-        // $('#error_message_box').addClass('hide');
-
         $.ajax({
             url: $(e).prop('action'),
             type: 'POST',
@@ -141,7 +137,7 @@ function Account() {
                     });
                 } else {
                     // bootbox.alert(response.message);
-                    Utils.show_form_errors(e, response.fields);
+                    Utils.show_form_errors(e, response.fields, response.message);
                 }
             },
             complete: function() {

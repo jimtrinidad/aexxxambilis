@@ -10,6 +10,17 @@ class Account extends CI_Controller
 	}
 
     public function test() {
+        $users = $this->appdb->getRecords('Users');
+        foreach ($users as $u) {
+            $saveData = array(
+                'id'        => $u['id'],
+                'PublicID'  => generate_public_id($u['Lastname'])
+            );
+
+            if (!$u['PublicID']) {
+                $this->appdb->saveData('Users', $saveData);
+            }
+        }
     }
 
     public function index()
@@ -44,7 +55,7 @@ class Account extends CI_Controller
         );
 
         // view('account/login', $viewData, 'templates/account');
-        view('account/login2', $viewData);
+        view('account/login', $viewData);
     }
 
     /**
@@ -115,7 +126,7 @@ class Account extends CI_Controller
         );
 
         // view('account/registration', $viewData, 'templates/account');
-        view('account/registration2', $viewData);
+        view('account/registration', $viewData);
     }
 
     /**
@@ -137,40 +148,54 @@ class Account extends CI_Controller
             );
         } else {
 
-            $registrationID = get_post('RegistrationID');
+            $referrer = $this->appdb->getRowObject('Users', get_post('Referrer'), 'PublicID');
 
-            $insertData     = array(
-                'RegistrationID'    => $registrationID,
-                'Firstname'         => get_post('Firstname'),
-                'Lastname'          => get_post('Lastname'),
-                'EmailAddress'      => get_post('EmailAddress'),
-                'Mobile'            => get_post('Mobile'),
-                'Password'          => $this->authentication->hash_password(get_post('Password')),
-                'AccountLevel'      => 1, // default, regular user,
-                'Status'            => 1, // active
-                'DateAdded'         => datetime(),
-            );
+            if ($referrer) {
 
-            if ($this->appdb->getRowObject('Users', $registrationID, 'RegistrationID') === false) {
+                $registrationID = get_post('RegistrationID');
+                $PublicID       = generate_public_id(get_post('Lastname'));
 
-                if (($ID = $this->appdb->saveData('Users', $insertData))) {
-                    $return_data = array(
-                        'status'    => true,
-                        'message'   => 'Account registration successful. You will can now login your account.',
-                        'id'        => $ID
-                    );
+                $insertData     = array(
+                    'Referrer'          => $referrer->id,
+                    'PublicID'          => $PublicID,
+                    'RegistrationID'    => $registrationID,
+                    'Firstname'         => get_post('Firstname'),
+                    'Lastname'          => get_post('Lastname'),
+                    'EmailAddress'      => get_post('EmailAddress'),
+                    'Mobile'            => get_post('Mobile'),
+                    'Password'          => $this->authentication->hash_password(get_post('Password')),
+                    'AccountLevel'      => 1, // default, regular user,
+                    'Status'            => 1, // active
+                    'DateAdded'         => datetime(),
+                );
+
+                if ($this->appdb->getRowObject('Users', $registrationID, 'RegistrationID') === false) {
+
+                    if (($ID = $this->appdb->saveData('Users', $insertData))) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Account registration successful. You will can now login your account.',
+                            'id'        => $ID
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Registration failed. Please try again later.'
+                        );
+                        @unlink($this->upload->data('full_name'));
+                    }
+
                 } else {
                     $return_data = array(
                         'status'    => false,
-                        'message'   => 'Registration failed. Please try again later.'
+                        'message'   => 'Account already exists.'
                     );
-                    @unlink($this->upload->data('full_name'));
                 }
 
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Account already exists.'
+                    'message'   => 'Invalid referrer id.'
                 );
             }
         }

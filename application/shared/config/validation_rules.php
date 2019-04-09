@@ -24,9 +24,8 @@ $config['account_registration'] = array(
 	        'is_unique' => 'Mobile number already exists.'
 	    )),
 	array('Password', 'Password', 'required|min_length[8]|max_length[16]'),
-	array('ConfirmPassword', 'Password confirmation', 'required|matches[Password]')
-
-
+	array('ConfirmPassword', 'Password confirmation', 'required|matches[Password]'),
+	array('Referrer', 'Referrer', 'trim|required')
 );
 
 

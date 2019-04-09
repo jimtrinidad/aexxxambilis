@@ -46,7 +46,7 @@ body.market-place{ background-color: #fff;}
 
 .my-connections p{ margin-bottom: 0px;}
 
-.registration{ background: #f8d90a; }
+.registration{ background: #fff; }
 .registration header{ text-align: center; margin-top: 50px; }
 .registration header img{width: 300px;}
 
@@ -61,7 +61,7 @@ body.market-place{ background-color: #fff;}
 .login .content .btn-auth img{ position:relative; top: -3px;}
 .login .content .btn-auth span{ width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; position:relative; top: 5px;}
 
-.login #header a img{ width: 100%!important; top: 100px;}
+.login #header a img, .registration #header a img{ width: 100%!important; top: 100px;}
 
 .main-login{ margin-top: 60px;}
 
@@ -160,9 +160,13 @@ box-shadow: 0 0 2px 1px #D1D1D1;}
 .text-b-red{ color: #f90d05; }
 .text-gray{ color: #9b9b9b; }
 .text-blue{ color: #346ad7; }
+.text-green{ color: #2f8c33; }
 
 .text-bold{ font-weight: bold; }
 .text-transform{ text-transform: uppercase; }
+.text-truncate{ white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;}
 
 .float-none{ float: none; }
 .margin-center{ margin: 0 auto;}
@@ -170,6 +174,12 @@ box-shadow: 0 0 2px 1px #D1D1D1;}
 
 .button-shadow{-webkit-box-shadow: 0 0 2px 1px #D1D1D1; box-shadow: 0 0 2px 1px #D1D1D1; padding: 10px; display: block;}
 .button-blue{-webkit-box-shadow: 0 0 2px 1px #D1D1D1; background: #39589b; padding: 10px; display: block;}
+
+.rotate{
+   -ms-transform: rotate(180deg); /* IE 9 */
+  -webkit-transform: rotate(180deg); /* Safari */
+  transform: rotate(180deg); /* Standard syntax */
+}
 
 /* Responsive */
 @media (max-width: 560px) {
