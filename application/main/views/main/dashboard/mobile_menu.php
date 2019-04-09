@@ -83,7 +83,7 @@
 		$categories  = lookup_all('ProductCategories', false, 'Name', false);
 		foreach ($categories as $k => $c) {
 
-			echo '<div class="col-12 col-sm-4 menu-categories mt-2">
+			echo '<div class="col-12 col-sm-6 col-md-4 menu-categories mt-2">
 							<div class="product-img">
 								<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
 							</div>

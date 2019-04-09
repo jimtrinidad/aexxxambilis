@@ -83,8 +83,6 @@ class Ewallet extends CI_Controller
                     'id'        => $ID
                 );
 
-                // $this->verify_deposit($saveData['Code']);
-
             } else {
                 $return_data = array(
                     'status'    => false,
@@ -92,77 +90,6 @@ class Ewallet extends CI_Controller
                 );
             }
 
-        }
-
-        response_json($return_data);
-    }
-
-    public function verify_deposit($code = null)
-    {
-        if (!$code) {
-            $code = get_post('code');
-        }
-
-        $deposit = $this->appdb->getRowObject('WalletDeposits', $code, 'Code');
-        if ($deposit) {
-
-            if ($deposit->Status == 0) {
-                $updateData = array(
-                    'id'           => $deposit->id,
-                    'Status'       => 1,
-                    'UpdatedBy'    => current_user(),
-                    'VerifiedDate' => date('Y-m-d H:i:s')  
-                );
-
-                $this->db->trans_begin();
-
-                if ($this->appdb->saveData('WalletDeposits', $updateData)) {
-                    $latest_balance = get_latest_wallet_balance();
-                    $new_balance    = $latest_balance + $deposit->Amount;
-
-                    $transactionData = array(
-                        'Code'          => $deposit->Code,
-                        'AccountID'     => $deposit->AccountID,
-                        'ReferenceNo'   => $deposit->ReferenceNo,
-                        'Date'          => date('Y-m-d h:i:s'),
-                        'Description'   => 'Bank Deposit',
-                        'Amount'        => $deposit->Amount,
-                        'Type'          => 'Credit',
-                        'EndingBalance' => $new_balance
-                    );
-
-                    if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
-                        $this->db->trans_commit();
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Deposit transaction has been posted.'
-                        );
-                    } else {
-                        $this->db->trans_rollback();
-
-                        $return_data = array(
-                            'status'    => false,
-                            'message'   => 'Saving transaction failed.'
-                        );
-                    }
-                } else {
-                    $return_data = array(
-                        'status'    => false,
-                        'message'   => 'Verifying deposit failed.'
-                    );
-                }
-
-            } else {
-                $return_data = array(
-                    'status'    => false,
-                    'message'   => 'Deposit request was already verified and credited.'
-                );
-            }
-        } else {
-            $return_data = array(
-                'status'    => false,
-                'message'   => 'Invalid deposit transaction'
-            );
         }
 
         response_json($return_data);

@@ -95,13 +95,15 @@ class Store extends CI_Controller
                 $upload_status = true;
                 $uploadData    = array();
 
+                $this->load->library('upload');
+
                 if(!empty($_FILES['Image']['name'])) {
                     foreach ($_FILES['Image']['name'] as $i => $name) {
 
-                        $randomLogoName = md5(microsecID());
+                        $randomLogoName = md5(random_letters());
 
                         // validate file upload
-                        $this->load->library('upload', array(
+                        $config = array(
                             'upload_path'   => PRODUCTS_DIRECTORY,
                             'allowed_types' => 'gif|jpg|png',
                             // 'max_size'      => '1000', // 1mb
@@ -109,7 +111,8 @@ class Store extends CI_Controller
                             // 'max_height'    => '768',
                             'overwrite'     => true,
                             'file_name'     => $randomLogoName
-                        ));
+                        );
+                        $this->upload->initialize($config);
 
                         $_FILES['userFile']['name'] = $_FILES['Image']['name'][$i];
                         $_FILES['userFile']['type'] = $_FILES['Image']['type'][$i];
@@ -130,6 +133,7 @@ class Store extends CI_Controller
                                 $uploadData[$i]['file_name'] = $fileData['file_name'];
                             }
                         }
+
                     }
                 }
 
