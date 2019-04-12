@@ -35,7 +35,7 @@
 			<!-- Main Body -->
 			<div id="main-content">
 				<div class="container p-0">
-					<div class="bg-trans-white rounded p-3">
+					<div class="bg-trans-white rounded p-1 pt-2">
 						<?php echo $templateContent;?>
 					</div>
 				</div>

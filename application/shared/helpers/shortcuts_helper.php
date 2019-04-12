@@ -341,3 +341,45 @@ function get_latest_wallet_balance($userID = false)
     	return 0;
     }
 }
+
+
+function get_transactions($userID)
+{	
+	if (!$userID) {
+		$userID = current_user();
+	}
+
+	$ci =& get_instance();
+
+	$transactions = $ci->appdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'Date DESC');
+  $summary      = array(
+    'balance'   => 0,
+    'debit'     => 0,
+    'credit'    => 0,
+    'transactions'  => 0
+  );
+
+  foreach ($transactions as &$i) {
+    if ($i['Type'] == 'Credit') {
+      $i['credit'] = $i['Amount'];
+      $i['debit']  = false;
+      $summary['credit'] += $i['Amount'];
+      $summary['balance'] += $i['Amount'];
+      $summary['transactions']++;
+    } else {
+      $i['debit']  = $i['Amount'];
+      $i['credit'] = false;
+      $summary['debit'] += $i['Amount'];
+      $summary['balance'] -= $i['Amount'];
+      $summary['transactions']++;
+    }
+  }
+
+  $data['transactions'] = $transactions;
+  $data['summary']      = $summary;
+
+  return array(
+  	'transactions'	=> $transactions,
+  	'summary'				=> $summary
+  );
+}

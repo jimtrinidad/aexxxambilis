@@ -24,6 +24,10 @@ class Account extends CI_Controller
             'accountInfo'   => user_account_details()
         );
 
+        $transaction = get_transactions(current_user());
+        $viewData['transactions'] = $transaction['transactions'];
+        $viewData['summary']      = $transaction['summary'];
+
         view('account/index', $viewData, 'templates/main');
     }
 

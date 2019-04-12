@@ -4,13 +4,13 @@
 					<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" width="100%" />
 				</div>
 				<div class="col-6">
-					<!-- <div class="balance-info">
-						<p>Balance: 12,305.00</p>
-						<p>Total Balance: 190,876.00</p>
-						<p>Total Debit: 12,506.00</p>
-						<p>Total Credit: 12,506.00</p>
-					</div> -->
-				</div>
+		     	<div class="balance-info">
+		        <p>Balance: <?php echo peso($summary['balance']) ?></p>
+		        <p>Total Transactions: <?php echo number_format($summary['transactions']) ?></p>
+		        <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
+		        <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
+		      </div>
+		    </div>
 				<div class="col-3">
 					<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="100%" />
 				</div>
@@ -41,7 +41,7 @@
 				<div class="col-12 content">
 					<label class="label-info">My Bank Name Detail</label>
 					<div class="info-field clearfix">
-						<span class="text">juanadelacruz@gmail.com</span>
+						<span class="text">Development Bank of the Philippines</span>
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
@@ -55,7 +55,7 @@
 				<div class="col-12 content">
 					<label class="label-info">Bank Account Name</label>
 					<div class="info-field clearfix">
-						<span class="text">Juana Dela Cruz</span>
+						<span class="text"><?php echo $accountInfo->fullname; ?></span>
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 			</div>
 			
 			<!-- Buttons -->
-			<div class="row mt-4">
+			<div class="row mt-4 gutter-5">
 				<div class="col-4">
 					<a href="#" class="button-shadow secure-my-account"><span>Secure my Account</span></a>
 				</div>
