@@ -101,8 +101,6 @@
     $(document).ready(function(){
       var h = $('.itemcont:last').height();
       $('.itemcont:last').mouseover(function(){
-        // var h = $(this).height();
-        console.log(h);
         $(this).height(h);
       }).mouseout(function(){
         $(this).height('auto');
