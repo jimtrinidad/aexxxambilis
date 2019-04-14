@@ -30,7 +30,44 @@ a:hover {text-decoration: none;}
     margin-top: 5px;
 }
 
-.product-img {cursor: pointer;}
+.product-img {
+  cursor: pointer;
+  height: 250px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.product-cont {
+  width: 100%;
+  border: 1px solid gray;
+}
+
+@media (min-width: 576px) {
+  .product-detail h2 {
+    display: block;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (min-width: 576px) {
+  .product-cont:hover .product-detail h2 {
+    display: block;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: none;
+  }
+
+  .product-cont:hover {
+    position: absolute;
+    width: calc(100% - 10px);
+    box-shadow: 1px 2px 8px #aaa;
+    z-index: 999;
+  }
+}
 
 /*end*/
 
