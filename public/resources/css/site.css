@@ -43,10 +43,13 @@ a:hover {text-decoration: none;}
   border: 1px solid gray;
 }
 
+.product-detail h2 {
+  font-size: 13px;
+}
+
 @media (min-width: 576px) {
   .product-detail h2 {
     display: block;
-    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

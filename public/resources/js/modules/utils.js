@@ -16,7 +16,7 @@ function Utils() {
 
         // keep scroll position on script reload
         if (sessionStorage.scrollTop != "undefined") {
-            $(window).scrollTop(sessionStorage.scrollTop);
+            // $(window).scrollTop(sessionStorage.scrollTop);
         }
 
     },
