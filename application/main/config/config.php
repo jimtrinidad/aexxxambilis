@@ -30,7 +30,7 @@ if (SUBDOMAIN == 'localhost') {
 } else if (SUBDOMAIN !== false) {
 	$config['base_url'] = 'https://'. SUBDOMAIN .'.ambilis.com/';
 } else {
-	$config['base_url'] = 'http://ambilis.com/';
+	$config['base_url'] = 'https://ambilis.com/';
 }
 
 /*
