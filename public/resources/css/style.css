@@ -90,6 +90,7 @@ border-radius: 50% 50%;
 }
 
 .my-account .balance-info p{ font-size: 12px; margin-bottom: 0px; line-height: 18px;}
+.my-account .balance-info p i{ font-size: 14px;}
 .my-account .main-info .content{ margin-top: 10px;}
 .my-account .main-info .content .label-info{ font-weight: bold; font-size: 12px;}
 .my-account .main-info .content .info-field{ padding: 5px 0px; border-bottom: 1px solid #d2d0d0; font-size: 15px;}
@@ -123,6 +124,17 @@ border-radius: 50% 50%;
 
 .menu-btn-icon.active{-webkit-box-shadow: 0 0 2px 1px #D1D1D1;
 box-shadow: 0 0 2px 1px #D1D1D1;}
+
+.add-quantity-products{ text-align: center; }
+.add-quantity-products span{ display: inline-block; font-size: 17px; font-weight: bold;}
+.add-quantity-products span.buttons{ padding: 0px 5px; border: 1px solid #dddcdc; color: #084aa3;}
+.add-quantity-products span.num-items{ padding: 0px 15px; border-bottom: 2px solid #cccccc; color: #000;}
+
+.add-to-cart-btn{ background: #e00000; padding: 10px; width: 85%; -webkit-border-radius: 50px 50px 50px 50px;
+border-radius: 50px 50px 50px 50px; color: #fff; text-align: center; font-size: 18px; border: 0px; margin: 0 auto; display: inline-block; margin-top: 20px;}
+
+.product-desc h6{ color: #084aa3; font-size: 17px; margin-top: 20px; margin-bottom: 0px;}
+.product-desc p{ margin-bottom: 0px; font-size: 14px; color: #606060}
 
 /* Bootstrap Override */
 .table thead th{ font-size: 12px; }
@@ -161,6 +173,8 @@ box-shadow: 0 0 2px 1px #D1D1D1;}
 .text-gray{ color: #9b9b9b; }
 .text-blue{ color: #346ad7; }
 .text-green{ color: #2f8c33; }
+.text-l-blue{ color: #b6ddf4; }
+
 
 .text-bold{ font-weight: bold; }
 .text-transform{ text-transform: uppercase; }

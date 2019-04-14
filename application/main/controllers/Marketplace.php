@@ -68,4 +68,28 @@ class Marketplace extends CI_Controller
         view('main/marketplace/index', $viewData, 'templates/main');
     }
 
+    public function view($code = false)
+    {
+        $product = $this->appdb->getRowObject('StoreItems', $code, 'Code');
+        if ($product) {
+
+            $viewData = array(
+                'pageTitle'     => $product->Name,
+                'pageSubTitle'  => 'Ambilis Mag Shopping!',
+                'accountInfo'   => user_account_details(),
+                'jsModules'         => array(
+                    'marketplace',
+                ),
+            );
+
+            $viewData['productData'] = $product;
+            $viewData['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
+
+            view('main/marketplace/view', $viewData, 'templates/main');
+
+        } else {
+            redirect(site_url('marketplace'));
+        }
+    }
+
 }

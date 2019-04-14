@@ -21,6 +21,16 @@ class Dashboard extends CI_Controller
             'accountInfo'       => user_account_details()
         );
 
+        $viewData['user_count'] = $this->db->query('SELECT COUNT(*) AS count FROM Users WHERE deletedAt IS NULL')->row()->count;
+        $viewData['product_count'] = $this->db->query('SELECT COUNT(*) AS count FROM StoreItems')->row()->count;
+        $viewData['store_count'] = $this->db->query('SELECT COUNT(*) AS count FROM StoreDetails')->row()->count;
+        $viewData['origin_count'] = $this->db->query('SELECT COUNT(DISTINCT(UPPER(Manufacturer))) AS `count` 
+                                                        FROM ambilis.StoreItems 
+                                                        WHERE Manufacturer IS NOT NULL AND Manufacturer != ""')->row()->count;
+
+
+        // print_data($viewData);
+
         view('pages/dashboard', $viewData, 'templates/main');
     }
 

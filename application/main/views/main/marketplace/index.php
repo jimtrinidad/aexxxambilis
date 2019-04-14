@@ -41,13 +41,13 @@
         $distribution = profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']);
       ?>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-          <div class="product-img">
+          <div class="product-img" onclick="window.location='<?php echo site_url('marketplace/view/' . $item['Code']) ?>'">
             <img src="<?php echo public_url('assets/products/') . $item['Image']  ?>" width="100%">
           </div>
           <div class="product-detail">
             <div class="row">
               <div class="col-7">
-                <h2><span class="text-red"><?php echo $item['Name'] ?></span><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></h2>
+                <h2><a href="<?php echo site_url('marketplace/view/' . $item['Code']) ?>"><span class="text-red"><?php echo $item['Name'] ?></span></a><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></h2>
                 <p><?php echo $item['seller']['Name'] ?></p>
               </div>
               <div class="col-5 text-right">
