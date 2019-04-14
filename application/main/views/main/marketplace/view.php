@@ -2,7 +2,7 @@
 	<div class="col-md-6 px-4">
 		<div class="row">
 			<div class="col text-center">
-				<img src="<?php echo public_url('assets/products') . product_filename($productData->Image); ?>" />
+				<img class="img-fluid" src="<?php echo public_url('assets/products') . product_filename($productData->Image); ?>" />
 			</div>
 		</div>
 		<div class="row mt-3">
