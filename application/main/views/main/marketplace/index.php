@@ -99,8 +99,11 @@
   	// Marketplace.itemData = <?php echo json_encode($products, JSON_HEX_TAG); ?>;
 
     $(document).ready(function(){
+      var h = $('.itemcont:last').height();
       $('.itemcont:last').mouseover(function(){
-        $(this).height(360);
+        // var h = $(this).height();
+        console.log(h);
+        $(this).height(h);
       }).mouseout(function(){
         $(this).height('auto');
       })
