@@ -30,7 +30,7 @@ a:hover {text-decoration: none;}
     margin-top: 5px;
 }
 
-.product-img {
+.product-listing .product-img {
   cursor: pointer;
   height: 250px;
   background-position: center center;
@@ -38,12 +38,12 @@ a:hover {text-decoration: none;}
   background-size: contain;
 }
 
-.product-cont {
+.product-listing .product-cont {
   width: 100%;
   border: 1px solid gray;
 }
 
-.product-detail h2 {
+.product-listing .product-detail h2 {
   font-size: 13px;
 }
 
@@ -57,14 +57,14 @@ a:hover {text-decoration: none;}
 }
 
 @media (min-width: 576px) {
-  .product-cont:hover .product-detail h2 {
+  .product-listing .product-cont:hover .product-detail h2 {
     display: block;
     white-space: normal;
     overflow: visible;
     text-overflow: none;
   }
 
-  .product-cont:hover {
+  .product-listing .product-cont:hover {
     position: absolute;
     width: calc(100% - 10px);
     box-shadow: 1px 2px 8px #aaa;

@@ -21,9 +21,9 @@
 		<div class="content">
 			<div class="row">
 				<div class="col-3 text-center icon-container">
-					<a href="javascript:;" onclick="Wallet.addDeposit()">
+					<a href="<?php echo site_url('ewallet') ?>">
 						<img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
-						<span>Fund my Wallet</span>
+						<span>EWallet</span>
 					</a>
 				</div>
 				<div class="col-3 text-center icon-container">
