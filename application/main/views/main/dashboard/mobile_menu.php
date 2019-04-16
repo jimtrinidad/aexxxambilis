@@ -21,7 +21,7 @@
 		<div class="content">
 			<div class="row">
 				<div class="col-3 text-center icon-container">
-					<a href="<?php echo site_url('ewallet') ?>">
+					<a href="javascript:;" onclick="Wallet.addDeposit()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
 						<span>Fund my Wallet</span>
 					</a>
@@ -99,3 +99,5 @@
 	</div>
 	
 </div>
+
+<?php view('main/ewallet/modals'); ?>
