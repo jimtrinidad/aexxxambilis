@@ -51,6 +51,13 @@ $config['add_deposit'] = array(
 	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
 );
 
+$config['encash_request'] = array(
+	array('ServiceType', 'Service Type', 'trim|required'),
+	array('AccountNo', 'Account Number', 'trim|required'),
+	array('Identifier', 'Identifier', 'trim|required'),
+	array('Amount', 'Amount', 'trim|required|numeric'),
+);
+
 $config['add_payment'] = array(
 	array('Biller', 'Biller', 'trim|required'),
 	array('ReferenceNo', 'Reference Number', 'trim|required'),

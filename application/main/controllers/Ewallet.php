@@ -73,6 +73,66 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
+    public function encash()
+    {
+        if (validate('encash_request') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $latest_balance = get_latest_wallet_balance();
+
+            $amount = get_post('Amount');
+            $desc   = 'Encash - ' . get_post('ServiceType');
+
+            if ($amount > 0) {
+
+                if ($latest_balance >= $amount) {
+
+                    $saveData = array(
+                        'Code'          => microsecID(),
+                        'AccountID'     => current_user(),
+                        'ReferenceNo'   => get_post('AccountNo'),
+                        'Description'   => $desc,
+                        'Date'          => date('Y-m-d H:i:s'),
+                        'Amount'        => $amount,
+                        'Type'          => 'Debit',
+                        'EndingBalance' => ($latest_balance - $amount)
+                    );
+
+                    if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Encash transaction has been requested successfully.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Transaction failed.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Insufficient balance.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid amount.'
+                );
+            }
+        }
+
+        response_json($return_data);
+    }
+
     public function add_payment()
     {
         if (validate('add_payment') == FALSE) {

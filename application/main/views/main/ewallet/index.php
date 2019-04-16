@@ -32,7 +32,7 @@
           </a>
         </div>
         <div class="col-3 text-center icon-container">
-          <a href="<?php echo site_url() ?>">
+          <a href="javascript:;" onclick="Wallet.encashRequest()">
             <img src="<?php echo public_url(); ?>resources/images/icons/encash-money.png" />
             <span>Encash</span>
           </a>
@@ -94,7 +94,7 @@
               if ($i['Type'] == 'Credit') {
                 echo '<i class="fa fa-external-link-square text-green" aria-hidden="true"></i> ';
               } else {
-                echo '<td scope="row"><i class="fa fa-external-link-square text-red rotate" aria-hidden="true"></i> ';
+                echo '<i class="fa fa-external-link-square text-red rotate" aria-hidden="true"></i> ';
               }
               echo $i['Description'] . '<br>';
               echo '<small>' . date('m/d/y h:i a', strtotime($i['Date'])) . '</small>';

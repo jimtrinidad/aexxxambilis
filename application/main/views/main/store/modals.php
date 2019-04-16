@@ -170,7 +170,7 @@
 	            <div class="form-group">
 	              <label class="control-label" for="DeliveryMethod">Delivery Method</label>
 	              <select class="form-control" id="DeliveryMethod" name="DeliveryMethod">
-	              	<option value=""></option>
+	              	<!-- <option value=""></option> -->
 	              	<?php
 	                  foreach(lookup('delivery_methods') as $k => $v) {
 	                    echo '<option value="' . $k . '">' . $v . '</option>';

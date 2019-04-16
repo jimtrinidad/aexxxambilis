@@ -84,7 +84,6 @@ function Utils() {
         });
 
         $( document ).ajaxComplete(function(event, xhr) {
-            console.log(xhr);
             if (xhr.status == 403) {
                 // invalid token, refresh page
                 bootbox.alert('Invalid request token!', function(){
@@ -108,7 +107,6 @@ function Utils() {
 
     this.update_csrf_token = function(data) 
     {
-        console.log('update token', data);
         if (typeof data.token !== 'undefined') {
             $global.csrfVal = data.token;
         }
@@ -143,8 +141,8 @@ function Utils() {
             errors += '<p class="small">' + e + '</p>';
         });
 
-        $('#error_message_box .error_messages').html(errors);
-        $('#error_message_box').removeClass('hide');
+        $(form).find('#error_message_box .error_messages').html(errors);
+        $(form).find('#error_message_box').removeClass('hide');
     }
 
     this.save_form = function(form, callback = false, error_callback = false, complete_callback = false)

@@ -21,6 +21,7 @@ $config['commission_type'] = array(
 );
 
 $config['delivery_methods'] = array(
-	1 => 'Company Delivery',
-	2 => 'Ambilis Delivery',
+	3 => 'Not Applicable',
+    1 => 'Company Delivery',
+    2 => 'Ambilis Delivery',
 );

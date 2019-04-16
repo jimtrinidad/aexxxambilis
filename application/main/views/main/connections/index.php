@@ -33,7 +33,7 @@
           </a>
         </div>
         <div class="col-3 text-center icon-container">
-          <a href="<?php echo site_url() ?>">
+          <a href="javascript:;" onclick="Wallet.encashRequest()">
             <img src="<?php echo public_url(); ?>resources/images/icons/encash-money.png" />
             <span>Encash</span>
           </a>

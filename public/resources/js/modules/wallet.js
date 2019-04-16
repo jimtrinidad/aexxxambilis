@@ -64,6 +64,20 @@ function Wallet() {
 
     }
 
+    /**
+    * encash
+    */
+    this.encashRequest = function()
+    {   
+
+        var form  = '#encashForm';
+        var modal = '#encashModal';
+        Utils.show_form_modal(modal, form, false, function(){
+
+        });
+
+    }
+
 
     this.addPayment = function()
     {

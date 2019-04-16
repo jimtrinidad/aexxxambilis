@@ -12,7 +12,7 @@
 		<ul>
 			<li><a href="<?php echo site_url('account')?>">My Account</a></li>
 			<li><a href="<?php echo site_url('ewallet')?>">eWallet</a></li>
-			<li><a href="<?php echo site_url()?>">Rewards</a></li>
+			<li><a href="<?php echo site_url('rewards')?>">Rewards</a></li>
 			<li><a href="<?php echo site_url('connections')?>">Connections</a></li>
 			<li><a href="<?php echo site_url('marketplace')?>">Shop</a></li>
 			<li><a href="<?php echo site_url('bills')?>">Bills Payment</a></li>
