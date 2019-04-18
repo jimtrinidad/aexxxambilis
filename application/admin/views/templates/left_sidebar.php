@@ -17,7 +17,8 @@
     <!-- Optionally, you can add icons to the links -->
     <li class="<?php echo (is_current_url('dashboard', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url() ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
     <li class="<?php echo (is_current_url('deposits', 'requests') ? 'active' : ''); ?>"><a href="<?php echo site_url('deposits/requests') ?>"><span>Deposit Requests</span></a></li>
-    <li class="treeview active">
+    <li class="<?php echo (is_current_url('billers', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers') ?>"><span>Billers</span></a></li>
+    <li class="treeview">
       <a href="#"><span>Products</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left pull-right"></i>
