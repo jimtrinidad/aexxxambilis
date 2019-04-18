@@ -60,8 +60,9 @@ $config['encash_request'] = array(
 
 $config['add_payment'] = array(
 	array('Biller', 'Biller', 'trim|required'),
-	array('ReferenceNo', 'Reference Number', 'trim|required'),
-	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+	array('AccountNo', 'Account Number', 'trim|required'),
+	array('Identifier', 'Identifier', 'trim|required'),
+	array('Amount', 'Amount', 'trim|required|numeric'),
 );
 
 $config['send_eload'] = array(

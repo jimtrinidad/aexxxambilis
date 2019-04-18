@@ -61,7 +61,7 @@ $autoload['packages'] = array(dirname(FCPATH) . '/application/shared/');
 $autoload['libraries'] = array(
 
 	// ci libraries
-	'database','session','form_validation',
+	'database','session','form_validation','cart',
 
 	// custom libraries
 	'authentication'

@@ -286,3 +286,9 @@ function partner_commision_rate($c)
 
     return 0;
 }
+
+
+function logger($message)
+{
+    syslog(LOG_INFO, '[AMBILIS] ' . $message);
+}

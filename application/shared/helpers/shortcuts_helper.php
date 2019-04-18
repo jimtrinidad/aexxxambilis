@@ -220,31 +220,31 @@ function isGuest()
 }
 
 
-function photo_filename($filename)
+function photo_filename($filename, $recache = true)
 {
 	// replace by default avatar if not exists
 	$filepath = PUBLIC_DIRECTORY . 'assets/profile/' . $filename;
-	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath) : 'default.jpg');
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . ($recache ? filemtime($filepath) : '') : 'default.jpg');
 }
 
-function logo_filename($filename)
+function logo_filename($filename, $recache = true)
 {
 	// replace by default logo if not exists
 	// recache using last file change
 	$filepath = PUBLIC_DIRECTORY . 'assets/logo/' . $filename;
-	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default.png');
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . ($recache ? filemtime($filepath) : '')  : 'default.png');
 }
 
-function upload_filename($filename)
+function upload_filename($filename, $recache = true)
 {
 	$filepath = PUBLIC_DIRECTORY . 'assets/uploads/' . $filename;
-	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default.png');
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . ($recache ? filemtime($filepath) : '')  : 'default.png');
 }
 
-function product_filename($filename)
+function product_filename($filename, $recache = true)
 {
 	$filepath = PUBLIC_DIRECTORY . 'assets/products/' . $filename;
-	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . filemtime($filepath)  : 'default.png');
+	return (!empty($filename) && file_exists($filepath) ? $filename . '?' . ($recache ? filemtime($filepath) : '')  : 'default.png');
 }
 
 

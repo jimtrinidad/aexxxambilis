@@ -79,46 +79,26 @@ function Wallet() {
     }
 
 
-    this.addPayment = function()
+    this.payBills = function(id)
     {
-        // reset form data
-        $('#paymentForm').trigger("reset");
 
-        // reset input erros
-        $.each($('#paymentForm').find('input, textarea, select'), function(i,e){
-            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(e).popover('destroy');
-        });
-        //clean error box
-        $('#paymentForm').find('#error_message_box .error_messages').html('');
-        $('#paymentForm').find('#error_message_box').addClass('hide');
-
-        $('#paymentModal .modal-title').html('<b>Payment</b>');
-        $('#paymentModal').modal({
-            backdrop : 'static',
-            keyboard : false
-        });
+        var data  = self.getData(id);
+        if (data) {
+            var form  = '#paymentForm';
+            var modal = '#paymentModal';
+            Utils.show_form_modal(modal, form, false, function(){
+                $(form).find('#Biller').val(data.Code);
+                $(form).find('#AccountNo').prop('placeholder', data.FirstField).prop('maxlength', data.FirstFieldWidth);
+                $(form).find('#AccountNoLabel').text(data.FirstField);
+                $(form).find('#Identifier').prop('placeholder', data.SecondField).prop('maxlength', data.SecondFieldWidth);
+                $(form).find('#IdentifierLabel').text(data.SecondField);
+            });
+        }
     }
 
     this.sendELoad = function()
     {
-        // reset form data
-        $('#eLoadForm').trigger("reset");
-
-        // reset input erros
-        $.each($('#eLoadForm').find('input, textarea, select'), function(i,e){
-            $(e).prop('title', '').closest('div').removeClass('has-error').find('label').removeClass('text-danger');
-            $(e).popover('destroy');
-        });
-        //clean error box
-        $('#eLoadForm').find('#error_message_box .error_messages').html('');
-        $('#eLoadForm').find('#error_message_box').addClass('hide');
-
-        $('#eLoadModal .modal-title').html('<b>Send eLoad</b>');
-        $('#eLoadModal').modal({
-            backdrop : 'static',
-            keyboard : false
-        });
+        
     }
 
 }

@@ -22,8 +22,8 @@
               <input type="text" class="form-control bg-cream" name="search" placeholder="Search Items" value="<?php echo get_post('search') ?>">
               <div class="input-group-append" id="button-addon4">
               <button type="submit" class="btn bg-d-purple text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
-              <button class="btn bg-red text-white" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
               </div>
+              <a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn bg-red text-white" type="button"><span class="badge badge-warning" id="cart_items"><?php echo $this->cart->total_items() ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
             </div>  
           </div>
         </div>
@@ -43,7 +43,6 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 itemcont" style="position: relative;">
           <div class="product-cont">
             <div class="product-img" onclick="window.location='<?php echo site_url('marketplace/view/' . $item['Code']) ?>'" style="background-image: url('<?php echo public_url('assets/products/') . $item['Image']  ?>');">
-              <!-- <img src="<?php echo public_url('assets/products/') . $item['Image']  ?>" width="100%"> -->
             </div>
             <div class="product-detail">
               <div class="row">
@@ -66,7 +65,7 @@
                   </p>
                 </div>
                 <div class="col-5 text-right">
-                  <a href="javascript:;" class="pr-button bg-red text-white mb-2"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                  <a href="javascript:;" class="pr-button bg-red text-white mb-2" onclick="Marketplace.addToCart('<?php echo $item['Code'] ?>')"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                   <a href="tel:<?php echo $item['seller']['Contact']; ?>"  class="pr-button bg-yellow text-black mb-2"><i class="fa fa-phone" aria-hidden="true"></i></a>
                 </div>
               </div>
@@ -92,6 +91,8 @@
 <div class="row">
   <div class="col-12"></div>
 </div>
+
+<?php view('main/marketplace/modals'); ?>
 
 <script type="text/javascript">
   $(document).ready(function(){
