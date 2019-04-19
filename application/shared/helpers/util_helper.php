@@ -1,7 +1,11 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-function microsecID() {
-	$v = round(microtime(true) * 1000);
+function microsecID($random_time = false) {
+    if ($random_time) {
+        return mt_rand(1000000000, time()) . str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
+    } else {
+	   $v = round(microtime(true) * 1000);
+    }
     // just returning $v as floats converts to exponential value
     return number_format($v, 0, '', '');
 }
@@ -232,6 +236,7 @@ function csrf_token_input_field()
 */
 function profit_distribution($srp, $commision, $type)
 {
+    $discount = 0;
     if ($type == 1) {
         $profit = $commision;
     } else {
@@ -244,6 +249,11 @@ function profit_distribution($srp, $commision, $type)
     }
 
     $data = array(
+        'srp'            => $srp,
+        'commision'      => $commision,
+        'commision_type' => $type,
+        'discount'       => $discount,
+        'profit'         => $profit,
         'company'        => $profit * 0.30,
         'investor'       => $profit * 0.25,
         'referral'       => $profit * 0.30,

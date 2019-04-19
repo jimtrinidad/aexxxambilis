@@ -58,8 +58,8 @@
                 <div class="col-7">
                   <p class="sub-details">
                     <?php 
-                      echo '<span class="d-sm-block">' . number_format($distribution['referral'], 1) . ' Points </span>' . 
-                           '<span class="d-sm-block">' . number_format($distribution['shared_rewards'], 1) . ' Shared </span>' . 
+                      echo '<span class="d-sm-block">' . number_format($distribution['discount'], 1) . ' Points </span>' . 
+                           '<span class="d-sm-block">' . number_format($distribution['divided_reward'], 1) . ' Shared </span>' . 
                            '<span class="d-sm-block">' . number_format($distribution['cashback'], 1) . ' Cashback</span>';
                     ?>
                   </p>

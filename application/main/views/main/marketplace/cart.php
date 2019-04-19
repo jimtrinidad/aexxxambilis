@@ -38,7 +38,7 @@
       <td><a href="<?php echo site_url('marketplace') ?>" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
       <td colspan="2" class=""></td>
       <td class="text-center"><strong class="cart_total_amount"><?php echo peso($this->cart->total()) ?></strong></td>
-      <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+      <td><a href="<?php echo site_url('marketplace/checkout') ?>" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
     </tr>
   </tfoot>
 </table>

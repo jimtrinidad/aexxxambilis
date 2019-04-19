@@ -123,3 +123,34 @@ function lookup_row($tableName, $find, $field = 'id', $select = false)
     return $record;
 
 }
+
+
+function lookup_address($codes)
+{
+    $address = array();
+
+    $codes = (array) $codes;
+
+    if (isset($codes['Province']) && $codes['Province']) {
+        $tableData = lookup_row('UtilLocProvince', $codes['Province'], 'provCode');
+        if ($tableData) {
+            $address['Province'] = $tableData->provDesc;
+        }
+    }
+
+    if (isset($codes['City']) && $codes['City']) {
+        $tableData = lookup_row('UtilLocCityMun', $codes['City'], 'citymunCode');
+        if ($tableData) {
+            $address['MuniCity'] = $tableData->citymunDesc;
+        }
+    }
+
+    if (isset($codes['Barangay']) && $codes['Barangay']) {
+        $tableData = lookup_row('UtilLocBrgy', $codes['Barangay'], 'brgyCode');
+        if ($tableData) {
+            $address['Barangay'] = $tableData->brgyDesc;
+        }
+    }
+
+    return $address;
+}

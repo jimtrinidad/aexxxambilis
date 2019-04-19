@@ -205,4 +205,54 @@ class Account extends CI_Controller
         redirect();
     }
 
+
+    public function save_address()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        if (validate('user_address') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $user_addresses = $this->appdb->getRecords('UserAddress', array('UserID' => current_user()));
+
+            // if no existing address. set this new one as active 
+            if (count($user_addresses) == 0) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+
+            $saveData     = array(
+                'UserID'            => current_user(),
+                'Street'            => get_post('AddressStreet'),
+                'Barangay'          => get_post('AddressBarangay'),
+                'City'              => get_post('AddressCity'),
+                'Province'          => get_post('AddressProvince'),
+                'Status'            => $status,
+                'LastUpdate'        => datetime(),
+            );
+
+            if (($ID = $this->appdb->saveData('UserAddress', $saveData))) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Account address has been added successfully.',
+                    'id'        => $ID
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Adding address failed. Please try again later.'
+                );
+            }
+        }
+        response_json($return_data);
+    }
+
 }

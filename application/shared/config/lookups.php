@@ -25,3 +25,22 @@ $config['delivery_methods'] = array(
     1 => 'Company Delivery',
     2 => 'Ambilis Delivery',
 );
+
+$config['payment_method'] = array(
+    1 => 'eWallet'
+);
+
+$config['order_status'] = array(
+    1 => 'Processing',
+    2 => 'For Delivery',
+    3 => 'Delivered',
+    4 => 'Completed',
+    5 => 'Canceled'
+);
+
+$config['wallet_rewards_type'] = array(
+    1 => 'Discount',
+    2 => 'Referral Points',
+    3 => 'Shared Reward',
+    4 => 'Cashback'
+);

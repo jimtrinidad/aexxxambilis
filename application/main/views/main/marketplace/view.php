@@ -21,7 +21,7 @@
 
 		<div class="row">
 			<div class="col text-center">
-				<button class="add-to-cart-btn">add to basket - <?php echo peso($productData->Price) ?></button>
+				<button class="add-to-cart-btn" onclick="Marketplace.addToCart('<?php echo $productData->Code ?>')">add to basket - <?php echo peso($productData->Price) ?></button>
 			</div>
 		</div>
 
@@ -29,8 +29,8 @@
 			<div class="col product-desc">
 				<h6>Rewards</h6>
 				<?php 
-          echo '<p>' . number_format($distribution['referral'], 1) . ' Points </p>' . 
-               '<p>' . number_format($distribution['shared_rewards'], 1) . ' Shared </p>' . 
+          echo '<p>' . number_format($distribution['discount'], 1) . ' Points </p>' . 
+               '<p>' . number_format($distribution['divided_reward'], 1) . ' Shared </p>' . 
                '<p>' . number_format($distribution['cashback'], 1) . ' Cashback</p>';
         ?>
 			</div>
@@ -39,7 +39,7 @@
 		<div class="row">
 			<div class="col product-desc">
 				<h6>Delivery Method</h6>
-				<p><?php echo lookup('delivery_methods', $productData->DeliveryMethod) ?></p>
+				<p><?php echo lookup('delivery_methods', ($productData->DeliveryMethod ? $productData->DeliveryMethod : 3)) ?></p>
 			</div>
 		</div>
 
@@ -55,3 +55,5 @@
 		</div>
 	</div>
 </div>
+
+<?php view('main/marketplace/modals'); ?>

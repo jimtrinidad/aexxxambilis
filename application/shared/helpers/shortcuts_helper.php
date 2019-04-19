@@ -383,3 +383,30 @@ function get_transactions($userID)
   	'summary'				=> $summary
   );
 }
+
+/**
+* get upline referrer
+*/
+function get_upper_referrers($userID, $levels = 8)
+{
+
+	$ci =& get_instance();
+	$user = $ci->appdb->getRowObject('Users', $userID);
+	$partakers = array(
+		$userID
+	);
+	$x 	 	= 1;
+	while ($x < $levels) {
+		if ($user && $user->Referrer) {
+			$user = $ci->appdb->getRowObject('Users', $user->Referrer);
+			if ($user) {
+				$partakers[] = $user->id;
+			} else {
+				// no more upper level, stop loop
+				break;
+			}
+		}
+	}
+
+	return $partakers;
+}

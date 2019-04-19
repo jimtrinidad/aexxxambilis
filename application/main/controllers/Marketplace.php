@@ -117,6 +117,53 @@ class Marketplace extends CI_Controller
         view('main/marketplace/cart', $viewData, 'templates/main');
     }
 
+    public function checkout()
+    {
+        // redirect if cart is empty
+        if (!$this->cart->total_items()) {
+            redirect(site_url('marketplace'));
+        }
+
+        $viewData = array(
+            'pageTitle'     => 'Checkout',
+            'pageSubTitle'  => 'Ambilis Mag Shopping!',
+            'accountInfo'   => user_account_details(),
+            'jsModules'         => array(
+                'marketplace',
+                'general'
+            ),
+        );
+
+        $cart_items = $this->cart->contents();
+        $viewData['points'] = 0;
+        $viewData['shared'] = 0;
+        $viewData['cashback'] = 0; 
+        foreach ($cart_items as &$item) {
+            $product = $this->appdb->getRowObject('StoreItems', $item['id']);
+            $seller  = (array) $this->appdb->getRowObject('StoreDetails', $product->StoreID);
+            $item['seller'] = $seller['Name'];
+            $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
+
+            $viewData['points'] += $item['distribution']['discount'] * $item['qty'];
+            $viewData['shared'] += $item['distribution']['divided_reward'] * $item['qty'];
+            $viewData['cashback'] += $item['distribution']['cashback'] * $item['qty'];
+        }
+
+        $viewData['items'] = $cart_items;
+
+        $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+
+        if ($address) {
+            $address->data = lookup_address($address);
+        }
+
+        $viewData['address'] = $address;
+
+        // print_data($viewData);
+
+        view('main/marketplace/checkout', $viewData, 'templates/main');
+    }
+
     public function add_to_cart()
     { 
         $product = $this->appdb->getRowObject('StoreItems', get_post('code'), 'Code');
@@ -200,6 +247,151 @@ class Marketplace extends CI_Controller
         }
 
         response_json($return_data);
+    }
+
+
+    public function place_order()
+    {
+        if (is_ajax()) {
+
+            $cart_items = $this->cart->contents();
+
+            if ($this->cart->total_items()) {
+                $distribution = array(
+                    'discount'       => 0,
+                    'profit'         => 0,
+                    'company'        => 0,
+                    'investor'       => 0,
+                    'referral'       => 0,
+                    'delivery'       => 0,
+                    'cashback'       => 0,
+                    'shared_rewards' => 0,
+                    'divided_reward' => 0
+                );
+                foreach ($cart_items as &$item) {
+                    $product = $this->appdb->getRowObject('StoreItems', $item['id']);
+                    $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
+
+                    $distribution['discount']       += $item['distribution']['discount'] *= $item['qty'];
+                    $distribution['profit']         += $item['distribution']['profit'] *= $item['qty'];
+                    $distribution['company']        += $item['distribution']['company'] *= $item['qty'];
+                    $distribution['investor']       += $item['distribution']['investor'] *= $item['qty'];
+                    $distribution['referral']       += $item['distribution']['referral'] *= $item['qty'];
+                    $distribution['delivery']       += $item['distribution']['delivery'] *= $item['qty'];
+                    $distribution['cashback']       += $item['distribution']['cashback'] *= $item['qty'];
+                    $distribution['shared_rewards'] += $item['distribution']['shared_rewards'] *= $item['qty'];
+                    $distribution['divided_reward'] += $item['distribution']['divided_reward'] *= $item['qty'];
+                }
+
+                // print_data($distribution);
+                // print_data($cart_items);
+
+                $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+
+                if ($address) {
+
+
+                    $latest_balance = get_latest_wallet_balance();
+
+                    if ($latest_balance >= $this->cart->total()) {
+
+                        $orderData = array(
+                            'Code'          => microsecID(),
+                            'OrderBy'       => current_user(),
+                            'AddressID'     => $address->id,
+                            'PaymentMethod' => 1, // test, default ewallet
+                            'DeliveryMethod'=> 2, // test, default to ambilis delivery
+                            'ItemCount'     => $this->cart->total_items(),
+                            'TotalAmount'   => $this->cart->total(),
+                            'Status'        => 1,
+                            'Distribution'  => json_encode($distribution),
+                            'DateOrdered'   => datetime(),
+                            'LastUpdate'    => datetime(),
+                        );
+
+                        $this->db->trans_start();
+
+                        if (($ID = $this->appdb->saveData('Orders', $orderData))) {
+
+                            $has_error = false;
+
+                            $cart_items = array_values($cart_items);
+
+                            // add order items
+                            foreach ($cart_items as $k => $i) {
+                                $orderItemData = array(
+                                    'OrderID'       => $ID,
+                                    'ItemID'        => $i['id'],
+                                    'ItemName'      => $i['name'],
+                                    'Price'         => $i['price'],
+                                    'Quantity'      => $i['qty'],
+                                    'Distribution'  => json_encode($i['distribution'])
+                                );
+
+                                if (!$this->appdb->saveData('OrderItems', $orderItemData)) {
+                                    $has_error = true;
+                                    break;
+                                }
+                            }
+
+                            if ($has_error) {
+                                $return_data = array(
+                                    'status'    => false,
+                                    'message'   => 'Saving order item failed. Please try again later.'
+                                );
+                            } else {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Order has been placed successfully.',
+                                    'id'        => $orderData['Code']
+                                );
+
+                                // clean the cart
+                                $this->cart->destroy();
+                            }
+
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Saving order failed. Please try again later.'
+                            );
+                        }
+
+                        $this->db->trans_complete();
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Insufficient wallet balance.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Shipping address is not set.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'No item to order.'
+                );
+            }
+
+            response_json($return_data);
+
+        } else {
+            redirect();
+        }
+    }
+
+    /*
+    * auto complete order for test, to show earnings
+    */
+    private function complete_order($order_id)
+    {
+
     }
 
 }

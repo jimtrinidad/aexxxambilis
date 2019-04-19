@@ -29,7 +29,12 @@ $config['account_registration'] = array(
 );
 
 
-
+$config['user_address'] = array(
+	array('AddressProvince', 'Province', 'trim|required'),
+	array('AddressCity', 'City/Municipal', 'trim|required'),
+	array('AddressBarangay', 'Barangay', 'trim|required'),
+	array('AddressStreet', 'Home number & street', 'trim|required'),
+);
 
 
 $config['save_store_item'] = array(
