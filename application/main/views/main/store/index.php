@@ -86,7 +86,7 @@
               echo '<td>' . peso($i['Price']) . '</td>';
               echo '<td>' . $i['Measurement'] . '</td>';
               echo '<td>' . ($i['CommissionType'] ? lookup('commission_type', $i['CommissionType']) : '') . '</td>';
-              echo '<td>' . $i['CommissionValue'] . '</td>';
+              echo '<td>' . floatval($i['CommissionValue']) . '</td>';
               echo '<td class="text-right">
                     <a href="javascript:;" onclick="Store.editProduct('. $i['id'] . ')" class="text-info"><i class="fa fa-pencil"></i></a>
                     <a href="javascript:;" onclick="Store.deleteProduct('. $i['id'] . ')" class="text-danger"><i class="fa fa-trash"></i></a>

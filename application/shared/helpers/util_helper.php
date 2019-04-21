@@ -213,7 +213,8 @@ function number_to_words($number)
 
 function peso($number)
 {
-    return '₱' . number_format($number);
+    setlocale(LC_MONETARY, 'en_US');
+    return '₱' . rtrim(rtrim(number_format($number, 2, ".", ""), '0'), '.');
 }
 
 

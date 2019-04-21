@@ -115,6 +115,8 @@ function Store() {
             var modal = '#itemModal';
             Utils.show_form_modal(modal, form, 'Update Product', function(){
                 Utils.set_form_input_value(form, data);
+                $(form).find('#Price').val(parseFloat(data.Price));
+                $(form).find('#CommissionValue').val(parseFloat(data.CommissionValue));
                 $('#itemForm .image-preview').prop('src', window.public_url() + 'assets/products/default.png');
                 if (data.Image) {
                     $('#itemForm .product_image').prop('src', window.public_url() + 'assets/products/' + data.Image);
