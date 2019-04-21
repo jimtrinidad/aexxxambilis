@@ -28,6 +28,12 @@ class Connections extends CI_Controller
         $viewData['summary']      = $transaction['summary'];
 
         $connections = $this->appdb->getRecords('Users', array('Referrer' => current_user()));
+        $viewData['total_earnings'] = 0;
+        foreach ($connections as &$i) {
+            $earnings = $this->db->query('SELECT SUM(Amount) AS total FROM WalletRewards WHERE FromUserID = ' . $i['id'])->row()->total;
+            $i['earnings'] = $earnings;
+            $viewData['total_earnings'] += $earnings;
+        }
         $viewData['connections'] = $connections;
 
         view('main/connections/index', $viewData, 'templates/main');

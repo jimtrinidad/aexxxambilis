@@ -71,13 +71,13 @@
 			<!-- Buttons -->
 			<div class="row mt-4 gutter-5">
 				<div class="col-4">
-					<a href="#" class="button-shadow secure-my-account"><span>Secure my Account</span></a>
+					<a href="javascript:;" class="button-shadow secure-my-account"><span>Secure my Account</span></a>
 				</div>
 				<div class="col-4">
-					<a href="#" class="button-shadow connection-rewards"><span>Connection Rewards</span></a>
+					<a href="<?php echo site_url('connections') ?>" class="button-shadow connection-rewards"><span>Connection Rewards</span></a>
 				</div>
 				<div class="col-4">
-					<a href="#" class="button-shadow transactions"><span>My Transactions</span></a>
+					<a href="<?php echo site_url('ewallet') ?>" class="button-shadow transactions"><span>My Transactions</span></a>
 				</div>
 			</div>
 			<!-- Buttons End -->
