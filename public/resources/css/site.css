@@ -80,6 +80,10 @@ a:hover {text-decoration: none;}
 
 /*end*/
 
+table.table>tbody>tr>td,
+table.table>tfoot>tr>td {
+  vertical-align: middle;
+}
 
 .i-15 {width: 15px;height: 15px;}
 .i-45 {width: 45px;height: 45px;}

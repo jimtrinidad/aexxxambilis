@@ -468,7 +468,7 @@ class Marketplace extends CI_Controller
                 $referrerData = $this->appdb->getRowObject('Users', $buyerInfo->Referrer);
                 if ($referrerData) {
                     $rewards[] = array(
-                        'reward_type'   => 'referral_points',
+                        'reward_type'   => 'referrer',
                         'account_id'    => $buyerInfo->Referrer,
                         'from_user'     => $orderData->OrderBy,
                         'order_id'      => $orderData->id,

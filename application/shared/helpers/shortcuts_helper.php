@@ -351,7 +351,7 @@ function get_transactions($userID)
 
 	$ci =& get_instance();
 
-	$transactions = $ci->appdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'Date DESC, id DESC');
+	$transactions = $ci->appdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'id DESC');
   $summary      = array(
     'balance'   => 0,
     'debit'     => 0,

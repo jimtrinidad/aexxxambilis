@@ -58,28 +58,31 @@
 
 
 <div class="bg-trans-80-white p-3">
-  <h5>My Retail Transactions</h5>
+  <h5>My Reward Transactions</h5>
   <?php if (count($transactions)) { ?>
   <div class="table-responsive">
     <table class="table">
       <thead>
         <tr>
-          <th scope="col" class="text-red">Connections</th>
+          <th scope="col" class="text-red">From</th>
           <th scope="col" class="text-red">Contact</th>
           <th scope="col" class="text-red">Email</th>
-          <th scope="col" class="text-red">Earned</th>
-          <th scope="col" class="text-red">Points</th>
+          <th scope="col" class="text-red">Type</th>
+          <th scope="col" class="text-red">Amount</th>
         </tr>
       </thead>
       <tbody>
         <?php
         foreach ($transactions as $i) {
           echo '<tr>
-                  <th scope="row">' . $i['Firstname'] . ' ' . $i['Lastname'] . '<small class="d-xs-block d-sm-block d-md-inline"> ' . date('m/d/y h:i a', strtotime($i['DateAdded'])) . ' </small></th>
-                  <td>' . $i['Mobile'] . '</td>
-                  <td>' . $i['EmailAddress'] . '</td>
-                  <td>' . peso(rand(0, 9999)) .  '</td>
-                  <td>' . number_format(rand(0, 9999)) .  '</td>
+                  <td scope="row">' . 
+                    '<b>' . ($i['from'] ? $i['from']['public_id'] : '<span class="text-danger">ME</span>') . '</b>'
+                    . '<br><small class="d-xs-block d-sm-block d-md-inline"> ' . date('m/d/y h:i a', strtotime($i['DateAdded'])) . ' </small>
+                  </td>
+                  <td>' . ($i['from'] ? $i['from']['contact'] : '')  . '</td>
+                  <td>' . ($i['from'] ? $i['from']['email'] : '')  . '</td>
+                  <td>' . lookup('wallet_rewards_type', $i['Type']) .  '</td>
+                  <td>' . peso($i['Amount']) .  '</td>
                 </tr>';
         }
         ?>
