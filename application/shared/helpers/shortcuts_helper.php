@@ -351,7 +351,7 @@ function get_transactions($userID)
 
 	$ci =& get_instance();
 
-	$transactions = $ci->appdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'Date DESC');
+	$transactions = $ci->appdb->getRecords('WalletTransactions', array('AccountID' => current_user()), 'Date DESC, id DESC');
   $summary      = array(
     'balance'   => 0,
     'debit'     => 0,
@@ -405,8 +405,11 @@ function get_upper_referrers($userID, $levels = 8)
 				// no more upper level, stop loop
 				break;
 			}
+		} else {
+			break;
 		}
+		$x++;
 	}
 
-	return $partakers;
+	return array_slice($partakers, 0, $levels);
 }

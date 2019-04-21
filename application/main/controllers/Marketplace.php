@@ -292,18 +292,19 @@ class Marketplace extends CI_Controller
 
 
                     $latest_balance = get_latest_wallet_balance();
+                    $order_amount   = $this->cart->total();
 
-                    if ($latest_balance >= $this->cart->total()) {
+                    if ($latest_balance >= $order_amount) {
 
                         $orderData = array(
-                            'Code'          => microsecID(),
+                            'Code'          => microsecID(true),
                             'OrderBy'       => current_user(),
                             'AddressID'     => $address->id,
                             'PaymentMethod' => 1, // test, default ewallet
                             'DeliveryMethod'=> 2, // test, default to ambilis delivery
                             'ItemCount'     => $this->cart->total_items(),
-                            'TotalAmount'   => $this->cart->total(),
-                            'Status'        => 1,
+                            'TotalAmount'   => $order_amount,
+                            'Status'        => 4,
                             'Distribution'  => json_encode($distribution),
                             'DateOrdered'   => datetime(),
                             'LastUpdate'    => datetime(),
@@ -340,14 +341,44 @@ class Marketplace extends CI_Controller
                                     'message'   => 'Saving order item failed. Please try again later.'
                                 );
                             } else {
-                                $return_data = array(
-                                    'status'    => true,
-                                    'message'   => 'Order has been placed successfully.',
-                                    'id'        => $orderData['Code']
+
+                                $transactionData = array(
+                                    'Code'          => microsecID(),
+                                    'AccountID'     => current_user(),
+                                    'ReferenceNo'   => $orderData['Code'],
+                                    'Description'   => 'Made a purchase - Order #' . $orderData['Code'],
+                                    'Date'          => date('Y-m-d H:i:s'),
+                                    'Amount'        => $order_amount,
+                                    'Type'          => 'Debit',
+                                    'EndingBalance' => ($latest_balance - $order_amount)
                                 );
 
-                                // clean the cart
-                                $this->cart->destroy();
+                                if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
+                                    
+
+                                    if ($this->distribute_rewards($ID)) {
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'message'   => 'Order has been placed successfully.',
+                                            'id'        => $orderData['Code']
+                                        );
+
+                                        // clean the cart
+                                        $this->cart->destroy();
+                                    } else {
+                                        $return_data = array(
+                                            'status'    => false,
+                                            'message'   => 'Order transaction failed.',
+                                        );
+                                    }
+
+                                } else {
+                                    $return_data = array(
+                                        'status'    => false,
+                                        'message'   => 'Order transaction failed.',
+                                    );
+                                }
+                                
                             }
 
                         } else {
@@ -389,9 +420,134 @@ class Marketplace extends CI_Controller
     /*
     * auto complete order for test, to show earnings
     */
-    private function complete_order($order_id)
-    {
+    private function distribute_rewards($order_id)
+    {   
+        $has_error = false;
+        $orderData = $this->appdb->getRowObject('Orders', $order_id);
+        if ($orderData) {
 
+            // buyer rewards (discount, cashback, 1/8 shared);
+            // direct referrer reward (referral points, 1/8 shared)
+            // 6 upline of direct referrer (1/8 shared each)
+
+            $buyerInfo = $this->appdb->getRowObject('Users', $orderData->OrderBy);
+
+            $distribution = json_decode($orderData->Distribution);
+
+            // BUYER
+            $rewards = array(
+                array(
+                    'reward_type'   => 'discount',
+                    'account_id'    => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'from_user'     => null,
+                    'amount'        => $distribution->discount,
+                    'trans_desc'    => 'Discounted from order - Order #' . $orderData->Code,
+                ),
+                array(
+                    'reward_type'   => 'cashback',
+                    'account_id'    => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'from_user'     => null,
+                    'amount'        => $distribution->cashback,
+                    'trans_desc'    => 'Cashback from order - Order #' . $orderData->Code,
+                ),
+                array(
+                    'reward_type'   => 'shared',
+                    'account_id'    => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'from_user'     => null,
+                    'amount'        => $distribution->divided_reward,
+                    'trans_desc'    => 'Shared reward from order - Order #' . $orderData->Code,
+                )
+
+            );
+
+            // REFERRER
+            if ($buyerInfo->Referrer) {
+                $referrerData = $this->appdb->getRowObject('Users', $buyerInfo->Referrer);
+                if ($referrerData) {
+                    $rewards[] = array(
+                        'reward_type'   => 'referral_points',
+                        'account_id'    => $buyerInfo->Referrer,
+                        'from_user'     => $orderData->OrderBy,
+                        'order_id'      => $orderData->id,
+                        'amount'        => $distribution->referral,
+                        'trans_desc'    => 'Referral points from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                    );
+                    $rewards[] = array(
+                        'reward_type'   => 'shared',
+                        'account_id'    => $buyerInfo->Referrer,
+                        'from_user'     => $orderData->OrderBy,
+                        'order_id'      => $orderData->id,
+                        'amount'        => $distribution->divided_reward,
+                        'trans_desc'    => 'Shared reward from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                    );
+
+                    // UPPER REFFERS
+                    $upper_referrers = get_upper_referrers($orderData->OrderBy);
+                    foreach ($upper_referrers as $user_id) {
+                        if (!in_array($user_id, array($orderData->OrderBy, $buyerInfo->Referrer))) {
+                            $rewards[] = array(
+                                'reward_type'   => 'shared',
+                                'account_id'    => $user_id,
+                                'order_id'      => $orderData->id,
+                                'from_user'     => $orderData->OrderBy,
+                                'amount'        => $distribution->divided_reward,
+                                'trans_desc'    => 'Shared reward from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                            );
+                        }
+                    }
+                }
+            }
+
+            foreach ($rewards as $data) {
+
+                $reward_type = $data['reward_type'];
+                $rewardData = array(
+                    'Code'      => microsecID(true),
+                    'AccountID' => $data['account_id'],
+                    'FromUserID'=> $data['from_user'],
+                    'OrderID'   => $data['order_id'],
+                    'Type'      => $reward_type,
+                    'Amount'    => $data['amount'],
+                    'DateAdded' => datetime()
+                );
+                if ($this->appdb->saveData('WalletRewards', $rewardData)) {
+                    $balance = get_latest_wallet_balance($data['account_id']);
+                    $transactions_data = array(
+                        'Code'          => microsecID(true),
+                        'AccountID'     => $data['account_id'],
+                        'ReferenceNo'   => $rewardData['Code'],
+                        'Description'   => $data['trans_desc'],
+                        'Date'          => datetime(),
+                        'Amount'        => $data['amount'],
+                        'Type'          => 'Credit',
+                        'EndingBalance' => ($balance + $data['amount'])
+                    );
+
+                    if (!$this->appdb->saveData('WalletTransactions', $transactions_data)) {
+                        $has_error = true;
+                        logger('Saving ' . $reward_type . ' reward transaction failed.');
+                    }
+                } else {
+                    $has_error = true;
+                    logger('Saving ' . $reward_type . ' reward failed.');
+                }
+
+                if ($has_error) {
+                    break;
+                }
+
+            }
+
+
+        } else{
+            $has_error = true;
+            logger('Order data not found.');
+        }
+
+        return !$has_error;
     }
 
 }
