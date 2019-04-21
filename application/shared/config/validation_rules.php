@@ -29,6 +29,27 @@ $config['account_registration'] = array(
 );
 
 
+$config['account_update'] = array(
+
+	array('account_firstname', 'First name', 'trim|required|regex_match[/^[a-zA-Z ]+$/]',
+		array(
+	        'regex_match' => '%s has invalid characters. Letters and space only.'
+	    )),
+	array('account_lastname', 'Last name', 'trim|required|regex_match[/^[a-zA-Z. ]+$/]',
+		array(
+	        'regex_match' => '%s has invalid characters. Letters and space only.'
+	    )),
+	array('account_email', 'Email address', 'trim|required|valid_email|min_length[5]|callback_unique_account_email',
+	    array(
+	        'unique_account_email' => 'Email address already exists.'
+	    )),
+	array('account_mobile', 'Mobile number', 'trim|required|numeric|exact_length[10]|callback_unique_account_mobile',
+		array(
+	        'unique_account_mobile' => 'Mobile number already exists.'
+	    ))
+);
+
+
 $config['user_address'] = array(
 	array('AddressProvince', 'Province', 'trim|required'),
 	array('AddressCity', 'City/Municipal', 'trim|required'),

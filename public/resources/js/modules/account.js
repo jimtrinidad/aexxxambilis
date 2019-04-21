@@ -2,6 +2,9 @@ function Account() {
     // because this is overwritten on jquery events
     var self = this;
 
+    this.info,
+    this.address,
+
     /**
      * Initialize events
      */
@@ -33,6 +36,13 @@ function Account() {
         $('#registrationForm').submit(function(e) {
             e.preventDefault();
             self.register(this);
+        });
+
+        $('#updateProfileForm').submit(function(e) {
+            e.preventDefault();
+            Utils.save_form(this, function(){
+                location.reload();
+            });
         });
 
     }
@@ -147,6 +157,31 @@ function Account() {
             cache: false,
             contentType: false,
             processData: false
+        });
+    }
+
+
+    this.toggle_account_no = function(elem)
+    {
+        if ($(elem).hasClass('show')) {
+            $(elem).removeClass('show').addClass('notshow').html('<strong>SHOW</strong>');
+            $(elem).parent('div').find('.account_no_holder').find('strong').toggleClass('hide');
+        } else {
+            $(elem).parent('div').find('.account_no_holder').find('strong').toggleClass('hide');
+            $(elem).removeClass('notshow').addClass('show').html('<strong>HIDE</strong>');
+        }
+    }
+
+
+    this.editProfile = function()
+    {
+        var form  = '#updateProfileForm';
+        var modal = '#updateProfileModal';
+        Utils.show_form_modal(modal, form, false, function(){
+            if (self.info) {
+                $(form).find('.image-preview').prop('src', self.info.photo);
+                Utils.set_form_input_value(form, self.info);
+            }
         });
     }
 

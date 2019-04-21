@@ -2,6 +2,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form id="userAddressForm" name="userAddressForm" class="modalForm" action="<?php echo site_url('account/save_address') ?>">
+        <input type="hidden" name="AddressID" id="AddressID">
         <div class="modal-header">
           <strong class="modal-title text-b-red"></strong>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -1,7 +1,7 @@
 <div class="my-account container">
 			<div class="row">
 				<div class="col-3">
-					<img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>" width="100%" />
+					<img src="<?php echo $profile['photo'] ?>" width="100%" />
 				</div>
 				<div class="col-6">
 		     	<div class="balance-info">
@@ -10,6 +10,7 @@
 		        <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
 		        <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
 		      </div>
+		      <a href="javascript:;" class="small" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit Profile</a>
 		    </div>
 				<div class="col-3">
 					<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="100%" />
@@ -41,29 +42,32 @@
 				<div class="col-12 content">
 					<label class="label-info">My Bank Name Detail</label>
 					<div class="info-field clearfix">
-						<span class="text">Development Bank of the Philippines</span>
+						<span class="text"><?php echo $profile['account_bank_name'] ?></span>
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
 				<div class="col-12 content">
 					<label class="label-info">My Account Number</label>
 					<div class="info-field clearfix">
-						<span class="text"><strong class="text-blue">*****************</strong></span>
-						<span class="icon"><strong>SHOW</strong></span>
+						<span class="text account_no_holder">
+							<strong class="text-blue">*****************</strong>
+							<strong class="hide text-blue"><?php echo $profile['account_bank_no'] ?></strong>
+						</span>
+						<a href="javascript:;" class="icon" onclick="Account.toggle_account_no(this)"><strong>SHOW</strong></a>
 					</div>
 				</div>
 				<div class="col-12 content">
 					<label class="label-info">Bank Account Name</label>
 					<div class="info-field clearfix">
-						<span class="text"><?php echo $accountInfo->fullname; ?></span>
+						<span class="text"><?php echo $profile['account_bank_account_name'] ?></span>
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
 				<div class="col-12 content">
 					<label class="label-info">Delivery Address</label>
 					<div class="info-field clearfix">
-						<span class="text">1924 Marco Polo Ortigas Pasig City</span>
-						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+						<span class="text"><?php echo $address ? ($address->Street . ', Barangay ' . $address->data['Barangay'] . ', ' . $address->data['MuniCity']) :'' ?></span>
+						<a class="icon" href="javascript:;" onclick="General.editUserAddress()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 					</div>
 				</div>
 			</div>
@@ -100,3 +104,16 @@
 			
 			
 		</div>	
+
+	<script type="text/javascript">
+	  $(document).ready(function(){
+
+	  	Account.info = <?php echo json_encode($profile, JSON_HEX_TAG); ?>;
+	  	General.address = <?php echo json_encode($address, JSON_HEX_TAG); ?>;
+	  	console.log(General.address);
+
+	  });
+	</script>
+
+	<?php view('account/modals') ?>
+	<?php view('modals/address') ?>
