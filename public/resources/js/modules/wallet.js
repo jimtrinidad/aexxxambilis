@@ -70,8 +70,22 @@ function Wallet() {
     this.encashRequest = function()
     {   
 
-        var form  = '#encashForm';
-        var modal = '#encashModal';
+        // var form  = '#encashForm';
+        // var modal = '#encashModal';
+        // Utils.show_form_modal(modal, form, false, function(){
+
+        // });
+
+    }
+
+    /**
+    * encash
+    */
+    this.moneyPadalaRequest = function()
+    {   
+
+        var form  = '#moneyPadalaForm';
+        var modal = '#moneyPadalaModal';
         Utils.show_form_modal(modal, form, false, function(){
 
         });

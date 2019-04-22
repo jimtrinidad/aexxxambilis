@@ -77,7 +77,7 @@ $config['add_deposit'] = array(
 	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
 );
 
-$config['encash_request'] = array(
+$config['money_padala_request'] = array(
 	array('ServiceType', 'Service Type', 'trim|required'),
 	array('AccountNo', 'Account Number', 'trim|required'),
 	array('Identifier', 'Identifier', 'trim|required'),

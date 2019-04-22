@@ -45,7 +45,7 @@ function Marketplace() {
             success: function (response) {
                 // console.log(response);
                 if (response.status) {
-                    $('#cart_items').text(response.item_count);
+                    $('.cart_items_count').text(response.item_count);
                     $('#addedToCartModal').find('.added_to_cart_message').text(response.message);
                     $('#addedToCartModal').find('.added_to_cart_image').prop('src', public_url('assets/products/') + response.data.Image);
                     $('#addedToCartModal').find('.added_to_cart_name').text(response.data.Name);

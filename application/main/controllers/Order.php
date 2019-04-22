@@ -19,7 +19,6 @@ class Order extends CI_Controller
             'pageSubTitle'  => 'ORDER SUMMARY',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet'
             ),
         );
 

@@ -16,12 +16,15 @@
 			<li><a href="<?php echo site_url('connections')?>">Connections</a></li>
 			<li><a href="<?php echo site_url('marketplace')?>">Shop</a></li>
 			<li><a href="<?php echo site_url('bills')?>">Bills Payment</a></li>
-			<li><a href="<?php echo site_url('eload')?>">eLoad</a></li>
+			<li><a href="javascript:;" onclick="Wallet.moneyPadalaRequest()">Money Padala</a></li>
+			<li><a href="javascript:;">eLoad</a></li>
 			<li><a href="<?php echo site_url('store')?>">My Business</a></li>
 			<li><a href="<?php echo site_url()?>">Support</a></li>
 			<li><a href="<?php echo site_url()?>">How it Works</a></li>
 		</ul>
 	</div>
+
+	<a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn btn-sm bg-red text-white rounded menu_cart_button" type="button"><span class="badge badge-warning cart_items_count"><?php echo $this->cart->total_items() ? $this->cart->total_items() : ''; ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
 
 </div>
 

@@ -19,7 +19,6 @@ class Ewallet extends CI_Controller
             'pageSubTitle'  => 'AMBILIS NANG E-WALLET',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet'
             )
         );
 
@@ -73,9 +72,9 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
-    public function encash()
+    public function money_padala()
     {
-        if (validate('encash_request') == FALSE) {
+        if (validate('money_padala_request') == FALSE) {
             $return_data = array(
                 'status'    => false,
                 'message'   => 'Some fields have errors.',
@@ -86,7 +85,7 @@ class Ewallet extends CI_Controller
             $latest_balance = get_latest_wallet_balance();
 
             $amount = get_post('Amount');
-            $desc   = 'Encash - ' . get_post('ServiceType');
+            $desc   = 'Money Padala - ' . get_post('ServiceType');
 
             if ($amount > 0) {
 
@@ -106,7 +105,7 @@ class Ewallet extends CI_Controller
                     if ($this->appdb->saveData('WalletTransactions', $saveData)) {
                         $return_data = array(
                             'status'    => true,
-                            'message'   => 'Encash transaction has been requested successfully.'
+                            'message'   => 'Money padala transaction has been requested successfully.'
                         );
                     } else {
                         $return_data = array(

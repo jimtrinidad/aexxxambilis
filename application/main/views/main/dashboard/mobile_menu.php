@@ -77,16 +77,16 @@
 
 
 <div class="container mt-4">
-	<div class="row">
+	<div class="row gutter-5">
 
 		<?php
 		$categories  = lookup_all('ProductCategories', false, 'Name', false);
 		foreach ($categories as $k => $c) {
 
-			echo '<div class="col-12 col-sm-6 col-md-4 menu-categories mt-2">
+			echo '<div class="col-6 col-md-4 menu-categories mt-2">
 							<a href="'. site_url('marketplace?c=' . $c['id']) .'">
-								<div class="product-img">
-									<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%" style="max-height: 180px;" />
+								<div class="category-img">
+									<img src="'. public_url('assets/uploads/') . upload_filename($c['Image']) .'" width="100%"/>
 								</div>
 								<div class="bg-red ' . ($k % 2 == 0 ? 'bg-red text-white' : 'bg-gray text-black') . ' p-2 ">
 									<h3>'. $c['Name'] .'</h3>

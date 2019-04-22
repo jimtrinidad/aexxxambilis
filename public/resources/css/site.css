@@ -72,9 +72,22 @@ a:hover {text-decoration: none;}
   }
 }
 
+.menu-categories .category-img img {max-height: 170px;}
+
+@media (max-width: 768px) {
+  .menu-categories .category-img img {max-height: 120px;}  
+}
+
+.menu_cart_button {
+  position: absolute;
+  right: 10px;
+}
+
 @media (max-width: 560px) {
-  .rounded-box {
-    height: auto; 
+  .menu_cart_button {
+    position: absolute;
+    right: 5px;
+    top: 1px;
   }
 }
 

@@ -19,7 +19,6 @@ class Connections extends CI_Controller
             'pageSubTitle'  => 'Ambilis ng Referrals!',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet'
             )
         );
 

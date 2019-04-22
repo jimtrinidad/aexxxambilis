@@ -69,7 +69,7 @@ class Deposits extends CI_Controller
                 $this->db->trans_begin();
 
                 if ($this->appdb->saveData('WalletDeposits', $updateData)) {
-                    $latest_balance = get_latest_wallet_balance();
+                    $latest_balance = get_latest_wallet_balance($deposit->AccountID);
                     $new_balance    = $latest_balance + $deposit->Amount;
 
                     $transactionData = array(

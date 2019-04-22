@@ -23,7 +23,7 @@
               <div class="input-group-append" id="button-addon4">
               <button type="submit" class="btn bg-d-purple text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
               </div>
-              <a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn bg-red text-white" type="button"><span class="badge badge-warning" id="cart_items"><?php echo $this->cart->total_items() ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+              <a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn bg-red text-white" type="button"><span class="badge badge-warning cart_items_count"><?php echo $this->cart->total_items() ? $this->cart->total_items() : '' ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
             </div>  
           </div>
         </div>

@@ -19,7 +19,6 @@ class Bills extends CI_Controller
             'pageSubTitle'  => 'AMBILIS TO PAY BILLS',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet'
             ),
         );
 

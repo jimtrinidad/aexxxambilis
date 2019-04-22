@@ -36,12 +36,14 @@
 			</div>
 		</div>
 
+		<?php if ($productData->DeliveryMethod != '' && $productData->DeliveryMethod != 3) { ?>
 		<div class="row">
 			<div class="col product-desc">
 				<h6>Delivery Method</h6>
-				<p><?php echo lookup('delivery_methods', ($productData->DeliveryMethod ? $productData->DeliveryMethod : 3)) ?></p>
+				<p><?php echo lookup('delivery_methods', $productData->DeliveryMethod) ?></p>
 			</div>
 		</div>
+		<?php } ?>
 
 		<div class="row">
 			<div class="col-12 product-desc">

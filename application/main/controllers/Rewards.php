@@ -19,7 +19,6 @@ class Rewards extends CI_Controller
             'pageSubTitle'  => 'Ambilis ng Rewards',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet'
             ),
         );
 

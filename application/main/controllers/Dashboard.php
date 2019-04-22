@@ -18,7 +18,6 @@ class Dashboard extends CI_Controller
             'pageTitle'     => 'Dashboard',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
-                'wallet',
             ),
         );        
 
