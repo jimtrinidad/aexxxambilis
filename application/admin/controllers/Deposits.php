@@ -23,7 +23,7 @@ class Deposits extends CI_Controller
             )
         );
 
-        $records = $this->appdb->getRecords('WalletDeposits', array(), 'Status');
+        $records = $this->appdb->getRecords('WalletDeposits', array(), 'Status, id DESC');
         foreach ($records as &$r) {
             $user = $this->appdb->getRowObject('Users', $r['AccountID']);
             $r['accountData'] = array(
