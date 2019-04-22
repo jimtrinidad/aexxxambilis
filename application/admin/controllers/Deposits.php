@@ -15,18 +15,7 @@ class Deposits extends CI_Controller
     public function index()
     {
         $viewData = array(
-            'pageTitle'         => 'Deposits',
-            'pageDescription'   => '',
-            'accountInfo'       => user_account_details()
-        );
-
-        view('pages/dashboard', $viewData, 'templates/main');
-    }
-
-    public function requests()
-    {
-        $viewData = array(
-            'pageTitle'         => 'Deposit Requests',
+            'pageTitle'         => 'Deposit',
             'pageDescription'   => '',
             'accountInfo'       => user_account_details(),
             'jsModules'         => array(
@@ -34,19 +23,19 @@ class Deposits extends CI_Controller
             )
         );
 
-        $requests = $this->appdb->getRecords('WalletDeposits', array('Status' => 0));
-        foreach ($requests as &$r) {
+        $records = $this->appdb->getRecords('WalletDeposits', array(), 'Status');
+        foreach ($records as &$r) {
             $user = $this->appdb->getRowObject('Users', $r['AccountID']);
             $r['accountData'] = array(
                 'Firstname'     => $user->Firstname,
                 'Lastname'      => $user->Lastname
             );
         }
-        $viewData['requests']   = $requests;
+        $viewData['records']   = $records;
 
         // print_data($viewData);
 
-        view('pages/deposits/requests', $viewData, 'templates/main');
+        view('pages/deposits/index', $viewData, 'templates/main');
     }
 
     public function confirm_deposit($code = null)
