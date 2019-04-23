@@ -72,6 +72,96 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
+    public function encash()
+    {
+        if (validate('encash_request') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $user = $this->appdb->getRowObject('Users', current_user());
+
+            if ($user) {
+
+                if (empty($user->BankName)) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Your bank info is not set.'
+                    );
+                } else if (empty($user->BankAccountNo)) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Your bank account number is not set.'
+                    );
+                } else if (empty($user->BankAccountName)) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Your bank account name is not set.'
+                    );
+                } else {
+
+                    $latest_balance = get_latest_wallet_balance();
+
+                    $amount = get_post('Amount');
+                    $desc   = 'Encash to debit card.';
+
+                    if ($amount > 0) {
+
+                        if ($latest_balance >= $amount) {
+
+                            $saveData = array(
+                                'Code'          => microsecID(),
+                                'AccountID'     => current_user(),
+                                'ReferenceNo'   => microsecID(true),
+                                'Description'   => $desc,
+                                'Date'          => date('Y-m-d H:i:s'),
+                                'Amount'        => $amount,
+                                'Type'          => 'Debit',
+                                'EndingBalance' => ($latest_balance - $amount)
+                            );
+
+                            if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Wallet encash transaction has been requested successfully.'
+                                );
+                            } else {
+                                $return_data = array(
+                                    'status'    => false,
+                                    'message'   => 'Transaction failed.'
+                                );
+                            }
+
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Insufficient balance.'
+                            );
+                        }
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Invalid amount.'
+                        );
+                    }
+
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid request.'
+                );
+            }
+        }
+
+        response_json($return_data);
+    }
+
     public function money_padala()
     {
         if (validate('money_padala_request') == FALSE) {

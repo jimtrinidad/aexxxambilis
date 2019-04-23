@@ -96,5 +96,11 @@ class Get extends CI_Controller
 
     }
 
+    public function n2w($n = '') {
+      if (is_numeric($n)) {
+        echo ucwords(number_to_words($n));
+      }
+    }
+
 
 }

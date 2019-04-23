@@ -236,7 +236,10 @@ function csrf_token_input_field()
 */
 function profit_distribution($srp, $commision, $type)
 {
-    $discount = 0;
+    $discount       = 0;
+    $supplier_price = 0;
+    $discount_rate  = 0;
+    $discounted_price = 0;
     if ($type == 1) {
         $profit = $commision;
     } else {
@@ -252,6 +255,9 @@ function profit_distribution($srp, $commision, $type)
         'srp'            => $srp,
         'commision'      => $commision,
         'commision_type' => $type,
+        'supplier_price' => $supplier_price,
+        'discounted_price' => $discounted_price,
+        'discount_rate'  => $discount_rate,
         'discount'       => $discount,
         'profit'         => $profit,
         'company'        => $profit * 0.30,
@@ -272,7 +278,7 @@ function profit_distribution($srp, $commision, $type)
 */
 function partner_commision_rate($c)
 {
-    if ($c >= 1 && $c <= 8) {
+    if ($c >= 3 && $c <= 8) {
         return 1;
     } else if ($c >= 9 && $c <= 17) {
         return 3;

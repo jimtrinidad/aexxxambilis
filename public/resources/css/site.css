@@ -75,6 +75,24 @@ a:hover {text-decoration: none;}
 .menu-categories .category-img img {max-height: 170px;}
 
 @media (max-width: 768px) {
+  .product-listing .product-img {
+    height: 150px;
+  }
+
+  .product-listing .product-detail h2, .product-listing .product-detail p {
+      font-size: 11px;
+  }
+
+  .product-detail .price {
+      font-size: 13px;
+  }
+
+  .product-detail .pr-button {
+    width: 26px;
+    height: 26px;
+    padding: 2px;
+  }
+
   .menu-categories .category-img img {max-height: 120px;}  
 }
 

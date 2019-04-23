@@ -15,7 +15,7 @@
               </div>
             </div>
          </div> -->
-         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name : 'My Market Place' ?></h5>
+         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name : 'Marketplace' ?></h5>
          <div class="row text-center">
           <div class="col-md-12 float-none center-block">
             <div class="input-group">
@@ -40,7 +40,7 @@
         foreach ($products as $item) { 
         $distribution = profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']);
       ?>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 itemcont" style="position: relative;">
+        <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-3 itemcont" style="position: relative;">
           <div class="product-cont">
             <div class="product-img" onclick="window.location='<?php echo site_url('marketplace/view/' . $item['Code']) ?>'" style="background-image: url('<?php echo public_url('assets/products/') . $item['Image']  ?>');">
             </div>

@@ -25,6 +25,17 @@ function Wallet() {
             e.preventDefault();
             Utils.save_form(this);
         });
+
+        var ajaxReq = null;
+        $('#encashForm #Amount').on('keyup change',function() {
+            if (ajaxReq != null) ajaxReq.abort();
+            ajaxReq =  $.ajax({
+                url: window.public_url('get/n2w/' + $(this).val()),
+                success: function(response){
+                    $('#encashForm').find('.number_in_words').text(response);
+                 }
+            });
+        });
     }
 
     /**
@@ -70,11 +81,11 @@ function Wallet() {
     this.encashRequest = function()
     {   
 
-        // var form  = '#encashForm';
-        // var modal = '#encashModal';
-        // Utils.show_form_modal(modal, form, false, function(){
+        var form  = '#encashForm';
+        var modal = '#encashModal';
+        Utils.show_form_modal(modal, form, false, function(){
 
-        // });
+        });
 
     }
 
