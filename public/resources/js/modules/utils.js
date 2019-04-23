@@ -44,16 +44,6 @@ function Utils() {
             // sticky footer on bottom
             Utils.stickFooter();
 
-            if (self.isBreakpoint('xs')) {
-                
-            } else if (self.isBreakpoint('sm')) {
-                
-            } else if (self.isBreakpoint('md')) {
-                
-            } else if (self.isBreakpoint('lg')) {
-                
-            }
-
         });
 
         // keep scroll position on script reload
@@ -63,9 +53,6 @@ function Utils() {
 
 
         $("input, textarea").attr('autocomplete', 'off');
-
-        // grid breakpoint detector
-        $('body').append(`<div class="device-xs visible-xs"></div><div class="device-sm visible-sm"></div><div class="device-md visible-md"></div><div class="device-lg visible-lg"></div>`);
 
     }
 
