@@ -211,9 +211,9 @@ function number_to_words($number)
     return $f->format($number);
 }
 
-function peso($number)
+function peso($number, $showSign = true)
 {
-    return '₱' . rtrim(rtrim(number_format($number, 2, ".", ","), '0'), '.');
+    return ($showSign ? '₱' : '') . rtrim(rtrim(number_format($number, 2, ".", ","), '0'), '.');
 }
 
 

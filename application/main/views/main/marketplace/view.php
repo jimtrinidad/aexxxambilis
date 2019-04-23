@@ -29,9 +29,9 @@
 			<div class="col product-desc">
 				<h6>Rewards</h6>
 				<?php 
-          echo '<p>' . number_format($distribution['discount'], 1) . ' Points </p>' . 
-               '<p>' . number_format($distribution['divided_reward'], 1) . ' Shared </p>' . 
-               '<p>' . number_format($distribution['cashback'], 1) . ' Cashback</p>';
+          echo '<p>' . peso($distribution['discount'], false) . ' Points </p>' . 
+               '<p>' . peso($distribution['divided_reward'], false) . ' Shared </p>' . 
+               '<p>' . peso($distribution['cashback'], false) . ' Cashback</p>';
         ?>
 			</div>
 		</div>

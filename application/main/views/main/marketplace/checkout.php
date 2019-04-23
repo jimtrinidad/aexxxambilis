@@ -29,9 +29,9 @@
 					<?php echo peso($i['price']); ?>
 					<div class="small">
 					<?php 
-	          echo $i['distribution']['discount'] > 0 ? '<span class="d-block">' . number_format($i['distribution']['discount'], 1) . ' Points </span>' : ''; 
-	          echo $i['distribution']['divided_reward'] > 0 ? '<span class="d-block">' . number_format($i['distribution']['divided_reward'], 1) . ' Shared </span>' : ''; 
-	          echo $i['distribution']['cashback'] > 0 ? '<span class="d-block">' . number_format($i['distribution']['cashback'], 1) . ' Cashback</span>' : '';
+	          echo $i['distribution']['discount'] > 0 ? '<span class="d-block">' . peso($i['distribution']['discount'], false) . ' Points </span>' : ''; 
+	          echo $i['distribution']['divided_reward'] > 0 ? '<span class="d-block">' . peso($i['distribution']['divided_reward'], false) . ' Shared </span>' : ''; 
+	          echo $i['distribution']['cashback'] > 0 ? '<span class="d-block">' . peso($i['distribution']['cashback'], false) . ' Cashback</span>' : '';
 	        ?>	
 	        </div>
 				</div>
@@ -64,19 +64,19 @@
 		    	if ($points > 0) {
 		    		echo '<div class="row gutter-5">
 					    		<div class="col-7">Points</div>
-					    		<div class="col-5 text-right">' . number_format($points, 1) . '</div>
+					    		<div class="col-5 text-right">' . peso($points, false) . '</div>
 					    	</div>';
 		    	}
 		    	if ($shared > 0) {
 		    		echo '<div class="row gutter-5">
 					    		<div class="col-7">Shared Reward</div>
-					    		<div class="col-5 text-right">' . number_format($shared, 1) . '</div>
+					    		<div class="col-5 text-right">' . peso($shared, false) . '</div>
 					    	</div>';
 		    	}
 		    	if ($cashback > 0) {
 		    		echo '<div class="row gutter-5">
 					    		<div class="col-7">Cashback</div>
-					    		<div class="col-5 text-right">' . number_format($cashback, 1) . '</div>
+					    		<div class="col-5 text-right">' . peso($cashback, false) . '</div>
 					    	</div>';
 		    	}
 		    ?>

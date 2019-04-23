@@ -58,9 +58,9 @@
                 <div class="col-7">
                   <p class="sub-details">
                     <?php 
-                      echo '<span class="d-sm-block">' . number_format($distribution['discount'], 1) . ' Points </span>' . 
-                           '<span class="d-sm-block">' . number_format($distribution['divided_reward'], 1) . ' Shared </span>' . 
-                           '<span class="d-sm-block">' . number_format($distribution['cashback'], 1) . ' Cashback</span>';
+                      echo '<span class="d-sm-block">' . peso($distribution['discount'], false) . ' Points </span>' . 
+                           '<span class="d-sm-block">' . peso($distribution['divided_reward'], false) . ' Shared </span>' . 
+                           '<span class="d-sm-block">' . peso($distribution['cashback'], false) . ' Cashback</span>';
                     ?>
                   </p>
                 </div>
