@@ -10,6 +10,8 @@ class Account extends CI_Controller
 	}
 
     public function test() {
+        $item = (array) $this->appdb->getRowObject('StoreItems', get_post('c'), 'Code');
+        print_data(profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']));
     }
 
     public function index()
