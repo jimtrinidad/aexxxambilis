@@ -284,9 +284,10 @@ class Product extends CI_Controller
         );
 
         $where   = array();
-        $results = $this->db->query('SELECT DISTINCT(UPPER(TRIM(Manufacturer))) AS `Name`, PartnerImage
+        $results = $this->db->query('SELECT ANY_VALUE(UPPER(TRIM(Manufacturer))) AS `Name`,ANY_VALUE(PartnerImage) AS `PartnerImage`
                                     FROM StoreItems 
                                     WHERE Manufacturer IS NOT NULL AND Manufacturer != ""
+                                    GROUP BY Name
                                     ORDER BY Name')->result_array();
         $viewData['records'] = $results;
 
