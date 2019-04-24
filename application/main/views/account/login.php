@@ -28,10 +28,10 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-6">
-						<a href="#" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/fb-icon.png" width="20" />  <span>Continue with Facebook</span></a>
+						<a href="<?php echo site_url('account/signup') ?>" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/fb-icon.png" width="20" />  <span>Continue with Facebook</span></a>
 					</div>
 					<div class="col-6">
-						<a href="#" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/google-icon.png" width="20" /> <span>Continue with Google</span></a>
+						<a href="<?php echo site_url('account/signup') ?>" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/google-icon.png" width="20" /> <span>Continue with Google</span></a>
 					</div>
 				</div>
 			</div>

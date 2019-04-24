@@ -25,7 +25,7 @@
 			<hr/>	
 			<div class="header clearfix">
 				<h5 class="text-bold float-left">Total Order</h5>
-				<h5 class="text float-right"><span class="text-gray">P</span> <?php echo peso($orderData->TotalAmount) ?></h5>
+				<h5 class="text float-right"><?php echo peso($orderData->TotalAmount) ?></h5>
 			</div>
 			
 

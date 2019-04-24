@@ -7,7 +7,7 @@
     <div class="col-6">
       <div class="balance-info">
         <p>Total earnings from connections: <?php echo peso($total_earnings) ?></p>
-        <p>Total withdrawals: <?php echo peso(rand(0, 50000)) ?></p>
+        <p>Total withdrawals: <?php echo peso(0) ?></p>
         <p>Current balance: <?php echo peso($summary['balance']) ?></p>
         <p>Direct connections: <?php echo number_format(count($connections)) ?></p>
       </div>

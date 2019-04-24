@@ -21,7 +21,7 @@
 
 		<div class="row">
 			<div class="col text-center">
-				<button class="add-to-cart-btn" onclick="Marketplace.addToCart('<?php echo $productData->Code ?>')">add to basket - <?php echo peso($productData->Price) ?></button>
+				<button class="add-to-cart-btn" onclick="Marketplace.addToCart('<?php echo $productData->Code ?>')">add to basket - <?php echo show_price($productData->Price, $distribution['discount']) ?></button>
 			</div>
 		</div>
 
@@ -29,8 +29,8 @@
 			<div class="col product-desc">
 				<h6>Rewards</h6>
 				<?php 
-          echo '<p>' . peso($distribution['discount'], false) . ' Points </p>' . 
-               '<p>' . peso($distribution['divided_reward'], false) . ' Shared </p>' . 
+          echo '<p>' . peso($distribution['referral'], false) . ' Referrer Points </p>' . 
+               '<p>' . peso($distribution['shared_rewards'], false) . ' Shared </p>' . 
                '<p>' . peso($distribution['cashback'], false) . ' Cashback</p>';
         ?>
 			</div>

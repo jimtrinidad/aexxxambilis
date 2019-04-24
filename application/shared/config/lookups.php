@@ -39,7 +39,7 @@ $config['order_status'] = array(
 );
 
 $config['wallet_rewards_type'] = array(
-    'discount'  => 'Returned Discount',
+    'discount'  => 'Discounts',
     'cashback'  => 'Cashback',
     'referrer'  => 'Referrer Points',
     'shared'    => 'Shared Rewards'

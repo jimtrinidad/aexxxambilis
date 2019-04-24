@@ -66,8 +66,8 @@
         <tr>
           <th scope="col" class="text-red">From</th>
           <th scope="col" class="text-red">Contact</th>
-          <th scope="col" class="text-red">Email</th>
           <th scope="col" class="text-red">Type</th>
+          <th scope="col" class="text-red">Description</th>
           <th scope="col" class="text-red">Amount</th>
         </tr>
       </thead>
@@ -79,9 +79,9 @@
                     '<b>' . ($i['from'] ? $i['from']['public_id'] : '<span class="text-danger">ME</span>') . '</b>'
                     . '<br><small class="d-xs-block d-sm-block d-md-inline"> ' . date('m/d/y h:i a', strtotime($i['DateAdded'])) . ' </small>
                   </td>
-                  <td>' . ($i['from'] ? $i['from']['contact'] : '')  . '</td>
-                  <td>' . ($i['from'] ? $i['from']['email'] : '')  . '</td>
+                  <td>' . ($i['from'] ? $i['from']['contact'] : '') . '<br>' . ($i['from'] ? $i['from']['email'] : '') . '</td>
                   <td>' . lookup('wallet_rewards_type', $i['Type']) .  '</td>
+                  <td>' . $i['Description'] .  '</td>
                   <td>' . peso($i['Amount']) .  '</td>
                 </tr>';
         }

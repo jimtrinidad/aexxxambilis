@@ -19,8 +19,9 @@
 			<li><a href="javascript:;" onclick="Wallet.moneyPadalaRequest()">Money Padala</a></li>
 			<li><a href="javascript:;">eLoad</a></li>
 			<li><a href="<?php echo site_url('store')?>">My Business</a></li>
-			<li><a href="<?php echo site_url()?>">Support</a></li>
-			<li><a href="<?php echo site_url()?>">How it Works</a></li>
+			<li><a href="<?php echo site_url('support')?>">Support</a></li>
+			<li><a href="<?php echo site_url('howitworks')?>">How it Works</a></li>
+			<li><a href="<?php echo site_url('terms')?>">Terms & Agreement</a></li>
 		</ul>
 	</div>
 

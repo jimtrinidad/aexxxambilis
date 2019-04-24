@@ -43,6 +43,29 @@ a:hover {text-decoration: none;}
   border: 1px solid gray;
 }
 
+.product-detail .price {
+    font-size: 15px;
+    line-height: 7px;
+}
+
+.product-detail .sub-details {
+  font-size: 11px;
+}
+
+.original_price {
+  color: gray;
+  text-decoration: line-through;
+}
+
+.discount_percent {
+  font-weight: bold;
+  color: red;
+}
+
+.add-to-cart-btn .discount_percent {
+  color: #ffffff;
+}
+
 .product-listing .product-detail h2 {
   font-size: 13px;
 }

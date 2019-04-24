@@ -26,6 +26,7 @@
       </a>
       <ul class="treeview-menu">
         <li class="<?php echo (is_current_url('product', 'categories') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/categories') ?>">Categories</a></li>
+        <li class="<?php echo (is_current_url('product', 'manufacturers') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/manufacturers') ?>">Manufacturers</a></li>
       </ul>
     </li>
   </ul>

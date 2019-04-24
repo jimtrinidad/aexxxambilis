@@ -271,4 +271,26 @@ class Product extends CI_Controller
 
     }
 
+
+    public function manufacturers()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Manfacturers',
+            'pageDescription'   => '',
+            'accountInfo'       => user_account_details(),
+            'jsModules'         => array(
+                'products'
+            )
+        );
+
+        $where   = array();
+        $results = $this->db->query('SELECT DISTINCT(UPPER(TRIM(Manufacturer))) AS `Name`, PartnerImage
+                                    FROM StoreItems 
+                                    WHERE Manufacturer IS NOT NULL AND Manufacturer != ""
+                                    ORDER BY Name')->result_array();
+        $viewData['records'] = $results;
+
+        view('pages/product/manufacturers', $viewData, 'templates/main');
+    }
+
 }

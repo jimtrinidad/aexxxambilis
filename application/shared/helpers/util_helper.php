@@ -216,6 +216,22 @@ function peso($number, $showSign = true)
     return ($showSign ? '₱' : '') . rtrim(rtrim(number_format($number, 2, ".", ","), '0'), '.');
 }
 
+function show_price($srp, $discount)
+{
+    if ($discount > 0) {
+        $discounted_price = $srp - $discount;
+        $percent = round(($discount / $srp) * 100, 2);
+        // return $percent . ' - ' . $srp . ' - ' . $discount . ' - ' . $discounted_price;
+        return peso($discounted_price) . 
+                '<small class="">
+                    <span class="original_price">' . peso($srp) . '</span> 
+                    <span class="discount_percent">-'. $percent .'%</span>
+                </small>';
+    } else {
+        return peso($srp);
+    }
+}
+
 
 function csrf_token_input_field()
 {
@@ -236,15 +252,18 @@ function csrf_token_input_field()
 */
 function profit_distribution($srp, $commision, $type)
 {
-    $discount       = 0;
-    $supplier_price = 0;
-    $discount_rate  = 0;
-    $discounted_price = 0;
+    $discount         = 0;
+    $discount_rate    = 0;
+    $supplier_price   = $srp;
+    $discounted_price = $srp;
+
     if ($type == 1) {
         $profit = $commision;
     } else {
         // get profit
-        $supplier_price     = $srp - ($srp * ($commision/100));
+        if ($commision > 0) { 
+            $supplier_price     = $srp - ($srp * ($commision/100));
+        }
         $discount_rate      = partner_commision_rate($commision);
         $discount           = ($discount_rate > 0 ? ($srp * ($discount_rate/100)) : 0);
         $discounted_price   = $srp - $discount;

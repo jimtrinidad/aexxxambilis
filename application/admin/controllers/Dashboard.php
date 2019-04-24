@@ -24,8 +24,8 @@ class Dashboard extends CI_Controller
         $viewData['user_count'] = $this->db->query('SELECT COUNT(*) AS count FROM Users WHERE deletedAt IS NULL')->row()->count;
         $viewData['product_count'] = $this->db->query('SELECT COUNT(*) AS count FROM StoreItems')->row()->count;
         $viewData['store_count'] = $this->db->query('SELECT COUNT(*) AS count FROM StoreDetails')->row()->count;
-        $viewData['origin_count'] = $this->db->query('SELECT COUNT(DISTINCT(UPPER(Manufacturer))) AS `count` 
-                                                        FROM ambilis.StoreItems 
+        $viewData['origin_count'] = $this->db->query('SELECT COUNT(DISTINCT(UPPER(TRIM(Manufacturer)))) AS `count` 
+                                                        FROM StoreItems 
                                                         WHERE Manufacturer IS NOT NULL AND Manufacturer != ""')->row()->count;
 
 

@@ -107,6 +107,7 @@ class Marketplace extends CI_Controller
         foreach ($cart_items as &$item) {
             $product = $this->appdb->getRowObject('StoreItems', $item['id']);
             $seller  = (array) $this->appdb->getRowObject('StoreDetails', $product->StoreID);
+            $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
             $item['seller'] = $seller['Name'];
         }
 
@@ -144,8 +145,8 @@ class Marketplace extends CI_Controller
             $item['seller'] = $seller['Name'];
             $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
 
-            $viewData['points'] += $item['distribution']['discount'] * $item['qty'];
-            $viewData['shared'] += $item['distribution']['divided_reward'] * $item['qty'];
+            $viewData['points'] += $item['distribution']['referral'] * $item['qty'];
+            $viewData['shared'] += $item['distribution']['shared_rewards'] * $item['qty'];
             $viewData['cashback'] += $item['distribution']['cashback'] * $item['qty'];
         }
 
@@ -168,20 +169,24 @@ class Marketplace extends CI_Controller
     { 
         $product = $this->appdb->getRowObject('StoreItems', get_post('code'), 'Code');
         if ($product) {
+
+            $distribution = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
+
             $data = array(
                 'id'    => $product->id, 
                 'name'  => $product->Name, 
-                'price' => $product->Price, 
+                'price' => $distribution['discounted_price'], 
                 'qty'   => get_post('quantity'), 
                 'img'   => product_filename($product->Image)
             );
+
             if ($this->cart->insert($data)) {
 
                 $seller  = (array) $this->appdb->getRowObject('StoreDetails', $product->StoreID);
                 $p = array(
                     'Image' => product_filename($product->Image),
                     'Name'  => $product->Name,
-                    'Price' => peso($product->Price),
+                    'Price' => peso($distribution['discounted_price']),
                     'Seller'=> $seller['Name']
                 );
 
@@ -258,6 +263,7 @@ class Marketplace extends CI_Controller
 
             if ($this->cart->total_items()) {
                 $distribution = array(
+                    'srp'            => 0,
                     'discount'       => 0,
                     'profit'         => 0,
                     'company'        => 0,
@@ -272,6 +278,7 @@ class Marketplace extends CI_Controller
                     $product = $this->appdb->getRowObject('StoreItems', $item['id']);
                     $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
 
+                    $distribution['srp']            += $item['distribution']['srp'] *= $item['qty'];
                     $distribution['discount']       += $item['distribution']['discount'] *= $item['qty'];
                     $distribution['profit']         += $item['distribution']['profit'] *= $item['qty'];
                     $distribution['company']        += $item['distribution']['company'] *= $item['qty'];
@@ -426,7 +433,7 @@ class Marketplace extends CI_Controller
         $orderData = $this->appdb->getRowObject('Orders', $order_id);
         if ($orderData) {
 
-            // buyer rewards (discount, cashback, 1/8 shared);
+            // buyer rewards (cashback, 1/8 shared), log discounts on transactions and rewards but not credited on wallet
             // direct referrer reward (referral points, 1/8 shared)
             // 6 upline of direct referrer (1/8 shared each)
 
@@ -505,30 +512,36 @@ class Marketplace extends CI_Controller
 
                 $reward_type = $data['reward_type'];
                 $rewardData = array(
-                    'Code'      => microsecID(true),
-                    'AccountID' => $data['account_id'],
-                    'FromUserID'=> $data['from_user'],
-                    'OrderID'   => $data['order_id'],
-                    'Type'      => $reward_type,
-                    'Amount'    => $data['amount'],
-                    'DateAdded' => datetime()
+                    'Code'        => microsecID(true),
+                    'AccountID'   => $data['account_id'],
+                    'FromUserID'  => $data['from_user'],
+                    'OrderID'     => $data['order_id'],
+                    'Type'        => $reward_type,
+                    'Amount'      => $data['amount'],
+                    'Description' => $data['trans_desc'],
+                    'DateAdded'   => datetime()
                 );
                 if ($this->appdb->saveData('WalletRewards', $rewardData)) {
-                    $balance = get_latest_wallet_balance($data['account_id']);
-                    $transactions_data = array(
-                        'Code'          => microsecID(true),
-                        'AccountID'     => $data['account_id'],
-                        'ReferenceNo'   => $rewardData['Code'],
-                        'Description'   => $data['trans_desc'],
-                        'Date'          => datetime(),
-                        'Amount'        => $data['amount'],
-                        'Type'          => 'Credit',
-                        'EndingBalance' => ($balance + $data['amount'])
-                    );
 
-                    if (!$this->appdb->saveData('WalletTransactions', $transactions_data)) {
-                        $has_error = true;
-                        logger('Saving ' . $reward_type . ' reward transaction failed.');
+                    // if discount type. no changes on wallet, just record the on reward logs
+                    if ($reward_type != 'discount') {
+                        $balance = get_latest_wallet_balance($data['account_id']);
+
+                        $transactions_data = array(
+                            'Code'          => microsecID(true),
+                            'AccountID'     => $data['account_id'],
+                            'ReferenceNo'   => $rewardData['Code'],
+                            'Description'   => $data['trans_desc'],
+                            'Date'          => datetime(),
+                            'Amount'        => $data['amount'],
+                            'Type'          => 'Credit',
+                            'EndingBalance' => ($balance + $data['amount'])
+                        );
+
+                        if (!$this->appdb->saveData('WalletTransactions', $transactions_data)) {
+                            $has_error = true;
+                            logger('Saving ' . $reward_type . ' reward transaction failed.');
+                        }
                     }
                 } else {
                     $has_error = true;

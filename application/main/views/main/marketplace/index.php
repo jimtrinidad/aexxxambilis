@@ -47,20 +47,20 @@
                   <p><?php echo $item['seller']['Name'] ?></p>
                 </div>
                 <div class="col-5 text-right">
-                  <strong class="price text-red"><?php echo peso($item['Price']); ?></strong>
+                  <strong class="price text-red"><?php echo show_price($item['Price'], $distribution['discount']); ?></strong>
                 </div>
               </div>
               <div class="row">
                 <div class="col-7">
                   <p class="sub-details">
                     <?php 
-                      echo '<span class="d-block d-md-inline">' . peso($distribution['discount'], false) . ' Points </span>' . 
-                           '<span class="d-block d-md-inline">' . peso($distribution['divided_reward'], false) . ' Shared </span>' . 
-                           '<span class="d-block d-md-inline">' . peso($distribution['cashback'], false) . ' Cashback</span>';
+                      echo '<span class="d-block">' . peso($distribution['referral'], false) . ' Referrer Points </span>' . 
+                           '<span class="d-block">' . peso($distribution['shared_rewards'], false) . ' Shared </span>' . 
+                           '<span class="d-block">' . peso($distribution['cashback'], false) . ' Cashback</span>';
                     ?>
                   </p>
                 </div>
-                <div class="col-5 text-right">
+                <div class="col-5 text-right mt-2">
                   <a href="javascript:;" class="pr-button bg-red text-white mb-2" onclick="Marketplace.addToCart('<?php echo $item['Code'] ?>')"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                   <a href="tel:<?php echo $item['seller']['Contact']; ?>"  class="pr-button bg-yellow text-black mb-2"><i class="fa fa-phone" aria-hidden="true"></i></a>
                 </div>
