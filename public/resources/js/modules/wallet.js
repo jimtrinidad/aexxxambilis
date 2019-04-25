@@ -90,13 +90,27 @@ function Wallet() {
     }
 
     /**
-    * encash
+    * padala
     */
     this.moneyPadalaRequest = function()
     {   
 
         var form  = '#moneyPadalaForm';
         var modal = '#moneyPadalaModal';
+        Utils.show_form_modal(modal, form, false, function(){
+
+        });
+
+    }
+
+    /**
+    * eload
+    */
+    this.eloadRequest = function()
+    {   
+
+        var form  = '#eloadForm';
+        var modal = '#eloadModal';
         Utils.show_form_modal(modal, form, false, function(){
 
         });

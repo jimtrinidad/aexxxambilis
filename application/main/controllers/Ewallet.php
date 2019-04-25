@@ -242,7 +242,7 @@ class Ewallet extends CI_Controller
                         'Code'          => microsecID(),
                         'AccountID'     => current_user(),
                         'ReferenceNo'   => get_post('Number'),
-                        'Description'   => 'eLoad (' . get_post('Number') . ')',
+                        'Description'   => lookup('mobile_service_provider', get_post('ServiceProvider')) . ' e-load (' . get_post('Number') . ')',
                         'Date'          => date('Y-m-d H:i:s'),
                         'Amount'        => $amount,
                         'Type'          => 'Debit',

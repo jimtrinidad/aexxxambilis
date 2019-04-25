@@ -44,3 +44,12 @@ $config['wallet_rewards_type'] = array(
     'referrer'  => 'Referrer Points',
     'shared'    => 'Shared Rewards'
 );
+
+
+$config['mobile_service_provider'] = array(
+    1 => 'Globe',
+    2 => 'Smart',
+    3 => 'Touch Mobile',
+    4 => 'Sun Cellular',
+    5 => 'ABS-CBN Mobile'
+);

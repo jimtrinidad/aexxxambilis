@@ -65,8 +65,8 @@
       <thead>
         <tr>
           <th scope="col" class="text-red">Connections</th>
+          <th scope="col" class="text-red">ID</th>
           <th scope="col" class="text-red">Contact</th>
-          <th scope="col" class="text-red">Email</th>
           <th scope="col" class="text-red">Earned</th>
         </tr>
       </thead>
@@ -75,8 +75,8 @@
         foreach ($connections as $i) {
           echo '<tr>
                   <td scope="row"><b>' . $i['Firstname'] . ' ' . $i['Lastname'] . '</b><br/><small class="d-xs-block d-sm-block d-md-inline"> ' . date('m/d/y h:i a', strtotime($i['DateAdded'])) . ' </small></td>
-                  <td>' . $i['Mobile'] . '</td>
-                  <td>' . $i['EmailAddress'] . '</td>
+                  <td>' . $i['PublicID'] . '</td>
+                  <td>' . $i['Mobile'] . '<br>' . $i['EmailAddress']  . '</td>
                   <td>' . peso($i['earnings']) .  '</td>
                 </tr>';
         }

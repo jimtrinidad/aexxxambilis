@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Terms extends CI_Controller
+class Support extends CI_Controller
 {
 
     public function __construct()
@@ -12,14 +12,14 @@ class Terms extends CI_Controller
     public function index($code = false)
     {
         $viewData = array(
-            'pageTitle'     => 'Terms & Conditions',
-            'pageSubTitle'  => 'Ambilis Terms & Conditions',
+            'pageTitle'     => 'Support',
+            'pageSubTitle'  => 'Ambilis Support',
             'accountInfo'   => user_account_details(),
             'jsModules'     => array(
             ),
         );
 
-        view('main/misc/terms', $viewData, 'templates/main');
+        view('main/misc/support', $viewData, 'templates/main');
 
     }
 
