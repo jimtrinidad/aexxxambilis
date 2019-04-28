@@ -14,7 +14,7 @@ class Account extends CI_Controller
         // print_data(profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']));
         
         $data = array(
-            'from'  => array('no-reply@ambilis.com', 'Ambilis.com'),
+            'from'  => array('info@mgov.ph', 'Ambilis.com'),
             'to'    => array('jimtrinidad002@gmail.com'),
             'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
             'message'   => 'This is a new <b>test</b> message from info smtp'
