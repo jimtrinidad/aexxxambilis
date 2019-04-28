@@ -54,6 +54,23 @@ function Account() {
             });
         });
 
+        $('#resetPasswordForm').submit(function(e) {
+            e.preventDefault();
+            Utils.save_form(this, function(response){
+                var cont = $('#resetPasswordForm').parent();
+                $('#resetPasswordForm').remove();
+                cont.html(`<div class="row justify-content-center">
+                    <div class="col-12 col-md-8">
+                        <h4>Reset Password</h4>
+                        <div class="alert alert-success" role="alert">
+                          Password has been changed successfully.
+                        </div>
+                        <button type="button" onclick="window.location='${window.base_url('account/signin')}'" name="" class="btn btn-success">Go to Login</button>
+                    </div>
+                </div>`);
+            });
+        });
+
     }
 
     /**

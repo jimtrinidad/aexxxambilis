@@ -53,6 +53,11 @@ $config['forgot_password'] = array(
 	array('account_email', 'Email address', 'trim|required|valid_email|min_length[5]')
 );
 
+$config['reset_password'] = array(
+	array('reset_code', 'Reset code', 'trim|required'),
+	array('Password', 'Password', 'required|min_length[8]|max_length[16]'),
+	array('ConfirmPassword', 'Password confirmation', 'required|matches[Password]')
+);
 
 $config['user_address'] = array(
 	array('AddressProvince', 'Province', 'trim|required'),

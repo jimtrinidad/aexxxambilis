@@ -416,9 +416,14 @@ class Account extends CI_Controller
 
     public function forgot()
     {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
         $viewData = array(
             'pageTitle' => 'Forgot Password',
-            'RegistrationID' => microsecID(),
             'jsModules' => array(
                 'account'
             )
@@ -429,6 +434,12 @@ class Account extends CI_Controller
 
     public function forgot_password()
     {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
         if (validate('forgot_password') == FALSE) {
             $return_data = array(
                 'status'    => false,
@@ -481,8 +492,7 @@ class Account extends CI_Controller
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => 'Request failed. Please try again later.',
-                                'data'      => $verifyResponse
+                                'message'   => 'Request failed. Please try again later.'
                             );
                         }
 
@@ -506,6 +516,97 @@ class Account extends CI_Controller
                 );
             }
 
+            
+        }
+
+        response_json($return_data);
+    }
+
+    public function reset($code = '')
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+
+        $resetCode = $this->appdb->getRowObject('ResetPassword', $code, 'Code');
+        if ($code && $resetCode && time() <= $resetCode->Expiration) {
+
+            $user = $this->appdb->getRowObject('Users', $resetCode->AccountID);
+
+            $viewData = array(
+                'pageTitle' => 'Reset Password',
+                'jsModules' => array(
+                    'account'
+                )
+            );
+
+            $viewData['reset_code'] = $resetCode->Code;
+
+            view('account/reset', $viewData);
+        } else {
+            show_404();
+        }
+    }
+
+    public function reset_password()
+    {
+
+        // if already logged in, redirect to home page
+        if (!isGuest()) {
+            redirect();
+        }
+        
+        if (validate('reset_password') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $resetCode = $this->appdb->getRowObject('ResetPassword', get_post('reset_code'), 'Code');
+            if ($resetCode) {
+
+                $user = $this->appdb->getRowObject('Users', $resetCode->AccountID);
+
+                if ($user) {
+
+                    $saveData = array(
+                        'id'            => $user->id,
+                        'Password'      => $this->authentication->hash_password(get_post('Password')),
+                        'LastUpdate'    => datetime()
+                    );
+
+                    if ($this->appdb->saveData('Users', $saveData)) {
+
+                        $this->appdb->deleteData('ResetPassword', $resetCode->id);
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Password has been changed successfully.'
+                        );
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Changing password failed. Please try again later.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid account password reset.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid password reset request.s'
+                );
+            }
             
         }
 
