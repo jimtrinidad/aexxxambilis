@@ -20,7 +20,8 @@ class Account extends CI_Controller
             'message'   => 'This is a new <b>test</b> message from info smtp'
         );
         print_r($data);
-        send_email($data, false);exit;
+        send_email($data, false);
+        exit;
     }
 
     public function index()
