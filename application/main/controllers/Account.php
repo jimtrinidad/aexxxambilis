@@ -10,8 +10,17 @@ class Account extends CI_Controller
 	}
 
     public function test() {
-        $item = (array) $this->appdb->getRowObject('StoreItems', get_post('c'), 'Code');
-        print_data(profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']));
+        // $item = (array) $this->appdb->getRowObject('StoreItems', get_post('c'), 'Code');
+        // print_data(profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']));
+        
+        $data = array(
+            'from'  => array('no-reply@ambilis.com', 'Ambilis.com'),
+            'to'    => array('jimtrinidad002@gmail.com'),
+            'subject'   => 'This another is a test ' . date('Y-m-d H:i:s'),
+            'message'   => 'This is a new <b>test</b> message from info smtp'
+        );
+        print_r($data);
+        send_email($data, false);exit;
     }
 
     public function index()
