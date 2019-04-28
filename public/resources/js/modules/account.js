@@ -45,6 +45,15 @@ function Account() {
             });
         });
 
+        $('#forgotPasswordForm').submit(function(e) {
+            e.preventDefault();
+            Utils.save_form(this, function(response){
+                bootbox.alert(response.message, function(){
+                    window.location = window.base_url('account/signin'); 
+                });
+            });
+        });
+
     }
 
     /**

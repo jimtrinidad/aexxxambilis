@@ -49,6 +49,10 @@ $config['account_update'] = array(
 	    ))
 );
 
+$config['forgot_password'] = array(
+	array('account_email', 'Email address', 'trim|required|valid_email|min_length[5]')
+);
+
 
 $config['user_address'] = array(
 	array('AddressProvince', 'Province', 'trim|required'),

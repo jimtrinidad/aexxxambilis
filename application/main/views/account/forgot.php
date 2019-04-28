@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/site.css">
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 	
     <title><?php echo TITLE_PREFIX . $pageTitle ?></title>
 	
@@ -25,42 +26,34 @@
 		</div>
 		
 		<div class="content">
-			<div class="container">
-				<div class="row">
-					<div class="col-6">
-						<a href="<?php echo site_url('account/signup') ?>" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/fb-icon.png" width="20" />  <span>Continue with Facebook</span></a>
-					</div>
-					<div class="col-6">
-						<a href="<?php echo site_url('account/signup') ?>" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/google-icon.png" width="20" /> <span>Continue with Google</span></a>
-					</div>
-				</div>
-			</div>
-			
+
 			<div class="main-login container">
 
-				<form id="loginForm" action="<?php echo site_url('account/login') ?>" autocomplete="off" >
-					<div class="row">
-						<div class="col-12 text-center mb-3">
-							<strong class="text-b-red">OR</strong>
+				<form id="forgotPasswordForm" method="post" action="<?php echo site_url('account/forgot_password') ?>" autocomplete="off" >
+
+					<div class="row justify-content-center">
+
+						<div class="col-12 col-md-8 form-group">
+
+							<div id="error_message_box" class="hide">
+		              <div class="error_messages alert alert-danger text-danger" role="alert"></div>
+		          </div>
+          
+							<h4>Forgot your Password?</h4>
+							<span>Enter your email address to reset your password.</span>
 						</div>
-					</div>
-					<div id="error_message_box" class="hide alert alert-danger text-danger" role="alert"></div>
-					<div class="row">
-						<div class="col-12 form-group">
-							<input type="text" class="form-control bg-cream" placeholder="Email" id="username" name="username" />
+						<div class="col-12 col-md-8 form-group">
+							<input type="text" class="form-control bg-cream" placeholder="Email" id="account_email" name="account_email" />
 						</div>
-						<div class="col-12 form-group">
-							<input type="password" class="form-control bg-cream" placeholder="Password" id="password" name="password" />
-						</div>
-						<div class="col-12 form-group text-right">
-							<a href="#">Forgot Password</a>
+						<div class="col-12 col-md-8">
+							<div class="g-recaptcha" data-sitekey="6Lf8QoIUAAAAAIa5oxCjRrBHCvOhDjLjENH6sBVI"></div>
 						</div>
 					</div>
 					
-					<div class="row">
+					<div class="row mt-4">
 						<div class="col-12 form-group text-center">
-							<button type="submit" class="btn btn-lg bg-l-red text-white mb-3">LOGIN</button>
-							<p><span class="text-gray">If you are a new user,</span> <a href="<?php echo site_url('account/signup') ?>" class="text-b-red">Signup here</a></p>
+							<button type="submit" name="reset_password" class="btn btn-lg bg-l-red text-white mb-3">Reset Password</button>
+							<a class="d-block mb-3 rounded" href="<?php echo site_url('signin') ?>">Back</a>
 						</div>
 					</div>
 				</form>

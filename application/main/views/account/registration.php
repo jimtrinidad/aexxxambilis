@@ -21,7 +21,7 @@
   <body class="registration">
     
     <div id="header">
-      <a href="#" class="login-logo"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png" width="350" /></a>
+      <a href="<?php echo site_url() ?>" class="login-logo"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png" width="350" /></a>
     </div>
 
     <div class="container registration">
@@ -29,7 +29,7 @@
       <div class="row justify-content-center mt-5">
         <div class="col-9 col-md-6">
           <h3 class="text-center">Registration</h3>
-          <form id="registrationForm" action="<?php echo site_url('account/register') ?>" autocomplete="false" >
+          <form id="registrationForm" action="<?php echo site_url('account/registration') ?>" autocomplete="false" >
             <input type="hidden" id="RegistrationID" name="RegistrationID" class="form-control" value="<?php echo $RegistrationID; ?>">
             <div id="error_message_box" class="hide">
               <div class="error_messages alert alert-danger text-danger" role="alert"></div>

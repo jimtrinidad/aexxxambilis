@@ -130,10 +130,15 @@ class Account extends CI_Controller
 
     }
 
+    public function signup()
+    {
+        redirect('account/register');
+    }
+
     /**
      * Open registration page
      */
-    public function signup()
+    public function register()
     {
 
         // if already logged in, redirect to home page
@@ -156,7 +161,7 @@ class Account extends CI_Controller
     /**
      * attempt and save registration
      */
-    public function register()
+    public function registration()
     {
 
         // if already logged in, redirect to home page
@@ -395,6 +400,104 @@ class Account extends CI_Controller
                 );
             }
         }
+        response_json($return_data);
+    }
+
+
+    public function forgot()
+    {
+        $viewData = array(
+            'pageTitle' => 'Forgot Password',
+            'RegistrationID' => microsecID(),
+            'jsModules' => array(
+                'account'
+            )
+        );
+
+        view('account/forgot', $viewData);
+    }
+
+    public function forgot_password()
+    {
+        if (validate('forgot_password') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+                // Google reCAPTCHA API secret key 
+                $secretKey = '6LfUmaAUAAAAAFoVSOC8NvcEf3HmF9usFE9c_ALV'; 
+                 
+                // Verify the reCAPTCHA response 
+                $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$_POST['g-recaptcha-response']); 
+                 
+                // Decode json data 
+                $responseData  = json_decode($verifyResponse); 
+                 
+                // If reCAPTCHA response is valid 
+                if ($responseData->success) {
+
+                    $user = $this->appdb->getRowObject('Users', get_post('account_email'), 'EmailAddress');
+
+                    if ($user) {
+
+                        $saveData = array(
+                            'AccountID'     => $user->id,
+                            'Code'          => sha1(microsecID(true)),
+                            'Expiration'    => strtotime('+12 hours')
+                        );
+
+                        if ($this->appdb->saveData('ResetPassword', $saveData)) {
+
+                            $emailData = array(
+                                'from'      => array('no-reply@ambilis.com', 'Ambilis.com'),
+                                'to'        => array($user->EmailAddress),
+                                'subject'   => 'Reset Password',
+                                'message'   => view('email_templates/forgot_password', array(
+                                    'firstname' => $user->Firstname,
+                                    'code'      => $saveData['Code']
+                                ), null, true)
+                            );
+                            send_email($emailData, true);
+
+                            $return_data = array(
+                                'status'    => true,
+                                'message'   => 'Instruction will be send to your email addres on how to reset your password.'
+                            );
+
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Request failed. Please try again later.'
+                            );
+                        }
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Account email address does not exists.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Robot verification failed, please try again.'
+                    );
+                } 
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Please check on the reCAPTCHA box.'
+                );
+            }
+
+            
+        }
+
         response_json($return_data);
     }
 

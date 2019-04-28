@@ -160,7 +160,7 @@ function Utils() {
                 if (response.status) {
                     $('#error_message_box').addClass('hide');
                     if (callback) {
-                        callback();
+                        callback(response);
                     } else {
                         // default, show message then reload
                         bootbox.alert(response.message, function(){
