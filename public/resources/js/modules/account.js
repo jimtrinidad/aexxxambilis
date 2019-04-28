@@ -51,6 +51,9 @@ function Account() {
                 bootbox.alert(response.message, function(){
                     window.location = window.base_url('account/signin'); 
                 });
+            }, function() {
+                // reset captcha
+                grecaptcha.reset();
             });
         });
 
