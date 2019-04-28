@@ -429,7 +429,7 @@ class Account extends CI_Controller
 
             if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
                 // Google reCAPTCHA API secret key 
-                $secretKey = '6LfUmaAUAAAAAFoVSOC8NvcEf3HmF9usFE9c_ALV'; 
+                $secretKey = '6LfemqAUAAAAAC2NS4k9XOaNbZG-4ITv8lhIF5vH'; 
                  
                 // Verify the reCAPTCHA response 
                 $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secretKey.'&response='.$_POST['g-recaptcha-response']); 
