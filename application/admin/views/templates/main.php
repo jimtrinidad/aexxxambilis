@@ -82,6 +82,7 @@
 
 
     <?php view('templates/js_constants'); ?>
+    <?php view('modals/global'); ?>
     <!-- REQUIRED JS SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.8/js/adminlte.min.js"></script>

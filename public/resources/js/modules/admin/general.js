@@ -49,6 +49,27 @@ function General() {
 
     }
 
+
+    this.viewOrderInvoice = function(code)
+    {   
+
+        $.LoadingOverlay("show", {zIndex: 999});
+        $.ajax({
+            url: window.base_url('orders/invoice/' + code),
+            type: 'GET',
+            success: function (response) {
+                if (response.length > 0) {
+                    $('#invoiceModal').find('.modal-body').html(response);
+                    $('#invoiceModal').modal('show');
+                }
+            },
+            complete: function() {
+                $.LoadingOverlay("hide");
+            }
+        });
+
+    }
+
 }
 
 
