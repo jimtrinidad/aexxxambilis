@@ -169,10 +169,9 @@ function Utils() {
                     }
                 } else {
                     if (error_callback) {
-                        error_callback();
+                        error_callback(response);
                     } else {
                         // bootbox.alert(response.message);
-                        console.log(response);
                         self.show_form_errors(form, response.fields, response.message);
                     }
                 }

@@ -51,8 +51,9 @@ function Account() {
                 bootbox.alert(response.message, function(){
                     window.location = window.base_url('account/signin'); 
                 });
-            }, function() {
+            }, function(response) {
                 // reset captcha
+                Utils.show_form_errors($('#forgotPasswordForm'), response.fields, response.message);
                 grecaptcha.reset();
             });
         });
