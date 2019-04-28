@@ -463,7 +463,7 @@ class Account extends CI_Controller
                         if ($this->appdb->saveData('ResetPassword', $saveData)) {
 
                             $emailData = array(
-                                'from'      => array('no-reply@ambilis.com', 'Ambilis.com'),
+                                'from'      => array('info@mgov.ph', 'Ambilis.com'),
                                 'to'        => array($user->EmailAddress),
                                 'subject'   => 'Reset Password',
                                 'message'   => view('email_templates/forgot_password', array(
