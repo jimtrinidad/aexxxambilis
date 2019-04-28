@@ -471,7 +471,8 @@ class Account extends CI_Controller
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => 'Request failed. Please try again later.'
+                                'message'   => 'Request failed. Please try again later.',
+                                'data'      => $verifyResponse
                             );
                         }
 
