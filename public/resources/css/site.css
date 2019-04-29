@@ -133,6 +133,20 @@ a:hover {text-decoration: none;}
   }
 }
 
+
+.dropmenu {
+  background-color: rgba(243, 243, 243, 0.95);
+}
+.dropmenu ul li a {
+  color: #000;
+}
+.dropmenu ul li a img{
+  margin-right: 8px;
+  vertical-align: bottom;
+  width: 25px;
+  height: 25px;
+}
+
 /*end*/
 
 table.table>tbody>tr>td,
