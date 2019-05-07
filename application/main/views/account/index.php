@@ -2,15 +2,26 @@
 			<div class="row">
 				<div class="col-3">
 					<img src="<?php echo $profile['photo'] ?>" width="100%" />
+					<a href="javascript:;" class="small d-block" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit Profile</a>
 				</div>
 				<div class="col-6">
-		     	<div class="balance-info">
+		     	<div class="balance-info" style="margin-bottom: 10px;">
 		        <p>Balance: <?php echo peso($summary['balance']) ?></p>
 		        <p>Total Transactions: <?php echo number_format($summary['transactions']) ?></p>
 		        <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
 		        <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
 		      </div>
-		      <a href="javascript:;" class="small" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit Profile</a>
+		      <?php
+		      if ($accountInfo->agent) {
+		      	if ($accountInfo->agent->Status == 0) {
+		      		echo '<a href="javascript:;" class="btn btn-sm btn-info small">Delivery agent application on process</a>';
+		      	} else if ($accountInfo->agent->Status == 1) {
+		      		echo '<a href="javascript:;" class="text-success small">Active delivery agent</a>';
+		      	}
+		      } else {
+		      	echo '<a href="javascript:;" class="btn btn-sm btn-warning small" onclick="Account.applyAsAgent()">Apply as Delivery Agent</a>';
+		      }
+		      ?>
 		    </div>
 				<div class="col-3">
 					<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="100%" />

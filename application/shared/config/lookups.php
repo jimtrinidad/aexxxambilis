@@ -53,3 +53,22 @@ $config['mobile_service_provider'] = array(
     4 => 'Sun Cellular',
     5 => 'ABS-CBN Mobile'
 );
+
+$config['biller_type'] = array(
+    1   => 'Bills',
+    2   => 'Ticketing'
+);
+
+
+$config['delivery_agent_status'] = array(
+    0 => 'Pending Application',
+    1 => 'Active',
+    2 => 'Disable'
+);
+$config['delivery_agent_man_type'] = array(
+    1   => 'Manpower Only',
+    2   => 'With Motorcycle',
+    3   => 'With Car',
+    4   => 'With Van',
+    5   => 'With Truck'
+);

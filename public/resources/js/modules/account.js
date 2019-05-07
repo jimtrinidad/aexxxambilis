@@ -75,6 +75,14 @@ function Account() {
             });
         });
 
+
+        $('.custom-file-input').on('change',function(){
+            //get the file name
+            var fileName = $(this).val();
+            //replace the "Choose a file" label
+            $(this).next('.custom-file-label').html(fileName.split(/[\\/]/).pop());
+        })
+
     }
 
     /**
@@ -212,6 +220,16 @@ function Account() {
                 $(form).find('.image-preview').prop('src', self.info.photo);
                 Utils.set_form_input_value(form, self.info);
             }
+        });
+    }
+
+    this.applyAsAgent = function()
+    {
+        var form  = '#deliveryAgentApplicationForm';
+        var modal = '#deliveryAgentApplicationModal';
+        Utils.show_form_modal(modal, form, false, function(){
+            Utils.set_form_input_value(form, self.info);
+            $(form).find('.custom-file-label').text('Choose file');
         });
     }
 

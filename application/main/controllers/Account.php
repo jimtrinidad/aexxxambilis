@@ -24,6 +24,12 @@ class Account extends CI_Controller
         exit;
     }
 
+
+    /*
+    * Logged in user functions
+    */
+
+
     public function index()
     {
         if (isGuest()) {
@@ -31,6 +37,8 @@ class Account extends CI_Controller
         }
 
         $userData = user_account_details();
+
+        // print_data($userData);
 
         $viewData = array(
             'pageTitle'     => 'Account',
@@ -70,6 +78,252 @@ class Account extends CI_Controller
 
         view('account/index', $viewData, 'templates/main');
     }
+
+    public function save_profile()
+    {
+
+        if (isGuest()) {
+            redirect();
+        }
+        
+        if (validate('account_update') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $user = $this->appdb->getRowObject('Users', get_post('user_id'), 'RegistrationID');
+
+            if ($user) {
+
+                $randomLogoName = md5(microsecID());
+
+                // validate file upload
+                $this->load->library('upload', array(
+                    'upload_path'   => PHOTO_DIRECTORY,
+                    'allowed_types' => 'gif|jpg|png',
+                    // 'max_size'      => '1000', // 1mb
+                    // 'max_width'     => '1024',
+                    // 'max_height'    => '768',
+                    'overwrite'     => true,
+                    'file_name'     => $randomLogoName
+                ));
+
+                if (!empty($_FILES['account_photo']['name']) && $this->upload->do_upload('account_photo') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading image failed.',
+                        'fields'    => array('account_photo' => $this->upload->display_errors('',''))
+                    );
+                } else {
+
+                    // do save
+                    $uploadData     = $this->upload->data();
+
+                    $saveData     = array(
+                        'id'                => $user->id,
+                        'Firstname'         => get_post('account_firstname'),
+                        'Lastname'          => get_post('account_lastname'),
+                        'EmailAddress'      => get_post('account_email'),
+                        'Mobile'            => get_post('account_mobile'),
+                        'BankName'          => get_post('account_bank_name'),
+                        'BankAccountNo'     => get_post('account_bank_no'),
+                        'BankAccountName'   => get_post('account_bank_account_name'),
+                        'LastUpdate'        => datetime()
+                    );
+
+                    if (!empty($_FILES['account_photo']['name'])) {
+                        $saveData['Photo'] = $uploadData['file_name'];
+                    }
+
+                    if ($this->appdb->saveData('Users', $saveData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Profile has been updated successfully.',
+                        );
+
+                        // delete old photo if edited
+                        if (isset($saveData['Photo']) && !empty($user->Photo)) {
+                            @unlink(PHOTO_DIRECTORY . $user->Photo);
+                        }
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating profile failed. Please try again later.'
+                        );
+                        @unlink($uploadData['file_name']);
+                    }
+
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid user.'
+                );
+            }
+        }
+        response_json($return_data);
+    }
+
+    public function save_address()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        if (validate('user_address') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $saveData     = array(
+                'Street'            => get_post('AddressStreet'),
+                'Barangay'          => get_post('AddressBarangay'),
+                'City'              => get_post('AddressCity'),
+                'Province'          => get_post('AddressProvince'),
+                'LastUpdate'        => datetime(),
+            );
+
+            $addressData = $this->appdb->getRowObject('UserAddress', get_post('AddressID'));
+            if ($addressData) {
+                $saveData['id'] = $addressData->id;
+            } else {
+
+                $user_addresses = $this->appdb->getRecords('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+
+                // if no active address. set this new one as active 
+                if (count($user_addresses) == 0) {
+                    $status = 1;
+                } else {
+                    $status = 0;
+                }
+
+                $saveData['UserID'] = current_user();
+                $saveData['Status'] = $status;
+            }
+
+            if (($ID = $this->appdb->saveData('UserAddress', $saveData))) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Account address has been added successfully.',
+                    'id'        => $ID
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Adding address failed. Please try again later.'
+                );
+            }
+        }
+        response_json($return_data);
+    }
+
+    public function delivery_agent_application()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        $user = $this->appdb->getRowObject('Users', get_post('user_id'), 'RegistrationID');
+
+        if ($user) {
+
+            $this->load->library('upload');
+            $upload_status = true;
+            $uploadData    = array();
+            $upload_errors = array();
+
+            foreach ($_FILES['file']['name'] as $i => $name) {
+
+                $randomname = md5(random_letters());
+
+                // validate file upload
+                $config = array(
+                    'upload_path'   => UPLOADS_DIRECTORY,
+                    'allowed_types' => 'gif|jpg|png',
+                    'max_size'      => '1000', // 1mb
+                    // 'max_width'     => '1024',
+                    // 'max_height'    => '768',
+                    'overwrite'     => true,
+                    'file_name'     => $randomname
+                );
+                $this->upload->initialize($config);
+
+                $_FILES['userFile']['name']         = $_FILES['file']['name'][$i];
+                $_FILES['userFile']['type']         = $_FILES['file']['type'][$i];
+                $_FILES['userFile']['tmp_name']     = $_FILES['file']['tmp_name'][$i];
+                $_FILES['userFile']['error']        = $_FILES['file']['error'][$i];
+                $_FILES['userFile']['size']         = $_FILES['file']['size'][$i];
+
+                if ($this->upload->do_upload('userFile') == false) {
+                    $upload_errors[$i] = $this->upload->display_errors('','');
+                    $upload_status = false;
+                } else {
+                    $fileData = $this->upload->data();
+                    $uploadData[$i] = $fileData['file_name'];
+                }
+
+            }
+
+            if ($upload_status) {
+
+                $saveData  = array(
+                    'Status'        => 0,
+                    'Requirements'  => json_encode($uploadData),
+                    'DateApplied'   => datetime(),
+                    'LastUpdate'    => datetime()
+                );
+                $agentData = $this->appdb->getRowObject('DeliveryAgents', $user->id, 'UserID');
+                if ($agentData) {
+                    $saveData['id'] = $StoreData->id;
+                } else {
+                    $saveData['Code']     = microsecID(true);
+                    $saveData['UserID']   = $user->id;
+                }
+
+                if (($ID = $this->appdb->saveData('DeliveryAgents', $saveData))) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Delivery Agent application has been submitted.',
+                        'id'        => $ID
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Saving application failed. Please try again later.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Uploading image failed.',
+                            'fields'    => $upload_errors
+                        );
+            }
+
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid user.'
+            );
+        }
+        
+        response_json($return_data);
+    }
+
+
+
+    /**
+    * GUEST
+    */
 
     /**
      * Open login page
@@ -271,148 +525,6 @@ class Account extends CI_Controller
             return true;
         }
     }
-
-    public function save_profile()
-    {
-        if (validate('account_update') == FALSE) {
-            $return_data = array(
-                'status'    => false,
-                'message'   => 'Some fields have errors.',
-                'fields'    => validation_error_array()
-            );
-        } else {
-
-            $user = $this->appdb->getRowObject('Users', get_post('user_id'), 'RegistrationID');
-
-            if ($user) {
-
-                $randomLogoName = md5(microsecID());
-
-                // validate file upload
-                $this->load->library('upload', array(
-                    'upload_path'   => PHOTO_DIRECTORY,
-                    'allowed_types' => 'gif|jpg|png',
-                    // 'max_size'      => '1000', // 1mb
-                    // 'max_width'     => '1024',
-                    // 'max_height'    => '768',
-                    'overwrite'     => true,
-                    'file_name'     => $randomLogoName
-                ));
-
-                if (!empty($_FILES['account_photo']['name']) && $this->upload->do_upload('account_photo') == false) {
-                    $return_data = array(
-                        'status'    => false,
-                        'message'   => 'Uploading image failed.',
-                        'fields'    => array('account_photo' => $this->upload->display_errors('',''))
-                    );
-                } else {
-
-                    // do save
-                    $uploadData     = $this->upload->data();
-
-                    $saveData     = array(
-                        'id'                => $user->id,
-                        'Firstname'         => get_post('account_firstname'),
-                        'Lastname'          => get_post('account_lastname'),
-                        'EmailAddress'      => get_post('account_email'),
-                        'Mobile'            => get_post('account_mobile'),
-                        'BankName'          => get_post('account_bank_name'),
-                        'BankAccountNo'     => get_post('account_bank_no'),
-                        'BankAccountName'   => get_post('account_bank_account_name'),
-                        'LastUpdate'        => datetime()
-                    );
-
-                    if (!empty($_FILES['account_photo']['name'])) {
-                        $saveData['Photo'] = $uploadData['file_name'];
-                    }
-
-                    if ($this->appdb->saveData('Users', $saveData)) {
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Profile has been updated successfully.',
-                        );
-
-                        // delete old photo if edited
-                        if (isset($saveData['Photo']) && !empty($user->Photo)) {
-                            @unlink(PHOTO_DIRECTORY . $user->Photo);
-                        }
-
-                    } else {
-                        $return_data = array(
-                            'status'    => false,
-                            'message'   => 'Updating profile failed. Please try again later.'
-                        );
-                        @unlink($uploadData['file_name']);
-                    }
-
-                }
-
-            } else {
-                $return_data = array(
-                    'status'    => false,
-                    'message'   => 'Invalid user.'
-                );
-            }
-        }
-        response_json($return_data);
-    }
-
-    public function save_address()
-    {
-        if (isGuest()) {
-            redirect();
-        }
-
-        if (validate('user_address') == FALSE) {
-            $return_data = array(
-                'status'    => false,
-                'message'   => 'Some fields have errors.',
-                'fields'    => validation_error_array()
-            );
-        } else {
-
-            $saveData     = array(
-                'Street'            => get_post('AddressStreet'),
-                'Barangay'          => get_post('AddressBarangay'),
-                'City'              => get_post('AddressCity'),
-                'Province'          => get_post('AddressProvince'),
-                'LastUpdate'        => datetime(),
-            );
-
-            $addressData = $this->appdb->getRowObject('UserAddress', get_post('AddressID'));
-            if ($addressData) {
-                $saveData['id'] = $addressData->id;
-            } else {
-
-                $user_addresses = $this->appdb->getRecords('UserAddress', array('UserID' => current_user(), 'Status' => 1));
-
-                // if no active address. set this new one as active 
-                if (count($user_addresses) == 0) {
-                    $status = 1;
-                } else {
-                    $status = 0;
-                }
-
-                $saveData['UserID'] = current_user();
-                $saveData['Status'] = $status;
-            }
-
-            if (($ID = $this->appdb->saveData('UserAddress', $saveData))) {
-                $return_data = array(
-                    'status'    => true,
-                    'message'   => 'Account address has been added successfully.',
-                    'id'        => $ID
-                );
-            } else {
-                $return_data = array(
-                    'status'    => false,
-                    'message'   => 'Adding address failed. Please try again later.'
-                );
-            }
-        }
-        response_json($return_data);
-    }
-
 
     public function forgot()
     {

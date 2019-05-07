@@ -295,6 +295,8 @@ function user_account_details($id = false, $field = 'id')
 		$user->fullname = user_full_name($user, 0);
 	}
 
+	$user->agent = lookup_row('DeliveryAgents', $user->id, 'UserID');
+
 	return $user;
 
 }
@@ -379,7 +381,7 @@ function get_transactions($userID)
   $data['summary']      = $summary;
 
   return array(
-  	'transactions'	=> $transactions,
+  	'transactions'	=> array_slice($transactions, 0, 10),
   	'summary'				=> $summary
   );
 }

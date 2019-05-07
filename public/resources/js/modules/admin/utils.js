@@ -73,9 +73,9 @@ function Utils() {
         $( document ).ajaxComplete(function(event, xhr) {
             if (xhr.status == 403) {
                 // invalid token, refresh page
-                bootbox.alert('Invalid request token!', function(){
+                // bootbox.alert('Invalid request token!', function(){
                     location.reload();
-                });
+                // });
             } else if (typeof xhr.responseJSON !== 'undefined') {
                 self.update_csrf_token(xhr.responseJSON);
             }

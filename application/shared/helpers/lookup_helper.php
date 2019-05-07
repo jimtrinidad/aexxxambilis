@@ -25,7 +25,7 @@ function lookup($collection, $id = null)
         }
     }
 	
-	if ($id != null) {
+	if ($id !== null) {
 
         if (is_array($id)) {
             $match = array();

@@ -19,6 +19,7 @@
     <li class="<?php echo (is_current_url('orders', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('orders') ?>"><span>Orders</span></a></li>
     <li class="<?php echo (is_current_url('deposits', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('deposits') ?>"><span>Deposits</span></a></li>
     <li class="<?php echo (is_current_url('billers', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers') ?>"><span>Billers</span></a></li>
+    <li class="<?php echo (is_current_url('delivery', 'agents') ? 'active' : ''); ?>"><a href="<?php echo site_url('delivery/agents') ?>"><span>Delivery Agents</span></a></li>
     <li class="treeview">
       <a href="#"><span>Products</span>
         <span class="pull-right-container">

@@ -90,3 +90,74 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="deliveryAgentApplicationModal" tabindex="-1" role="dialog" aria-labelledby="deliveryAgentApplicationModal">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <form id="deliveryAgentApplicationForm" name="deliveryAgentApplicationForm" class="modalForm" action="<?php echo site_url('account/delivery_agent_application') ?>">
+        <input type="hidden" name="user_id" id="user_id">
+        <div class="modal-header">
+          <strong class="modal-title text-b-red">Apply as Delivery Agent</strong>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <p class="h5">Earn as much as 100 pesos on every completed transaction.</p>
+          <p>You just need to provide some documents for your application</p>
+
+          <div id="error_message_box" class="hide">
+            <div class="error_messages alert alert-danger text-danger" role="alert"></div>
+          </div>
+
+          <div class="row gutter-5">
+            <div class="col-12">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">1st ID</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="valid_id_one" name="file[valid_id_one]" accept="image/*">
+                  <label class="custom-file-label text-truncate" for="valid_id_one">Choose file</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">2nd ID</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="valid_id_two" name="file[valid_id_two]" accept="image/*">
+                  <label class="custom-file-label text-truncate" for="valid_id_two">Choose file</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Police Clearance</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" name="file[police_clearance]"  id="police_clearance" accept="image/*">
+                  <label class="custom-file-label text-truncate" for="police_clearance">Choose file</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row gutter-5">
+            <div class="col-12">
+              <small>Note: All attachment should be an image format.</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="reset" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn bg-b-red text-white">Apply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
