@@ -25,7 +25,7 @@ foreach ($results as $c) {
 		<ul class="m-0 p-0">
 			<li>
 				<a href="javascript:;" data-toggle="dropdown" class="nav-link dropdown-toggle"><img src="<?php echo public_url(); ?>resources/images/menu/cat.png"/>Categories</a>
-        <ul class="dropdown-menu dropdown-menu-left ml-4">
+        <ul class="dropdown-menu dropdown-menu-left">
         	<?php
         	echo '<li class="dropdown-item">
 		                <a href="'. site_url('marketplace') .'">All Categories</a>
