@@ -1,3 +1,16 @@
+<?php
+$results = $this->appdb->getRecords('ProductCategories', array(), 'Name');
+$categories = array();
+foreach ($results as $c) {
+    $sub = $this->appdb->getRecords('ProductSubCategories', array('CategoryID' => $c['id']), 'Name');
+    $c['subCategories'] = array();
+    foreach ($sub as $s) {
+        $c['subCategories'][$s['id']] = $s;
+    }
+    $categories[$c['id']] = $c;
+}
+
+?>
 <div id="mobile-menu">
 		
 	<div class="menu-icon">
@@ -10,7 +23,39 @@
 	
 	<div class="dropmenu">
 		<ul class="m-0 p-0">
-			<li><a href="<?php echo site_url()?>"><img src="<?php echo public_url(); ?>resources/images/menu/cat.png"/>Categories</a></li>
+			<li>
+				<a href="javascript:;" data-toggle="dropdown" class="nav-link dropdown-toggle"><img src="<?php echo public_url(); ?>resources/images/menu/cat.png"/>Categories</a>
+        <ul class="dropdown-menu">
+        	<?php
+        	echo '<li class="dropdown-item">
+		                <a href="'. site_url('marketplace') .'">All Categories</a>
+		            </li>';
+        	foreach ($categories as $c) {
+        	?>
+            <li class="dropdown-item dropdown-submenu">
+            	<?php if (count($c['subCategories'])) { ?>
+                <a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle"><?php echo $c['Name'] ?></a>
+                <ul class="dropdown-menu">
+                	<?php
+                		echo '<li class="dropdown-item">
+				                        <a href="'. site_url('marketplace?c=' . $c['id']) .'">All '. $c['Name'] .'</a>
+				                    </li>';
+                		foreach ($c['subCategories'] as $sc) {
+                			echo '<li class="dropdown-item">
+				                        <a href="'. site_url('marketplace?c=' . $c['id'] . '&sc=' . $sc['id']) .'">'. $sc['Name'] .'</a>
+				                    </li>';
+                		}
+                	?>
+                </ul>
+              <?php 
+            	} else {
+              	echo '<a href="' . site_url('marketplace?c=' . $c['id']) . '">'. $c['Name'] .'</a>';
+              } 
+              ?>
+            </li>
+          <?php } ?>
+        </ul>
+			</li>
 			<li><a href="<?php echo site_url('account')?>"><img src="<?php echo public_url(); ?>resources/images/menu/my-account.png"/>My Account</a></li>
 			<li><a href="<?php echo site_url('ewallet')?>"><img src="<?php echo public_url(); ?>resources/images/menu/ewallet.png"/>eWallet</a></li>
 			<li><a href="<?php echo site_url('rewards')?>"><img src="<?php echo public_url(); ?>resources/images/menu/rewards.png"/>Rewards</a></li>

@@ -15,7 +15,7 @@
               </div>
             </div>
          </div> -->
-         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name : 'Marketplace' ?></h5>
+         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name . ($subcategory ? ' / ' . $subcategory->Name : '') : 'Marketplace' ?></h5>
             <div class="input-group">
               <input type="text" class="form-control bg-cream" name="search" placeholder="Search Items" value="<?php echo get_post('search') ?>">
               <div class="input-group-append" id="button-addon4">

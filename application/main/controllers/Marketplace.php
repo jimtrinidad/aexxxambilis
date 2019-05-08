@@ -38,6 +38,10 @@ class Marketplace extends CI_Controller
             $where['Category'] = get_post('c');
         }
 
+        if (get_post('sc')) {
+            $where['SubCategory'] = get_post('sc');
+        }
+
         $paginatationData = $this->appdb->getPaginationData('StoreItems', $page_limit, $page_start, $where, $order);
 
         $products = array();
@@ -63,6 +67,7 @@ class Marketplace extends CI_Controller
         $viewData['pagination'] = paginate($paginationConfig);
 
         $viewData['category']   = $this->appdb->getRowObject('ProductCategories', get_post('c'));
+        $viewData['subcategory']   = $this->appdb->getRowObject('ProductSubCategories', get_post('sc'));
 
         view('main/marketplace/index', $viewData, 'templates/main');
     }

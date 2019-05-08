@@ -248,7 +248,7 @@ class Account extends CI_Controller
                 $config = array(
                     'upload_path'   => UPLOADS_DIRECTORY,
                     'allowed_types' => 'gif|jpg|png',
-                    'max_size'      => '1000', // 1mb
+                    // 'max_size'      => '1000', // 1mb
                     // 'max_width'     => '1024',
                     // 'max_height'    => '768',
                     'overwrite'     => true,

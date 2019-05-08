@@ -147,7 +147,37 @@ a:hover {text-decoration: none;}
   height: 25px;
 }
 
+.dropmenu > ul > li:first-child > a {border-top: none;}
+
+.dropdown-menu li:first-child a {border-top: none;}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-menu {
+  padding: 5px 0;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #f2f2f2;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 0;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+
 /*end*/
+
+
+
 
 table.table>tbody>tr>td,
 table.table>tfoot>tr>td {

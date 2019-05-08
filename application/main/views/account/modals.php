@@ -105,7 +105,7 @@
         </div>
         <div class="modal-body">
 
-          <p class="h5">Earn as much as 100 pesos on every completed transaction.</p>
+          <p class="h5">Earn as much as 2000 pesos per 20 completed transaction.</p>
           <p>You just need to provide some documents for your application</p>
 
           <div id="error_message_box" class="hide">
