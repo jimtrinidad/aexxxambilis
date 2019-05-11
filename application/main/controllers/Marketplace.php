@@ -26,12 +26,12 @@ class Marketplace extends CI_Controller
         $page_limit = 20;
         $page_start = (int) $this->uri->segment(3);
 
-        $order = 'LastUpdate Desc';
+        $order = 'si.LastUpdate Desc';
         $where = array();
 
         // SET SEARCH FILTER
         if (get_post('search')) {
-            $where['CONCAT(Name, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
+            $where['CONCAT(si.Name, " ", si.Description) LIKE ']  = '%' . get_post('search') . '%';
         }
 
         if (get_post('c')) {
