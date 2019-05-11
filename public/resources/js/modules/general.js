@@ -77,6 +77,8 @@ function General() {
         $(target).html(window.emptySelectOption).prop('disabled', true);
         $(baragay_target).html(window.emptySelectOption).prop('disabled', true);
 
+        $.LoadingOverlay("show");
+
         $.get(window.public_url('get/city'), {'provCode' : $(e).val()}).done(function(response) {
             if (response.status) {
                 var options = window.emptySelectOption;
@@ -91,6 +93,8 @@ function General() {
             if (callback) {
                 callback();
             }
+
+            $.LoadingOverlay("hide");
         });
     }
 
@@ -98,6 +102,9 @@ function General() {
     {
         console.log(selected);
         $(target).html(window.emptySelectOption).prop('disabled', true);
+
+        $.LoadingOverlay("show");
+
         $.get(window.public_url('get/barangay'), {'citymunCode' : $(e).val()}).done(function(response) {
             if (response.status) {
                 var options = window.emptySelectOption;
@@ -112,6 +119,8 @@ function General() {
             if (callback) {
                 callback();
             }
+
+            $.LoadingOverlay("hide");
         });
     }
 
