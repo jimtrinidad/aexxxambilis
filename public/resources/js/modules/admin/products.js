@@ -28,6 +28,10 @@ function Products() {
             Utils.save_form(this);
         });
 
+        $('.storeStatusToggle').change(function(e){
+            self.updateStoreStatus(this);
+        });
+
     }
 
     /**
@@ -179,6 +183,67 @@ function Products() {
                 }
             });
         }
+    }
+
+
+    this.approveStore = function(code)
+    {
+        var tr = $('#store_' + code);
+        if (tr.length) {
+            var name   = tr.find('td:nth(1)').text();
+            var store   = tr.find('td:nth(3)').text();
+            bootbox.confirm({
+                message  : `Are you sure you want to <label class="label label-success">enable</label> <b>${store}</b> of ${name}?`,
+                buttons: {
+                    confirm: {
+                        label: 'Enable',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-default'
+                    }
+                },
+                callback : function(r){
+                    if (r) {
+                        $.LoadingOverlay("show", {zIndex: 999});
+                        $.ajax({
+                            url: window.base_url('product/approve_store/' + code),
+                            type: 'GET',
+                            success: function (response) {
+                                if (response.status) {
+                                    bootbox.alert(response.message, function(){
+                                        location.reload(); //easy way, just reload the page
+                                    });
+                                } else {
+                                    $.LoadingOverlay("hide");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    this.updateStoreStatus = function(elem)
+    {
+        var checkbox    = $(elem);
+        var data        = checkbox.data();
+        var status      = checkbox.is(":checked");
+        $.ajax({
+            url: window.base_url('product/store_status/' + data.code),
+            type: 'get',
+            data: {'status' : status},
+            success: function (response) {
+                if (!response.status) {
+                    // failed
+                    bootbox.alert(response.message, function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
     }
 
 }

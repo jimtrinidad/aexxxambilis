@@ -62,6 +62,7 @@ class Store extends CI_Controller
         } else {
             $updateData['Code']     = microsecID();
             $updateData['OwnerID']  = current_user();
+            $updateData['Status']   = 0;
         }
 
         if (($ID = $this->appdb->saveData('StoreDetails', $updateData))) {
@@ -93,13 +94,25 @@ class Store extends CI_Controller
             $Store = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
             if ($Store) {
 
+                $itemData = $this->appdb->getRowObject('StoreItems', get_post('Code'), 'Code');
+
                 $upload_status = true;
                 $uploadData    = array();
+                $uploadErrors  = array();
 
                 $this->load->library('upload');
 
                 if(!empty($_FILES['Image']['name'])) {
                     foreach ($_FILES['Image']['name'] as $i => $name) {
+
+                        // require on new item
+                        if (!$itemData) {
+                            if (empty($_FILES['Image']['name'][$i])) {
+                                $uploadErrors[$i] = $i . ' image is required.';
+                                $upload_status = false;
+                                continue;
+                            }
+                        }
 
                         $randomLogoName = md5(random_letters());
 
@@ -122,11 +135,7 @@ class Store extends CI_Controller
                         $_FILES['userFile']['size'] = $_FILES['Image']['size'][$i];
 
                         if (!empty($_FILES['userFile']['name']) && $this->upload->do_upload('userFile') == false) {
-                            $return_data = array(
-                                'status'    => false,
-                                'message'   => 'Uploading image failed.',
-                                'fields'    => array($i => $this->upload->display_errors('',''))
-                            );
+                            $uploadErrors[$i] = $this->upload->display_errors('','');
                             $upload_status = false;
                         } else {
                             if (!empty($_FILES['userFile']['name'])) {
@@ -166,7 +175,6 @@ class Store extends CI_Controller
                         $saveData['PartnerImage'] = $uploadData['PartnerImage']['file_name'];
                     }
 
-                    $itemData = $this->appdb->getRowObject('StoreItems', get_post('Code'), 'Code');
                     if ($itemData) {
                         $saveData['id'] = $itemData->id;
                     } else {
@@ -193,6 +201,12 @@ class Store extends CI_Controller
                         );
                     }
 
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading image failed.',
+                        'fields'    => $uploadErrors
+                    );
                 }
 
             } else {

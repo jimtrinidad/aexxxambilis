@@ -26,6 +26,12 @@
     padding-left: 5px;
 }
 
+
+table.table-middle >tbody>tr>td,
+table.table-middle >tfoot>tr>td {
+  vertical-align: middle !important;
+}
+
 /**
 * upload image
 */

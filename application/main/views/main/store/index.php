@@ -8,12 +8,20 @@
 			<div class="col-9 col-sm-10">
 				<?php if ($StoreData) { ?>
 				  <h4 class="mb-0"><?php echo $StoreData->Name ?? ''; ?></h4>
-				  <p class="lead small">
+				  <p class="lead small mb-2">
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $StoreData->Address ?? ''; ?></span>
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/call.png" /> <?php echo $StoreData->Contact ?? ''; ?></span>
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/email.png" /> <?php echo $StoreData->Email ?? ''; ?></span>
 				  </p>
-				<?php } else { echo '<h4 class="text-danger">You need to setup your store profile first before you can add products.</h4>'; } ?>
+				  <?php 
+					  	if ($StoreData->Status == 0) { 
+					  		echo '<b class="text-warning">Store is pending for approval</b>';
+					  	} else if ($StoreData->Status == 2) {
+					  		echo '<b class="text-danger">Store was disabled. Please contact Amblis.com support for details.</b>';
+					  	}
+
+				  	} else { echo '<b class="text-danger">You need to setup your store profile and get approved first before you can sell your products.</b>'; }
+				  ?>
 			</div>
 		</div>
 	</div>
@@ -25,19 +33,21 @@
 		</div>
 		
 		<div class="content">
-			<div class="row">
+			<div class="row justify-content-center">
 				<div class="col-3 text-center icon-container">
 					<a href="javascript:;" onClick="Store.updateProfile()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/shop.png" class="i-45" />
 						<span>Update Profile</span>
 					</a>
 				</div>
+				<?php if ($StoreData && $StoreData->Status == 1) { ?>
 				<div class="col-3 text-center icon-container">
 					<a href="javascript:;" onClick="Store.addProduct()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/basket.png" class="i-45" />
 						<span>Sell Product or Service</span>
 					</a>
 				</div>
+				<?php } ?>
 				<div class="col-3 text-center icon-container">
 					<a href="javascript:;">
 						<img src="<?php echo public_url(); ?>resources/images/icons/cart.png" class="i-45" />
@@ -57,6 +67,7 @@
 	
 </div>
 
+<?php if ($StoreData && $StoreData->Status == 1) { ?>
 
 <div class="row mt-2">
 	<div class="col-12"><h4>Products</h4></div>
@@ -99,6 +110,8 @@
     </div>
   </div>
 </div>
+
+<?php } ?>
 
 <?php view('main/store/modals'); ?>
 

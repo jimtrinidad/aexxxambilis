@@ -207,6 +207,9 @@ function Utils() {
         // reset form data
         $(formSelector).trigger("reset");
 
+        // reset hidden
+        $(formSelector).find('#Code').val('');
+
         self.reset_form_errors(formSelector);
 
         if (todo_fnc) {
@@ -225,7 +228,10 @@ function Utils() {
     this.set_form_input_value = function(form, fields)
     {
         $.each(fields, function(id, value) {
-            $(form).find('#' + id).val(value);
+            console.log(id, value, $(form).find('#' + id).length);
+            if ($(form).find('#' + id).length > 0) {
+                $(form).find('#' + id).val(value);
+            }
         })
     }
 

@@ -42,7 +42,7 @@ class Marketplace extends CI_Controller
             $where['SubCategory'] = get_post('sc');
         }
 
-        $paginatationData = $this->appdb->getPaginationData('StoreItems', $page_limit, $page_start, $where, $order);
+        $paginatationData = $this->appdb->getMarketplaceData($page_limit, $page_start, $where, $order);
 
         $products = array();
         foreach ($paginatationData['data'] as $product) {

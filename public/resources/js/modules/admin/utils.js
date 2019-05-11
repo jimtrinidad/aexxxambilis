@@ -193,6 +193,9 @@ function Utils() {
         // reset form data
         $(formSelector).trigger("reset");
 
+        // reset hidden
+        $(formSelector).find('#Code').val('');
+
         self.reset_form_errors(formSelector);
 
         if (todo_fnc) {

@@ -297,4 +297,78 @@ class Product extends CI_Controller
         view('pages/product/manufacturers', $viewData, 'templates/main');
     }
 
+
+    public function stores()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Stores',
+            'pageDescription'   => '',
+            'accountInfo'       => user_account_details(),
+            'jsModules'         => array(
+                'products'
+            )
+        );
+
+        $results = $this->appdb->getRecords('StoreDetails', array(), 'Status, id DESC');
+        $records = array();
+        foreach ($results as $r) {
+            $user = $this->appdb->getRowObject('Users', $r['OwnerID']);
+            unset($user->Password);
+            $r['accountData'] = $user;
+            $r['ItemCount']   = count($this->appdb->getRecords('StoreItems', array('StoreID' => $r['id'])));
+
+            $records[$r['Code']] = $r;
+        }
+        $viewData['records']   = $records;
+
+        // print_data($viewData, true);
+
+        view('pages/product/stores', $viewData, 'templates/main');
+    }
+
+    public function store_status($code)
+    {
+        if ($code) {
+            $store = $this->appdb->getRowObject('StoreDetails', $code, 'Code');
+            if ($store) {
+                $status = get_post('status');
+                if ($status == 'true' || $status == 'false') {
+                    $updateData = array(
+                        'id'          => $store->id,
+                        'Status'      => ($status == 'true' ? 1 : 2),
+                        'LastUpdate'  => date('Y-m-d H:i:s')
+                    );
+                    if ($this->appdb->saveData('StoreDetails', $updateData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Store status has been updated.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating store status failed.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid store status.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid store code.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid store code.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
 }

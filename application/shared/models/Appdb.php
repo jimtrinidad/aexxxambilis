@@ -129,7 +129,7 @@ class Appdb extends CI_Model {
 	/**
 	* paginate data
 	*/
-	public function getPaginationData($tableName, $limit, $start, $where = false, $order = false)
+	public function getPaginationData($tableName, $limit, $start, $where = false, $order = false, $join = false)
 	{
 		
 		// GET COUNT
@@ -150,6 +150,50 @@ class Appdb extends CI_Model {
 		}
 
 		$data 	= $this->db->get($tableName, $limit, $start)->result();
+		// echo $this->db->last_query();
+
+		return array(
+			'count'	=> $count,
+			'data'	=> $data
+		);
+	}
+
+
+	/**
+	* paginate data
+	*/
+	public function getMarketplaceData($limit, $start, $where = false, $order = false)
+	{
+		
+		// GET COUNT
+		$this->db->select('si.*');
+		$this->db->from('StoreItems si');
+		$this->db->join('StoreDetails sd', 'sd.id = si.StoreID');
+		$this->db->where('sd.Status', 1);
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		$count 	= $this->db->count_all_results();
+
+		// GET RESULTS DATA
+
+		$this->db->select('si.*');
+		$this->db->from('StoreItems si');
+		$this->db->join('StoreDetails sd', 'sd.id = si.StoreID');
+		$this->db->where('sd.Status', 1);
+
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		if ($order != false) {
+			$this->db->order_by($order);
+		}
+
+		$this->db->limit($limit, $start);
+
+		$data 	= $this->db->get()->result();
 		// echo $this->db->last_query();
 
 		return array(

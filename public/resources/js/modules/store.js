@@ -102,6 +102,8 @@ function Store() {
             $(form).find('#SearchKeywords').tagsinput();
             $(form).find('#Description').summernote('destroy');
             $(form).find('#Description').summernote('reset');
+
+            $(form).find('#Code').val('');
         });
     }
 

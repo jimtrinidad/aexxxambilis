@@ -21,13 +21,14 @@
     <li class="<?php echo (is_current_url('billers', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers') ?>"><span>Billers</span></a></li>
     <li class="<?php echo (is_current_url('delivery', 'agents') ? 'active' : ''); ?>"><a href="<?php echo site_url('delivery/agents') ?>"><span>Delivery Agents</span></a></li>
     <li class="treeview">
-      <a href="#"><span>Products</span>
+      <a href="#"><span>Marketplace</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left pull-right"></i>
         </span>
       </a>
       <ul class="treeview-menu">
         <li class="<?php echo (is_current_url('product', 'categories') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/categories') ?>">Categories</a></li>
+        <li class="<?php echo (is_current_url('product', 'stores') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/stores') ?>">Stores</a></li>
         <li class="<?php echo (is_current_url('product', 'manufacturers') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/manufacturers') ?>">Manufacturers</a></li>
       </ul>
     </li>
