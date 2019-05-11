@@ -18,9 +18,9 @@ class Get extends CI_Controller
     public function barangay()
     {
 
-    	if (get_post('citymunCode')) {
+    	// if (get_post('citymunCode')) {
     		$this->db->where('citymunCode', get_post('citymunCode'));
-    	}
+    	// }
 
     	$this->db->order_by('brgyDesc', 'ASC');
 
@@ -45,9 +45,9 @@ class Get extends CI_Controller
     public function city()
     {
 
-    	if (get_post('provCode')) {
+    	// if (get_post('provCode')) {
     		$this->db->where('provCode', get_post('provCode'));
-    	}
+    	// }
 
     	$this->db->order_by('citymunDesc', 'ASC');
 
