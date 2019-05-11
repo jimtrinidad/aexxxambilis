@@ -187,11 +187,64 @@
 	              <span class="form-text text-muted"></span>
 	            </div>
 	          </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="Weight">Weight</label>
+                <input type="number" class="form-control" id="Weight" name="Weight" placeholder="Item Weight">
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="control-label" for="WeightUnit">Weight Unit</label>
+                <select class="form-control" id="WeightUnit" name="WeightUnit">
+                  <option value=""></option>
+                  <?php
+                    foreach(lookup('weight_units') as $k => $v) {
+                      echo '<option value="' . $k . '">' . $v . '</option>';
+                    }
+                  ?>
+                </select>
+                <span class="form-text text-muted"></span>
+              </div>
+            </div>
 	          <div class="col-12">
               <div class="form-group">
                 <label class="control-label" for="SearchKeywords">Search Keywords</label>
                 <input type="text" class="form-control" id="SearchKeywords" name="SearchKeywords" placeholder="Search Keywords">
                 <span class="form-text text-muted small">Type the keyword then press entry to add.</span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Province">Province</label>
+                <select id="Province" name="Province" class="form-control" onChange="General.loadCityOptions('#City', this, '#Barangay')">
+                  <option value="">--</option>
+                  <?php
+                    foreach (lookup_all('UtilLocProvince', false, 'provDesc', false) as $v) {
+                      echo "<option value='" . $v['provCode'] . "'>" . $v['provDesc'] . "</option>";
+                    }
+                  ?>
+                </select>
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="City">City/Municipality</label>
+                <select id="City" disabled="disabled"  name="City" class="form-control" onChange="General.loadBarangayOptions('#Barangay', this)">
+                  <option value="">--</option>
+                </select>
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Barangay">Barangay</label>
+                <select id="Barangay" disabled="disabled" name="Barangay" class="form-control">
+                  <option value="">--</option>
+                </select>
+                <span class="help-block hidden"></span>
               </div>
             </div>
 	          <div class="col-12">

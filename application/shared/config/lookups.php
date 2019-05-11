@@ -80,3 +80,9 @@ $config['store_status'] = array(
     1 => 'Active',
     2 => 'Disable'
 );
+
+
+$config['weight_units'] = array(
+    1 => 'Grams',
+    2 => 'Kilograms'
+);

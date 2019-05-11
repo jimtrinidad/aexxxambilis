@@ -133,6 +133,10 @@ function Store() {
                 $(form).find('#SearchKeywords').tagsinput();
                 $(form).find('#Description').summernote('destroy');
                 $(form).find('#Description').summernote();
+
+                General.loadCityOptions('#City', '#Province', '#Barangay', data.City, function(){
+                    General.loadBarangayOptions('#Barangay', '#City', data.Barangay);
+                });
             });
         }
     }

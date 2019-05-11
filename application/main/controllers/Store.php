@@ -19,7 +19,8 @@ class Store extends CI_Controller
             'pageSubTitle'  => 'Ambilis ng Business ko!',
             'accountInfo'   => user_account_details(),
             'jsModules'         => array(
-                'store'
+                'store',
+                'general'
             ),
         );
 
@@ -165,6 +166,11 @@ class Store extends CI_Controller
                         'DeliveryMethod'    => get_post('DeliveryMethod'),
                         'Warranty'          => get_post('Warranty'),
                         'SearchKeywords'    => get_post('SearchKeywords'),
+                        'Weight'            => get_post('Weight'),
+                        'WeightUnit'        => get_post('WeightUnit'),
+                        'Province'          => get_post('Province'),
+                        'City'              => get_post('City'),
+                        'Barangay'          => get_post('Barangay'),
                         'LastUpdate'        => date('Y-m-d H:i:s')
                     );
 

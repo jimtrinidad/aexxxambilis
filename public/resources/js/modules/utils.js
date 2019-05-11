@@ -228,7 +228,6 @@ function Utils() {
     this.set_form_input_value = function(form, fields)
     {
         $.each(fields, function(id, value) {
-            console.log(id, value, $(form).find('#' + id).length);
             if ($(form).find('#' + id).length > 0) {
                 $(form).find('#' + id).val(value);
             }
