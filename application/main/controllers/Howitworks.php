@@ -19,7 +19,11 @@ class Howitworks extends CI_Controller
             ),
         );
 
-        view('main/misc/how', $viewData, 'templates/main');
+        $setting = $this->appdb->getRowObject('Settings', 'howitworks', 'key');
+        $viewData['content'] = $setting->value ?? '';
+
+        view('main/misc/misc_page', $viewData, 'templates/main');
+        // view('main/misc/how', $viewData, 'templates/main');
 
     }
 

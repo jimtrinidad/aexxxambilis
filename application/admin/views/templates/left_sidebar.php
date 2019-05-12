@@ -32,6 +32,17 @@
         <li class="<?php echo (is_current_url('product', 'manufacturers') ? 'active' : ''); ?>"><a href="<?php echo site_url('product/manufacturers') ?>">Manufacturers</a></li>
       </ul>
     </li>
+    <li class="treeview">
+      <a href="#"><span>Settings</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li class="<?php echo (is_current_url('settings', 'terms') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/terms') ?>">Terms & Condition</a></li>
+        <li class="<?php echo (is_current_url('settings', 'how') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/how') ?>">How it Works</a></li>
+      </ul>
+    </li>
   </ul>
 <!-- /.sidebar-menu -->
 </section>

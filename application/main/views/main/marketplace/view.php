@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="row justify-content-center view-product">
 	<div class="col-md-6 px-4">
 		<div class="row">
 			<div class="col text-center">

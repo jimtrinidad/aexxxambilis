@@ -19,7 +19,10 @@ class Terms extends CI_Controller
             ),
         );
 
-        view('main/misc/terms', $viewData, 'templates/main');
+        $setting = $this->appdb->getRowObject('Settings', 'terms', 'key');
+        $viewData['content'] = $setting->value ?? '';
+
+        view('main/misc/misc_page', $viewData, 'templates/main');
 
     }
 

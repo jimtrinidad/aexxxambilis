@@ -17,6 +17,7 @@ class Marketplace extends CI_Controller
         $viewData = array(
             'pageTitle'     => 'Marketplace',
             'pageSubTitle'  => 'Ambilis Mag Shopping!',
+            'pageClass'     => 'marketplace-content',
             'accountInfo'   => user_account_details(),
             'jsModules'         => array(
                 'marketplace',

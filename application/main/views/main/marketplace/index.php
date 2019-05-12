@@ -1,5 +1,5 @@
 <form id="searchProducts" action="<?php echo site_url('marketplace') ?>" method="get">
-   <div class="row justify-content-center">
+   <div class="row justify-content-center marketplace-header">
       <div class="col-md-8 text-center">
         <!-- <h3>Marketplace</h3> -->
          <!-- <div>
@@ -102,6 +102,17 @@
       }).mouseout(function(){
         $(this).height('auto');
       })
+    });
+
+    var header = $(".marketplace-header");
+    var header_offset = header.offset().top;
+    $(document).scroll(function() {
+        var y = $(document).scrollTop(); //get page y value 
+        if(y >= header_offset)  {
+            header.css({position: "fixed", "top" : "0", "left" : "15px"});
+        } else {
+            header.css("position", "relative");
+        }
     });
 
   });

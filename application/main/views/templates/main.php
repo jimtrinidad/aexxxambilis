@@ -33,9 +33,9 @@
 	  <?php view('templates/menu'); ?>
 				
 			<!-- Main Body -->
-			<div id="main-content">
+			<div id="main-content" class="<?php echo ($pageClass ?? '') ?>">
 				<div class="container p-0">
-					<div class="bg-trans-white rounded p-1 pt-2">
+					<div class="rounded p-1 pt-2">
 						<?php echo $templateContent;?>
 					</div>
 				</div>

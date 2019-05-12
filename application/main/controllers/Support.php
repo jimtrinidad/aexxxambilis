@@ -19,6 +19,10 @@ class Support extends CI_Controller
             ),
         );
 
+        $setting = $this->appdb->getRowObject('Settings', 'support', 'key');
+        $viewData['content'] = $setting->value ?? '';
+
+        // view('main/misc/misc_page', $viewData, 'templates/main');
         view('main/misc/support', $viewData, 'templates/main');
 
     }
