@@ -24,7 +24,7 @@ class Marketplace extends CI_Controller
             ),
         );
 
-        $page_limit = 20;
+        $page_limit = 100;
         $page_start = (int) $this->uri->segment(3);
 
         $order = 'si.LastUpdate Desc';
