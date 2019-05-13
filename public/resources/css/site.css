@@ -151,6 +151,7 @@ a:hover {text-decoration: none;}
 
 .dropmenu {
   background-color: rgba(243, 243, 243, 0.95);
+  z-index: 99999;
 }
 .dropmenu ul li a {
   color: #000;
