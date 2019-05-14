@@ -371,4 +371,48 @@ class Product extends CI_Controller
         response_json($return_data);
     }
 
+    public function approve_store($code = null)
+    {
+        if (!$code) {
+            $code = get_post('code');
+        }
+
+        $store = $this->appdb->getRowObject('StoreDetails', $code, 'Code');
+        if ($store) {
+
+            if ($store->Status == 0) {
+                $updateData = array(
+                    'id'           => $store->id,
+                    'Status'       => 1,
+                    'LastUpdate'   => datetime(), 
+                );
+
+                if ($this->appdb->saveData('StoreDetails', $updateData)) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Store has been activated successfully.'
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Activating store failed.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Store was already activated.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid request'
+            );
+        }
+
+        response_json($return_data);
+    }
+
 }

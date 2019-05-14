@@ -293,9 +293,9 @@ function user_account_details($id = false, $field = 'id')
 
 	if ($user) {
 		$user->fullname = user_full_name($user, 0);
+		$user->agent = lookup_row('DeliveryAgents', $user->id, 'UserID');
 	}
 
-	$user->agent = lookup_row('DeliveryAgents', $user->id, 'UserID');
 
 	return $user;
 

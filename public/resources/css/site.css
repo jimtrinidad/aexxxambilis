@@ -33,7 +33,7 @@ a:hover {text-decoration: none;}
 .marketplace-header {
   position: relative;
   background: rgb(245, 245, 245);
-  z-index: 9999;
+  z-index: 101;
   padding-bottom: 10px;
   width: 100%;
 }
@@ -106,7 +106,7 @@ a:hover {text-decoration: none;}
     position: absolute;
     width: calc(100% - 10px);
     box-shadow: 1px 2px 8px #aaa;
-    z-index: 999;
+    z-index: 100;
   }
 }
 
@@ -151,7 +151,7 @@ a:hover {text-decoration: none;}
 
 .dropmenu {
   background-color: rgba(243, 243, 243, 0.95);
-  z-index: 99999;
+  z-index: 102;
 }
 .dropmenu ul li a {
   color: #000;
