@@ -70,7 +70,7 @@
               </small>
             </div>
             <div class="form-group">
-              <input type="text" name="Referrer" id="Referrer" class="form-control" placeholder="Referrer ID" value="<?php echo get_post('r') ?>">
+              <input type="text" name="Referrer" id="Referrer" class="form-control" <?php echo (get_post('r') ? 'readonly' : '') ?> placeholder="Referrer ID" value="<?php echo get_post('r') ?>">
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-sm btn-danger btn-block">
