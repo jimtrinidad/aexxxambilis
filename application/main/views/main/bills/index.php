@@ -4,7 +4,7 @@
 			<div class="input-group">
 			  <input type="text" name="search" class="form-control bg-cream" placeholder="Search Biller Name" value="<?php echo get_post('search') ?>">
 			  <div class="input-group-append" id="button-addon4">
-				<button class="btn bg-green text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+				<button class="btn bg-green text-white" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			  </div>
 			</div>	
 		</div>

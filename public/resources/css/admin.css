@@ -32,6 +32,13 @@ table.table-middle >tfoot>tr>td {
   vertical-align: middle !important;
 }
 
+@media (max-width: 970px) {
+  .box-header>.box-tools {
+    position: unset;
+    margin-top: 10px;
+  }
+}
+
 /**
 * upload image
 */

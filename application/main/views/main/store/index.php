@@ -40,14 +40,14 @@
 						<span>Update Profile</span>
 					</a>
 				</div>
-				<?php if ($StoreData && $StoreData->Status == 1) { ?>
+				<?php // if ($StoreData && $StoreData->Status == 1) { ?>
 				<div class="col-3 text-center icon-container">
 					<a href="javascript:;" onClick="Store.addProduct()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/basket.png" class="i-45" />
 						<span>Sell Product or Service</span>
 					</a>
 				</div>
-				<?php } ?>
+				<?php //} ?>
 				<div class="col-3 text-center icon-container">
 					<a href="javascript:;">
 						<img src="<?php echo public_url(); ?>resources/images/icons/cart.png" class="i-45" />
@@ -67,7 +67,10 @@
 	
 </div>
 
-<?php if ($StoreData && $StoreData->Status == 1) { ?>
+<?php 
+	// if ($StoreData && $StoreData->Status == 1) { 
+	if (count($items)) {
+?>
 
 <div class="row mt-2">
 	<div class="col-12"><h4>Products</h4></div>

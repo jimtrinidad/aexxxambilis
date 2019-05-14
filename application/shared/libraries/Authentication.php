@@ -102,12 +102,12 @@ class Authentication
             ->select($this->identifier_field . ' as identifier, ' . $this->username_field . ' as username, ' . $this->password_field . ' as password')
             ->where($this->username_field, $username)
             ->where('deletedAt', NULL)
-            ->where_in('Status', array(1,2));
+            ->where_in('Status', array(1));
 
         if ($isAdmin) {
             // 2 - admin
             // 3 - super admin (hidden in options)
-            // $this->ci->db->where_in('AccountLevel', array(2,3));
+            $this->ci->db->where_in('AccountLevel', array(2,3));
         }
 
         $user = $this->ci->db->get($this->user_table);

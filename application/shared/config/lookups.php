@@ -5,14 +5,14 @@
 
 $config['account_status'] = array(
     1 => 'Active',
-    2 => 'Blocked',
-    3 => 'Deleted'
+    2 => 'Disabled',
+    // 3 => 'Deleted'
 );
 
 $config['account_level'] = array(
     1 => 'Regular',
     2 => 'Admin',
-    3 => 'Super Admin'
+    // 3 => 'Super Admin'
 );
 
 $config['commission_type'] = array(
