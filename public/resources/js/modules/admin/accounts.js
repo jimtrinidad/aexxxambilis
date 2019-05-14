@@ -4,6 +4,7 @@ function Accounts() {
     var self = this;
 
     // initialize module variables
+    this.accountData = {}
 
     /**
      * Initialize events
@@ -41,6 +42,20 @@ function Accounts() {
         
     }
 
+    this.getAccount = function(id)
+    {   
+
+        var match = false;
+        $.each(self.accountData, function(i,e){
+            if (e.id == id) {
+                match = e;
+                return false;
+            }
+        });
+
+        return match;
+    }
+
     this.updateAccountStatus = function(elem)
     {
         var checkbox    = $(elem);
@@ -59,6 +74,25 @@ function Accounts() {
                 }
             }
         });
+    }
+
+
+    this.editAccount = function(id)
+    {
+        var data = self.getAccount(id);
+        console.log(data);
+        if (data != false) {
+            var form  = '#updateAccountForm';
+            var modal = '#updateAccountModal';
+            Utils.show_form_modal(modal, form, 'Update Account', function(){
+                Utils.set_form_input_value(form, data);
+                $(form).find('.image-preview').prop('src', window.public_url() + 'assets/profile/default.jpg');
+                if (data.Photo) {
+                    $(form).find('.image-preview').prop('src', window.public_url() + 'assets/profile/' + data.Photo);
+                }
+            });
+        }
+
     }
 
 }

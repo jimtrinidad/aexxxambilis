@@ -131,4 +131,48 @@ class Accounts extends CI_Controller
         response_json($return_data);
     }
 
+
+    public function update_account()
+    {
+        // if (validate('account_registration') == FALSE) {
+        //     $return_data = array(
+        //         'status'    => false,
+        //         'message'   => 'Some fields have errors.',
+        //         'fields'    => validation_error_array()
+        //     );
+        // } else {
+
+            $accountData = $this->appdb->getRowObject('Users', get_post('id'), 'id');
+
+            if ($accountData != false) {
+
+                $updateData     = array(
+                    'id'                => get_post('id'),
+                    'AccountLevel'      => get_post('AccountLevel'),
+                    'LastUpdate'        => date('Y-m-d H:i:s')
+                );
+
+
+                if ($this->appdb->saveData('Users', $updateData)) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Account has been updated successfully.'
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Account update failed. Please try again later.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Account does not exists.'
+                );
+            }
+        // }
+        response_json($return_data);
+    }
+
 }

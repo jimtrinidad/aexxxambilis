@@ -51,7 +51,7 @@
             <th>Level</th>
             <th>Status</th>
             <th class="visible-lg">Regisration Date</th>
-            <!-- <th class="c"></th> -->
+            <th class="c"></th>
           </thead>
           <tbody>
             <?php
@@ -73,17 +73,15 @@
                         data-width="70">';
                 echo '</td>';
                 echo '<td class="visible-lg">' . date('y/m/d', strtotime($account['DateAdded'])) . '</td>';
-                // echo '<td>
-                //         <div class="box-tools">
-                //           <div class="input-group pull-right" style="width: 10px;">
-                //             <div class="input-group-btn">
-                //               <button type="button" class="btn btn-xs btn-default" title="View details" onClick="Accounts.editAccount('.$account['id'].')"><i class="fa fa-pencil"></i><span class="visible-lg-inline"> Details</span></button>
-                //               <button type="button" class="btn btn-xs btn-warning" title="Generate new password." onClick="Accounts.resetPassword('.$account['id'].')"><i class="fa fa-key"></i></button>
-                //               <button type="button" class="btn btn-xs btn-danger" title="Delete" onClick="Accounts.deleteAccount('.$account['id'].')"><i class="fa fa-trash"></i></button>
-                //             </div>
-                //           </div>
-                //         </div> 
-                //       </td>';
+                echo '<td>
+                        <div class="box-tools">
+                          <div class="input-group pull-right" style="width: 10px;">
+                            <div class="input-group-btn">
+                              <button type="button" class="btn btn-xs btn-default" title="Update" onClick="Accounts.editAccount('.$account['id'].')"><i class="fa fa-pencil"></i><span class="visible-lg-inline"> Update</span></button>
+                            </div>
+                          </div>
+                        </div> 
+                      </td>';
               echo '</tr>';
             }
             ?>
@@ -99,11 +97,14 @@
   </div>
 </div>
 
+<?php view('pages/accounts/modals.php'); ?>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function(){
+    Accounts.accountData = <?php echo json_encode($accounts, JSON_HEX_TAG); ?>;
   });
 </script>
 
