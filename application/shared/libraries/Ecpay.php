@@ -55,10 +55,6 @@ class Ecpay
 
     /**
      * get billers
-     *
-     * @access    public
-     * @param    string [$username] The username to query
-     * @return    boolean
      */
     public function get_billers()
     {
@@ -85,15 +81,71 @@ class Ecpay
                 return $billers;
 
             } else {
-                logger($items['BStruct'][0]['Description']);
+                logger('[get_billers] : ' . $items['BStruct'][0]['Description']);
             }
 
         } else {
-            logger('Cannot connect to host.');
+            logger('[get_billers] : Cannot connect to host.');
         }
 
         return false;
     }
+
+
+    /**
+    * get encash services
+    */
+    public function get_encash_providers()
+    {
+        $params = array(
+            'post_url'  => 'https://myecpay.ph/uat/wsecash/service1.asmx',
+            'action'    => 'http://ecpay.ph/WKECash/GetServices'
+        );
+        $body   = '<GetServices xmlns="http://ecpay.ph/WKECash">' .
+                    $this->default_body_params() .
+                  '</GetServices>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->GetServicesResponse)) {
+            $items    = json_decode(json_encode($response->GetServicesResponse->GetServicesResult), true);
+
+            if (isset($items[0])) {
+                $data = json_decode($items[0], true);
+                if (isset($data['Description'])) {
+                    logger('[get_encash_providers] : ' . $data['Description']);
+                } else {
+                    return $data;
+                }
+            } else {
+                logger('[get_encash_providers] : Invalid response.');
+            }
+            // if ($items['BStruct'][0]['BillerTag'] != 'ERROR') {
+
+            //     $billers = array();
+            //     foreach ($items['BStruct'] as $item) {
+            //         $billers[] = $item;
+            //     }
+
+            //     return $billers;
+
+            // } else {
+            //     logger($items['BStruct'][0]['Description']);
+            // }
+
+        } else {
+            logger('[get_encash_providers] : Cannot connect to host.');
+        }
+
+        // print_data($response);
+    }
+
+
+
+
+
+
+
 
     private function default_body_params()
     {

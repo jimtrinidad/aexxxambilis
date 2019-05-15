@@ -55,7 +55,7 @@ class Bills extends CI_Controller
         view('main/bills/index', $viewData, 'templates/main');
     }
 
-
+    // bills payment
     public function payment()
     {
         if (validate('add_payment') == FALSE) {
@@ -123,4 +123,43 @@ class Bills extends CI_Controller
         response_json($return_data);
     }
 
+
+    // show padala option page
+    // routed on /padala
+    public function padala()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Money Padala',
+            'pageSubTitle'  => 'AMBILIS Mag Padala!',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            ),
+        );
+
+        $page_limit = 1000;
+        $page_start = (int) $this->uri->segment(3);
+
+        $order = 'Name';
+        $where = array();
+
+        // SET SEARCH FILTER
+        if (get_post('search')) {
+            $where['CONCAT(Name, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
+        }
+
+        $results = $this->appdb->getRecords('EncashServices', $where, $order);
+
+        $items = array();
+        foreach ($results as $i) {
+            $i = (array) $i;
+            $i['Image']  = logo_filename($i['Image']);
+            $items[] = $i;
+        }
+
+        $viewData['items']   = $items;
+
+        // print_data($viewData, true);
+
+        view('main/bills/encash_services', $viewData, 'templates/main');
+    }
 }

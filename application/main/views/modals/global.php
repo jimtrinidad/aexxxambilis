@@ -1,4 +1,4 @@
-<div class="modal fade" id="moneyPadalaModal" tabindex="-1" role="dialog" aria-labelledby="moneyPadalaModal">
+<!-- <div class="modal fade" id="moneyPadalaModal" tabindex="-1" role="dialog" aria-labelledby="moneyPadalaModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form id="moneyPadalaForm" name="moneyPadalaForm" class="modalForm" action="<?php echo site_url('ewallet/money_padala') ?>">
@@ -61,7 +61,7 @@
     </div>
   </div>
 </div>
-
+ -->
 <div class="modal fade" id="encashModal" tabindex="-1" role="dialog" aria-labelledby="encashModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

@@ -92,14 +92,26 @@ function Wallet() {
     /**
     * padala
     */
-    this.moneyPadalaRequest = function()
+    this.moneyPadalaRequest = function(id)
     {   
 
-        var form  = '#moneyPadalaForm';
-        var modal = '#moneyPadalaModal';
-        Utils.show_form_modal(modal, form, false, function(){
+        var data  = self.getData(id);
+        if (data) {
+            var form  = '#moneyPadalaForm';
+            var modal = '#moneyPadalaModal';
+            Utils.show_form_modal(modal, form, data.Name, function(){
+                $(form).find('#ServiceType').val(data.Code);
+                $(form).find('#AccountNo').prop('placeholder', data.FirstField);
+                $(form).find('#AccountNoLabel').text(data.FirstField);
+                $(form).find('#Identifier').prop('placeholder', data.SecondField);
+                $(form).find('#IdentifierLabel').text(data.SecondField);
+            });
+        }
+        // var form  = '#moneyPadalaForm';
+        // var modal = '#moneyPadalaModal';
+        // Utils.show_form_modal(modal, form, false, function(){
 
-        });
+        // });
 
     }
 

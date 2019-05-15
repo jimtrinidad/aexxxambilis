@@ -173,48 +173,58 @@ class Ewallet extends CI_Controller
         } else {
 
             $latest_balance = get_latest_wallet_balance();
-
             $amount = get_post('Amount');
-            $desc   = 'Money Padala - ' . get_post('ServiceType');
 
-            if ($amount > 0) {
+            $service = $this->appdb->getRowObject('EncashServices', get_post('ServiceType'), 'Code');
+            if ($service) {
 
-                if ($latest_balance >= $amount) {
+                $desc   = 'Money Padala - ' . $service->Name . ' - ' . $service->Description;
 
-                    $saveData = array(
-                        'Code'          => microsecID(),
-                        'AccountID'     => current_user(),
-                        'ReferenceNo'   => get_post('AccountNo'),
-                        'Description'   => $desc,
-                        'Date'          => date('Y-m-d H:i:s'),
-                        'Amount'        => $amount,
-                        'Type'          => 'Debit',
-                        'EndingBalance' => ($latest_balance - $amount)
-                    );
+                if ($amount > 0) {
 
-                    if ($this->appdb->saveData('WalletTransactions', $saveData)) {
-                        $return_data = array(
-                            'status'    => true,
-                            'message'   => 'Money padala transaction has been requested successfully.'
+                    if ($latest_balance >= $amount) {
+
+                        $saveData = array(
+                            'Code'          => microsecID(),
+                            'AccountID'     => current_user(),
+                            'ReferenceNo'   => get_post('AccountNo'),
+                            'Description'   => $desc,
+                            'Date'          => date('Y-m-d H:i:s'),
+                            'Amount'        => $amount,
+                            'Type'          => 'Debit',
+                            'EndingBalance' => ($latest_balance - $amount)
                         );
+
+                        if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                            $return_data = array(
+                                'status'    => true,
+                                'message'   => $service->Name . ' transaction has been requested successfully.'
+                            );
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => 'Transaction failed.'
+                            );
+                        }
+
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Transaction failed.'
+                            'message'   => 'Insufficient balance.'
                         );
                     }
 
                 } else {
                     $return_data = array(
                         'status'    => false,
-                        'message'   => 'Insufficient balance.'
+                        'message'   => 'Invalid amount.'
                     );
                 }
 
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Invalid amount.'
+                    'message'   => 'Invalid encash service.'
                 );
             }
         }

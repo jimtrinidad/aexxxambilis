@@ -45,6 +45,8 @@
 		<?php if (!isGuest()) { ?>
 		<div id="footer" class="user-logged-in text-center text-white p-3">
 			Hi <a href="#"><?php echo $accountInfo->Firstname?>!</a> Welcome to your Mobile Business Menu. <br>Not you? <a href="<?php echo site_url('account/logout') ?>">Logout</a>
+			<br>
+			<small>Referral Link: <span class="text-primary"><?php echo site_url('u/' . $accountInfo->PublicID) ?></span></small>
 		</div>
 		<?php } ?>
 

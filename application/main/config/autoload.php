@@ -64,7 +64,7 @@ $autoload['libraries'] = array(
 	'database','session','form_validation','cart',
 
 	// custom libraries
-	'authentication'
+	'authentication','ecpay'
 );
 
 /*

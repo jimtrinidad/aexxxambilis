@@ -20,7 +20,7 @@ function General() {
     this.set_events = function()
     {
 
-        $('#billerLogoForm').submit(function(e) {
+        $('#billerLogoForm, #encashServiceForm').submit(function(e) {
             e.preventDefault();
             Utils.save_form(this, function() {
                 location.reload();
@@ -47,6 +47,19 @@ function General() {
             $(form).find('#Code').val(biller_code);
         });
 
+    }
+
+
+    this.updateEncashService = function(code)
+    {
+        var form  = '#encashServiceForm';
+        var modal = '#encashServiceModal';
+        Utils.show_form_modal(modal, form, 'Update Encash Service', function(){
+            $(form).find('.image-preview').prop('src', $('#item_' + code).find('.logo-small').prop('src'));
+            $(form).find('#Code').val(code);
+            $(form).find('#service_name').val($('#item_' + code).find('td:nth(1)').text());
+            $(form).find('#service_description').val($('#item_' + code).find('td:nth(3)').text());
+        });
     }
 
 
