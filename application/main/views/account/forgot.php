@@ -53,7 +53,7 @@
 					<div class="row mt-4">
 						<div class="col-12 form-group text-center">
 							<button type="submit" name="reset_password" class="btn btn-lg bg-l-red text-white mb-3">Reset Password</button>
-							<a class="d-block mb-3 rounded" href="<?php echo site_url('signin') ?>">Back</a>
+							<a class="d-block mb-3 rounded" href="<?php echo site_url('account/signin') ?>">Back</a>
 						</div>
 					</div>
 				</form>

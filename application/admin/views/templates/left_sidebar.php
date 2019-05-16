@@ -20,7 +20,7 @@
     <li class="<?php echo (is_current_url('deposits', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('deposits') ?>"><span>Deposits</span></a></li>
     <li class="<?php echo (is_current_url('delivery', 'agents') ? 'active' : ''); ?>"><a href="<?php echo site_url('delivery/agents') ?>"><span>Delivery Agents</span></a></li>
     <li class="treeview">
-      <a href="#"><span>ECPay</span>
+      <a href="#"><span>Services</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left pull-right"></i>
         </span>
