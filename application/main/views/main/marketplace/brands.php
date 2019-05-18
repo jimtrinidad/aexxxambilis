@@ -8,13 +8,13 @@
         
         echo '<div class="col text-center d-none d-md-block">';
           echo '<a href="'.site_url('marketplace/?b=' . $item['Name']).'">';
-            echo '<img class="img-fluid" src="'.public_url() . 'assets/products/' . product_filename($item['PartnerImage']) .'" title="'.$item['Name'].'">';
+            echo '<img class="p-2 img-fluid" src="'.public_url() . 'assets/products/' . product_filename($item['PartnerImage']) .'" title="'.$item['Name'].'">';
           echo '</a>';
         echo '</div>';
 
         echo '<div class="col-3 text-center d-block d-md-none">';
           echo '<a href="'.site_url('marketplace/?b=' . $item['Name']).'">';
-            echo '<img class="img-fluid" src="'.public_url() . 'assets/products/' . product_filename($item['PartnerImage']) .'" title="'.$item['Name'].'">';
+            echo '<img class="p-2 img-fluid" src="'.public_url() . 'assets/products/' . product_filename($item['PartnerImage']) .'" title="'.$item['Name'].'">';
           echo '</a>';
         echo '</div>';
         
