@@ -113,8 +113,10 @@ class Marketplace extends CI_Controller
 
         $where   = array();
         $results = $this->db->query('SELECT DISTINCT(UPPER(TRIM(Manufacturer))) AS `Name`, PartnerImage
-                                    FROM StoreItems 
+                                    FROM StoreItems si
+                                    JOIN StoreDetails sd ON si.StoreID = sd.id
                                     WHERE Manufacturer IS NOT NULL AND Manufacturer != ""
+                                    AND sd.Status = 1
                                     ORDER BY Name')->result_array();
         $unique = array();
         foreach ($results as $result) {
