@@ -1,8 +1,3 @@
-<meta property="og:title" content="<?php echo $productData->Name ?>">
-<meta property="og:image" content="<?php echo public_url('assets/products') . product_filename($productData->Image); ?>">
-<meta property="og:description" content="<?php echo strip_tags($productData->Description) ?>">
-<meta property="og:url" content="<?php echo site_url('i/'. $productData->Code . '-' . slugit($productData->Name)) ?>">
-
 <div class="row justify-content-center view-product">
 	<div class="col-md-6 px-4">
 		<div class="row">
