@@ -9,6 +9,8 @@
 		<link rel="icon" href="<?php echo public_url(); ?>resources/images/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title><?php echo TITLE_PREFIX . $pageTitle ?></title>
+    
     <?php if (isset($pageMeta)) {echo $pageMeta;} ?>
 
     <!-- Bootstrap CSS -->
@@ -19,8 +21,6 @@
 		<link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/site.css?<?php echo recache()?>">
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	
-    <title><?php echo TITLE_PREFIX . $pageTitle ?></title>
 	
   </head>
   <body>

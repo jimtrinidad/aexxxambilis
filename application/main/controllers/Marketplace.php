@@ -90,10 +90,13 @@ class Marketplace extends CI_Controller
                 ),
             );
 
-            $viewData['pageMeta'] = '<meta property="og:title" content="' .$product->Name. '">
-                                <meta property="og:image" content="' .public_url('assets/products') . product_filename($product->Image). '">
-                                <meta property="og:description" content="' .strip_tags($product->Description). '">
-                                <meta property="og:url" content="' .site_url('i/'. $product->Code . '-' . slugit($product->Name)). '">';
+            $viewData['pageMeta'] = '<meta name="description" content="' .substr(strip_tags($product->Description), 0, 155). '">
+                                <meta property="og:title" content="' .$product->Name. '">
+                                <meta property="og:url" content="' .site_url('i/'. $product->Code . '-' . slugit($product->Name)). '">
+                                <meta property="og:description" content="' .substr(strip_tags($product->Description), 0, 155). '">
+                                <meta property="og:image" content="' .public_url('assets/products') . product_filename($product->Image, false). '">
+                                <meta property="og:type" content="article" />
+                                ';
 
             $viewData['productData'] = $product;
             $viewData['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
