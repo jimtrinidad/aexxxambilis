@@ -381,9 +381,13 @@ class Account extends CI_Controller
 
             if ($this->authentication->login($username, $password)) {
                 $return_data = array(
-                    'status'  => true,
-                    'message' => 'Authentication successful.',
+                    'status'   => true,
+                    'message'  => 'Authentication successful.',
+                    'redirect' => ($this->session->userdata('referrer') ? $this->session->userdata('referrer') : site_url())
                 );
+                if ($this->session->userdata('referrer')) {
+                    $this->session->unset_userdata('referrer');
+                }
             } else {
                 $return_data = array(
                     'status'  => false,

@@ -192,8 +192,16 @@ function check_authentication()
 {
 	$ci =& get_instance();
 	if (!$ci->authentication->is_loggedin()) {
-        if (!$ci->input->is_ajax_request()) {
-		   	redirect('account/signin');
+
+		// save referrer
+		$ci->load->library('user_agent');
+	  $referrer = $ci->agent->referrer();
+	  if (stripos($referrer, site_url()) !== false) {
+	   		$ci->session->set_userdata('referrer', $referrer);
+	  }
+
+    if (!$ci->input->is_ajax_request()) {
+		   redirect('account/signin');
 		} else {
 			header("HTTP/1.1 401 Unauthorized");
 			header('Content-Type: application/json');
@@ -203,7 +211,7 @@ function check_authentication()
 			));
 			exit;
 		}
-    }
+  }
 }
 
 /**

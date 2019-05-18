@@ -184,7 +184,7 @@ class Store extends CI_Controller
                     if ($itemData) {
                         $saveData['id'] = $itemData->id;
                     } else {
-                        $saveData['Code']        = microsecID();
+                        $saveData['Code']        = microsecID(true);
                         $saveData['StoreID']     = $Store->id;
                     }
 

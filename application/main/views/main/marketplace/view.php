@@ -3,6 +3,10 @@
 		<div class="row">
 			<div class="col text-center">
 				<img class="img-fluid" src="<?php echo public_url('assets/products') . product_filename($productData->Image); ?>" />
+				<button class="share_button btn btn-info btn-sm small" style="position: absolute;top:2px;right:2px;" 
+					data-clipboard-text="<?php echo site_url('i/'. $productData->Code . '-' . slugit($productData->Name)) ?>">
+					<i class="fa fa-copy"></i> <i class="fa fa-link"></i>
+				</button>
 			</div>
 		</div>
 		<div class="row mt-3">
@@ -59,3 +63,20 @@
 </div>
 
 <?php view('main/marketplace/modals'); ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var clipboard = new ClipboardJS('.share_button');
+		clipboard.on('success', function(e) {
+
+		    $('.share_button').tooltip({title: 'Share link has been copied!', placement: 'left'}).tooltip('show').on('shown.bs.tooltip', function () {
+				  setTimeout(function(){
+				  	$('.share_button').tooltip('dispose');
+				  }, 1000);
+				})
+
+		    e.clearSelection();
+		});
+	});
+</script>

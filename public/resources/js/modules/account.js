@@ -119,7 +119,7 @@ function Account() {
             success: function (response) {
                 if (response.status) {
                     $('#error_message_box').text(response.message).addClass('hide');
-                    window.location = window.base_url(); 
+                    window.location = response.redirect; 
                 } else {
                     $('#password').val('');
                     $('#error_message_box').text(response.message).removeClass('hide');

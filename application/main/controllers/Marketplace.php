@@ -8,8 +8,7 @@ class Marketplace extends CI_Controller
     {
         parent::__construct();
 
-        // require login
-        check_authentication();
+        $this->cart->product_name_safe = false;
     }
 
     public function index()
@@ -101,6 +100,12 @@ class Marketplace extends CI_Controller
         }
     }
 
+    public function view_alias($slug = '')
+    {
+        $code = explode('-', $slug)[0];
+        $this->view($code);
+    }
+
     public function brands()
     {
         $viewData = array(
@@ -155,7 +160,10 @@ class Marketplace extends CI_Controller
     }
 
     public function checkout()
-    {
+    {   
+
+        check_authentication();
+
         // redirect if cart is empty
         if (!$this->cart->total_items()) {
             redirect(site_url('marketplace'));
@@ -236,7 +244,8 @@ class Marketplace extends CI_Controller
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Failed to add on cart'
+                    'message'   => 'Failed to add on cart',
+                    'data'      => $data
                 );
             }
         } else {
@@ -293,6 +302,7 @@ class Marketplace extends CI_Controller
 
     public function place_order()
     {
+        check_authentication();
         if (is_ajax()) {
 
             $cart_items = $this->cart->contents();
