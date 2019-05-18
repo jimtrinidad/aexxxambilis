@@ -26,8 +26,8 @@
 
     <div class="container registration">
 
-      <div class="row justify-content-center mt-5">
-        <div class="col-9 col-md-6">
+      <div class="row mt-5">
+        <div class="col-12 col-md-6">
           <h3 class="text-center">Registration</h3>
           <form id="registrationForm" action="<?php echo site_url('account/registration') ?>" autocomplete="false" >
             <input type="hidden" id="RegistrationID" name="RegistrationID" class="form-control" value="<?php echo $RegistrationID; ?>">
@@ -80,6 +80,14 @@
             </div>
             
           </form>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="px-1">
+            <b style="color: #4981c5">Yes it's Free! This is How it Works.</b>
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/4JEuPlwE4pQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
         </div>
       </div>
 

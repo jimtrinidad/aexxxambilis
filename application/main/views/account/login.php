@@ -25,9 +25,9 @@
 		</div>
 		
 		<div class="content container">
-			<div class="row gutter-5">
+			<div class="row">
 				<div class="col-md-6">
-					<div class="container">
+					<div class="px-1">
 						<div class="row">
 							<div class="col-6">
 								<a href="<?php echo site_url('account/signup') ?>" class="btn btn-block bg-cream btn-auth"><img src="<?php echo public_url(); ?>resources/images/icons/fb-icon.png" width="20" />  <span>Continue with Facebook</span></a>
@@ -39,7 +39,7 @@
 
 						<form id="loginForm" action="<?php echo site_url('account/login') ?>" autocomplete="off" >
 							<div class="row">
-								<div class="col-12 text-center mb-3">
+								<div class="col-12 text-center my-3">
 									<strong class="text-b-red">OR</strong>
 								</div>
 							</div>
@@ -63,11 +63,10 @@
 								</div>
 							</div>
 						</form>
-
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div class="container">
+					<div class="px-1">
 						<b style="color: #4981c5">Yes it's Free! This is How it Works.</b>
 						<div class="embed-responsive embed-responsive-16by9">
 						  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/4JEuPlwE4pQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
