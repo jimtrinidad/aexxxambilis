@@ -33,6 +33,11 @@ class Connections extends CI_Controller
             $i['earnings'] = $earnings;
             $viewData['total_earnings'] += $earnings;
         }
+
+        foreach ($connections as &$c) {
+            $c['connections'] = $this->appdb->getRecords('Users', array('Referrer' => $c['id']));
+        }
+
         $viewData['connections'] = $connections;
 
         view('main/connections/index', $viewData, 'templates/main');

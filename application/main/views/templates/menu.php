@@ -56,7 +56,7 @@ foreach ($results as $c) {
           <?php } ?>
         </ul>
 			</li>
-			<li><a href="<?php echo site_url('brands')?>"><img src="<?php echo public_url(); ?>resources/images/menu/cat.png"/>Brands</a></li>
+			<li><a href="<?php echo site_url('brands')?>"><img src="<?php echo public_url(); ?>resources/images/menu/star.png"/>Brands</a></li>
 			<li><a href="<?php echo site_url('marketplace')?>"><img src="<?php echo public_url(); ?>resources/images/menu/marketplace.png"/>Marketplace</a></li>
 			<?php if (!isGuest()) { ?>
 			<li><a href="<?php echo site_url('account')?>"><img src="<?php echo public_url(); ?>resources/images/menu/my-account.png"/>My Account</a></li>
@@ -67,10 +67,10 @@ foreach ($results as $c) {
 			<li><a href="<?php echo site_url('padala')?>"><img src="<?php echo public_url(); ?>resources/images/menu/money-transfer.png"/>Money Padala</a></li>
 			<li><a href="javascript:;" onclick="Wallet.eloadRequest()"><img src="<?php echo public_url(); ?>resources/images/menu/eload.png"/>eLoad</a></li>
 			<li><a href="<?php echo site_url('store')?>"><img src="<?php echo public_url(); ?>resources/images/menu/mybusiness.png"/>My Business</a></li>
-			<?php } ?>
 			<li><a href="<?php echo site_url('support')?>"><img src="<?php echo public_url(); ?>resources/images/menu/support.png"/>Support</a></li>
 			<li><a href="<?php echo site_url('howitworks')?>"><img src="<?php echo public_url(); ?>resources/images/menu/how.png"/>How it Works</a></li>
 			<li><a href="<?php echo site_url('terms')?>"><img src="<?php echo public_url(); ?>resources/images/menu/terms.png"/>Terms & Conditions</a></li>
+			<?php } ?>
 		</ul>
 	</div>
 

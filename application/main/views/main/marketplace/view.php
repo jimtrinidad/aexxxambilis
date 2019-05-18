@@ -3,9 +3,9 @@
 		<div class="row">
 			<div class="col text-center">
 				<img class="img-fluid" src="<?php echo public_url('assets/products') . product_filename($productData->Image); ?>" />
-				<button class="share_button btn btn-info btn-sm small" style="position: absolute;top:2px;right:2px;" 
+				<button class="share_button btn btn-info btn-sm small" style="position: absolute;top:2px;right:2px;padding: 1px 3px;" 
 					data-clipboard-text="<?php echo site_url('i/'. $productData->Code . '-' . slugit($productData->Name)) ?>">
-					<i class="fa fa-copy"></i> <i class="fa fa-link"></i>
+					<i class="fa fa-check"></i> share</i>
 				</button>
 			</div>
 		</div>

@@ -67,6 +67,7 @@
           <th scope="col" class="text-red">Connections</th>
           <th scope="col" class="text-red">ID</th>
           <th scope="col" class="text-red">Contact</th>
+          <th scope="col" class="text-red">Direct connection</th>
           <th scope="col" class="text-red">Earned</th>
         </tr>
       </thead>
@@ -77,6 +78,7 @@
                   <td scope="row"><b>' . $i['Firstname'] . ' ' . $i['Lastname'] . '</b><br/><small class="d-xs-block d-sm-block d-md-inline"> ' . date('m/d/y h:i a', strtotime($i['DateAdded'])) . ' </small></td>
                   <td>' . $i['PublicID'] . '</td>
                   <td>' . $i['Mobile'] . '<br>' . $i['EmailAddress']  . '</td>
+                  <td>' . count($i['connections']) .  '</td>
                   <td>' . peso($i['earnings']) .  '</td>
                 </tr>';
         }
