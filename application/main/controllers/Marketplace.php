@@ -44,7 +44,7 @@ class Marketplace extends CI_Controller
         }
 
         if (get_post('b')) {
-            $where['Manufacturer'] = get_post('b');
+            $where['TRIM(Manufacturer)'] = get_post('b');
         }
 
         $paginatationData = $this->appdb->getMarketplaceData($page_limit, $page_start, $where, $order);
