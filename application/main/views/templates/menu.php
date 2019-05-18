@@ -56,6 +56,7 @@ foreach ($results as $c) {
           <?php } ?>
         </ul>
 			</li>
+			<li><a href="<?php echo site_url('brands')?>"><img src="<?php echo public_url(); ?>resources/images/menu/cat.png"/>Brands</a></li>
 			<li><a href="<?php echo site_url('account')?>"><img src="<?php echo public_url(); ?>resources/images/menu/my-account.png"/>My Account</a></li>
 			<li><a href="<?php echo site_url('ewallet')?>"><img src="<?php echo public_url(); ?>resources/images/menu/ewallet.png"/>eWallet</a></li>
 			<li><a href="<?php echo site_url('rewards')?>"><img src="<?php echo public_url(); ?>resources/images/menu/rewards.png"/>Rewards</a></li>

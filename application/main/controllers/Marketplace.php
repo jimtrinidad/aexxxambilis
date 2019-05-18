@@ -43,6 +43,10 @@ class Marketplace extends CI_Controller
             $where['SubCategory'] = get_post('sc');
         }
 
+        if (get_post('b')) {
+            $where['Manufacturer'] = get_post('b');
+        }
+
         $paginatationData = $this->appdb->getMarketplaceData($page_limit, $page_start, $where, $order);
 
         $products = array();
@@ -95,6 +99,30 @@ class Marketplace extends CI_Controller
         } else {
             redirect(site_url('marketplace'));
         }
+    }
+
+    public function brands()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Brands',
+            'pageDescription'   => '',
+            'accountInfo'       => user_account_details(),
+            'jsModules'         => array(
+            )
+        );
+
+        $where   = array();
+        $results = $this->db->query('SELECT DISTINCT(UPPER(TRIM(Manufacturer))) AS `Name`, PartnerImage
+                                    FROM StoreItems 
+                                    WHERE Manufacturer IS NOT NULL AND Manufacturer != ""
+                                    ORDER BY Name')->result_array();
+        $unique = array();
+        foreach ($results as $result) {
+            $unique[$result['Name']] = $result;
+        }
+        $viewData['records'] = array_values($unique);
+
+        view('main/marketplace/brands', $viewData, 'templates/main');
     }
 
     public function cart()

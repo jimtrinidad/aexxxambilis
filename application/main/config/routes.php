@@ -56,3 +56,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['u/(:any)'] = 'u/index/$1';
 
 $route['padala'] = 'bills/padala';
+$route['brands'] = 'marketplace/brands';
