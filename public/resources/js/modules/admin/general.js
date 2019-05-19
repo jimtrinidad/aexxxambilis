@@ -45,6 +45,8 @@ function General() {
         Utils.show_form_modal(modal, form, 'Update Biller Logo', function(){
             $(form).find('.image-preview').prop('src', $('#biller_' + biller_code).find('.logo-small').prop('src'));
             $(form).find('#Code').val(biller_code);
+            $(form).find('#biller_name').val($('#biller_' + biller_code).find('td:nth(1)').text());
+            $(form).find('#biller_type').val($('#biller_' + biller_code).find('td:nth(2)').data('val'));
         });
 
     }

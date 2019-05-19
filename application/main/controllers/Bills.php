@@ -22,15 +22,18 @@ class Bills extends CI_Controller
             ),
         );
 
-        $page_limit = 20;
+        $page_limit = 100;
         $page_start = (int) $this->uri->segment(3);
 
         $order = 'BillerTag';
-        $where = array();
+        $where = array(
+            'Status'    => 1,
+            'Type'      => 1
+        );
 
         // SET SEARCH FILTER
         if (get_post('search')) {
-            $where['CONCAT(BillerTag, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
+            $where['Name LIKE ']  = '%' . get_post('search') . '%';
         }
 
         $paginatationData = $this->appdb->getPaginationData('Billers', $page_limit, $page_start, $where, $order);
@@ -55,6 +58,53 @@ class Bills extends CI_Controller
         view('main/bills/index', $viewData, 'templates/main');
     }
 
+    public function ticket()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Ticket Payment',
+            'pageSubTitle'  => 'AMBILIS TO PAY TICKETS',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            ),
+        );
+
+        $page_limit = 100;
+        $page_start = (int) $this->uri->segment(3);
+
+        $order = 'BillerTag';
+        $where = array(
+            'Status'    => 1,
+            'Type'      => 2
+        );
+
+        // SET SEARCH FILTER
+        if (get_post('search')) {
+            $where['Name LIKE ']  = '%' . get_post('search') . '%';
+        }
+
+        $paginatationData = $this->appdb->getPaginationData('Billers', $page_limit, $page_start, $where, $order);
+
+        $billers = array();
+        foreach ($paginatationData['data'] as $i) {
+            $i = (array) $i;
+            $i['Image']  = logo_filename($i['Image']);
+            $billers[] = $i;
+        }
+
+        $paginationConfig = array(
+            'base_url'      => base_url('bills/ticket'),
+            'total_rows'    => $paginatationData['count'],
+            'per_page'      => $page_limit,
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+        );
+
+        $viewData['billers']   = $billers;
+        $viewData['pagination'] = paginate($paginationConfig);
+
+        view('main/bills/index', $viewData, 'templates/main');
+    }
+
+
     // bills payment
     public function payment()
     {
@@ -74,7 +124,14 @@ class Bills extends CI_Controller
                 if ($amount > 0) {
                     if ($latest_balance >= $amount) {
 
-                        $desc = 'Bills Payment - ' . $biller->BillerTag . ' - ' . $biller->Description;
+                        if ($biller->Type == 1) {
+                            $desc = 'Bills';
+                        } else if ($biller->Type == 2) {
+                            $desc = 'Ticket';
+                        }
+
+                        $desc = $desc . ' Payment - ' . $biller->BillerTag . ' - ' . $biller->Description;
+
 
                         $saveData = array(
                             'Code'          => microsecID(),

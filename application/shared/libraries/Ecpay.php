@@ -120,18 +120,6 @@ class Ecpay
             } else {
                 logger('[get_encash_providers] : Invalid response.');
             }
-            // if ($items['BStruct'][0]['BillerTag'] != 'ERROR') {
-
-            //     $billers = array();
-            //     foreach ($items['BStruct'] as $item) {
-            //         $billers[] = $item;
-            //     }
-
-            //     return $billers;
-
-            // } else {
-            //     logger($items['BStruct'][0]['Description']);
-            // }
 
         } else {
             logger('[get_encash_providers] : Cannot connect to host.');
@@ -188,6 +176,9 @@ class Ecpay
             "Content-length: ". strlen($xml_post_string),
         );
 
+        // print_r($headers);
+        // echo $xml_post_string . PHP_EOL;
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $soapUrl);
@@ -200,6 +191,8 @@ class Ecpay
         // converting
         $response = curl_exec($ch); 
         curl_close($ch);
+
+        // echo $response . PHP_EOL;
 
         // // converting
         $response1 = str_replace("<soap:Body>","",$response);

@@ -13,6 +13,5 @@ $config['authentication']['password'] = 'A3XPON3NTSP@$$';
 // $config['authentication']['username'] = 'ambilis';
 // $config['authentication']['password'] = 'ambilis123';
 
-
 /* End of file authentication.php */
 /* Location: ./application/config/authentication.php */

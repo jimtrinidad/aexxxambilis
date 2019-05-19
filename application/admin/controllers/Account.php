@@ -59,8 +59,9 @@ class Account extends CI_Controller
 
             if ($this->authentication->login($username, $password, true)) {
                 $return_data = array(
-                    'status'  => true,
-                    'message' => 'Authentication successfull.',
+                    'status'   => true,
+                    'message'  => 'Authentication successfull.',
+                    'redirect' => site_url()
                 );
             } else {
                 $return_data = array(

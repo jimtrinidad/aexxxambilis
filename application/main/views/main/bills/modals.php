@@ -4,7 +4,7 @@
       <form id="paymentForm" name="paymentForm" class="modalForm" action="<?php echo site_url('bills/payment') ?>">
         <input type="hidden" name="Biller" id="Biller">
         <div class="modal-header">
-          <strong class="modal-title text-b-red">Bills Payment</strong>
+          <strong class="modal-title text-b-red"><?php echo $pageTitle ?></strong>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

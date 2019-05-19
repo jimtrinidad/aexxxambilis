@@ -24,7 +24,32 @@ class Billers extends CI_Controller
             )
         );
 
-        $viewData['billers'] = $this->appdb->getRecords('Billers', array('Status' => 1), 'BillerTag');
+        $where = array(
+            'Status'    => 1
+        );
+
+                // SET SEARCH FILTER
+        $filters = array(
+            'search_name',
+            'search_biller_type'
+        );
+
+        foreach ($filters as $filter) {
+
+            $$filter = get_post($filter);
+
+            if ($filter == 'search_name' && $$filter != false) {
+                $where['CONCAT(Name, " ", BillerTag, " ", Description) LIKE ']  = "%{$search_name}%";
+            } else if ($filter == 'search_biller_type' && $$filter != '') {
+                $where['Type']  = $search_biller_type;
+            }
+
+            // search params
+            $viewData[$filter] = $$filter;
+
+        }
+
+        $viewData['billers'] = $this->appdb->getRecords('Billers', $where, 'Name');
 
         view('pages/billers/index', $viewData, 'templates/main');
 
@@ -47,6 +72,8 @@ class Billers extends CI_Controller
 
                 if (!$billerData) {
                     $saveData['Code'] = md5($biller['BillerTag']);
+                    $saveData['Name'] = $biller['BillerTag'];
+                    $saveData['Type'] = 1;
                 } else {
                     $saveData['id']   = $billerData->id;
                     $active_billers[] = $billerData->Code;
@@ -105,6 +132,8 @@ class Billers extends CI_Controller
 
                 $saveData = array(
                     'id'            => $billerData->id,
+                    'Name'          => get_post('biller_name'),
+                    'Type'          => get_post('biller_type'),
                     'LastUpdate'    => date('Y-m-d H:i:s')
                 );
 

@@ -21,6 +21,24 @@
                   </span>
                 </div>
               </div>
+              <div class="col-xs-12 logo padding-top-10">
+                <div class="form-group">
+                  <label class="control-label" for="biller_name">Name</label>
+                  <input type="text" class="form-control" name="biller_name" id="biller_name" placeholder="Name to appear on Menu">
+                </div>
+              </div>
+              <div class="col-xs-12 logo padding-top-10">
+                <div class="form-group">
+                  <label class="control-label" for="biller_type">Type</label>
+                  <select class="form-control" id="biller_type" name="biller_type">
+                    <?php
+                    foreach (lookup('biller_type') as $k => $v) {
+                      echo "<option value='{$k}'>{$v}</option>";
+                    }
+                    ?>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
           <input type="hidden" id="Code" name="Code">

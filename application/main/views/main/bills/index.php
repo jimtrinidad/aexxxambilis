@@ -1,8 +1,8 @@
-<form id="searchBiller" action="<?php echo site_url('bills') ?>" method="get">
+<form id="searchBiller" action="<?php echo site_url(current_controller() . '/' . current_method()) ?>" method="get">
 	<div class="row text-center mb-4">
 		<div class="col-md-12 float-none center-block">
 			<div class="input-group">
-			  <input type="text" name="search" class="form-control bg-cream" placeholder="Search Biller Name" value="<?php echo get_post('search') ?>">
+			  <input type="text" name="search" class="form-control bg-cream" placeholder="Find" value="<?php echo get_post('search') ?>">
 			  <div class="input-group-append" id="button-addon4">
 				<button class="btn bg-green text-white" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			  </div>
