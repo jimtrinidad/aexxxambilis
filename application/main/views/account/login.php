@@ -21,7 +21,7 @@
   <body class="login">
 		
 		<div id="header">
-			<a href="<?php echo site_url() ?>" class="login-logo"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png" width="350" /></a>
+			<a href="<?php echo site_url() ?>" class="login-logo"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png?1" width="350" /></a>
 		</div>
 		
 		<div class="content container">
