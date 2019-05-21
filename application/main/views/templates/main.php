@@ -28,8 +28,7 @@
 			
 		<!-- Header -->
 		<div id="header">
-			<!-- <a href="<?php echo site_url()?>"><img src="<?php echo public_url(); ?>resources/images/ambilis-bills.png" /></a> -->
-			<a href="<?php echo site_url()?>"><img src="<?php echo public_url(); ?>resources/images/login-logo-bg.png?1" /></a>
+			<a href="<?php echo site_url()?>"><img src="<?php echo public_url(); ?>resources/images/ambilis-bills.png?1" /></a>
 		</div>
 	  <!-- Header End -->
 
