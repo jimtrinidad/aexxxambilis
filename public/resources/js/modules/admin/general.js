@@ -3,6 +3,8 @@ function General() {
     // because this is overwritten on jquery events
     var self = this;
 
+    this.itemData = {};
+
     /**
      * Initialize events
      */
@@ -20,7 +22,7 @@ function General() {
     this.set_events = function()
     {
 
-        $('#billerLogoForm, #encashServiceForm').submit(function(e) {
+        $('.modalForm').submit(function(e) {
             e.preventDefault();
             Utils.save_form(this, function() {
                 location.reload();
@@ -35,6 +37,19 @@ function General() {
     this.set_configs = function()
     {
         
+    }
+
+    this.getData = function(id)
+    {   
+        var match = false;
+        $.each(self.itemData, function(i,e){
+            if (e.id == id) {
+                match = e;
+                return false;
+            }
+        });
+
+        return match;
     }
 
     this.updateBillerLogo = function(biller_code)
@@ -83,6 +98,79 @@ function General() {
             }
         });
 
+    }
+
+    this.editOutlet = function(id)
+    {   
+        var data = this.getData(id);
+
+        console.log(data);
+        if (data) {
+            var form  = '#partnerOutletForm';
+            var modal = '#partnerOutletModal';
+            Utils.show_form_modal(modal, form, false, function(){
+                Utils.set_form_input_value(form, data);
+                self.loadCityOptions('#City', '#Province', '#Barangay', data.City, function(){
+                    self.loadBarangayOptions('#Barangay', '#City', data.Barangay);
+                });
+            });
+        }
+    }
+
+
+
+
+
+
+    this.loadCityOptions = function(target, e, baragay_target, selected = false, callback = false)
+    {
+        $(target).html(window.emptySelectOption).prop('disabled', true);
+        $(baragay_target).html(window.emptySelectOption).prop('disabled', true);
+
+        $.LoadingOverlay("show");
+
+        $.get(window.public_url('get/city'), {'provCode' : $(e).val()}).done(function(response) {
+            if (response.status) {
+                var options = window.emptySelectOption;
+                $.each(response.data, function(i, e){
+                    options += '<option value="' + e.citymunCode + '" ' + (selected && selected == e.citymunCode ? 'selected' : '') + '>' + e.citymunDesc + '</option> \n';
+                });
+                $(target).html(options).prop('disabled', false);
+            } else {
+                $(target).html(window.emptySelectOption);
+            }
+
+            if (callback) {
+                callback();
+            }
+
+            $.LoadingOverlay("hide");
+        });
+    }
+
+    this.loadBarangayOptions = function(target, e, selected = false, callback = false)
+    {
+        $(target).html(window.emptySelectOption).prop('disabled', true);
+
+        $.LoadingOverlay("show");
+
+        $.get(window.public_url('get/barangay'), {'citymunCode' : $(e).val()}).done(function(response) {
+            if (response.status) {
+                var options = window.emptySelectOption;
+                $.each(response.data, function(i, e){
+                    options += '<option value="' + e.brgyCode + '" ' + (selected && selected == e.brgyCode ? 'selected' : '') + '>' + e.brgyDesc + '</option> \n';
+                });
+                $(target).html(options).prop('disabled', false);
+            } else {
+                $(target).html(window.emptySelectOption);
+            }
+
+            if (callback) {
+                callback();
+            }
+
+            $.LoadingOverlay("hide");
+        });
     }
 
 }

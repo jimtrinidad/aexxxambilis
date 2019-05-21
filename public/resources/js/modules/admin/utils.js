@@ -70,13 +70,14 @@ function Utils() {
             zIndex : 99999
         });
 
-        $( document ).ajaxComplete(function(event, xhr) {
+        $( document ).ajaxComplete(function(event, xhr, settings) {
             if (xhr.status == 403) {
                 // invalid token, refresh page
                 // bootbox.alert('Invalid request token!', function(){
                     location.reload();
                 // });
-            } else if (typeof xhr.responseJSON !== 'undefined') {
+            } else if (typeof xhr.responseJSON !== 'undefined' && typeof settings.type != 'undefined' && settings.type == 'POST') {
+                // console.log(event, xhr, settings, 'update token');
                 self.update_csrf_token(xhr.responseJSON);
             }
         });

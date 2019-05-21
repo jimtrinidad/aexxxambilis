@@ -53,6 +53,7 @@
         <li class="<?php echo (is_current_url('settings', 'how') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/how') ?>">How it Works</a></li>
       </ul>
     </li>
+    <li class="<?php echo (is_current_url('outlets', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('outlets') ?>"><span>Partner Outlets</span></a></li>
     <li class="<?php echo (is_current_url('accounts', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('accounts') ?>"><span>Accounts</span></a></li>
   </ul>
 <!-- /.sidebar-menu -->

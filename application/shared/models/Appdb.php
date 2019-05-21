@@ -202,4 +202,41 @@ class Appdb extends CI_Model {
 		);
 	}
 
+	public function getPartnerOutlets($limit, $start, $where = false, $order = false)
+	{
+		
+		// GET COUNT
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		$count 	= $this->db->count_all_results('PartnerOutlets');
+
+		// GET RESULTS DATA
+
+		$this->db->select('po.*, provDesc, citymunDesc, brgyDesc');
+		$this->db->from('PartnerOutlets po');
+		$this->db->join('UtilLocBrgy b', 'b.brgyCode = po.Barangay', 'left');
+		$this->db->join('UtilLocCityMun c', 'c.citymunCode = po.City', 'left');
+		$this->db->join('UtilLocProvince p', 'p.provCode = po.Province', 'left');
+
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		if ($order != false) {
+			$this->db->order_by($order);
+		}
+
+		$this->db->limit($limit, $start);
+
+		$data 	= $this->db->get()->result();
+		// echo $this->db->last_query();
+
+		return array(
+			'count'	=> $count,
+			'data'	=> $data
+		);
+	}
+
 }

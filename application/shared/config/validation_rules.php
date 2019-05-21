@@ -121,3 +121,8 @@ $config['save_product_sub_category'] = array(
 	array('Name', 'Sub category name', 'trim|required'),
 	array('CategoryID', 'Parent category', 'required'),
 );
+
+$config['save_partner_outlet'] = array(
+	array('Name', 'Name', 'trim|required'),
+	array('Address', 'Address', 'trim|required'),
+);
