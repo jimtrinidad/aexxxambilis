@@ -4,8 +4,8 @@ body{ background-color: #fff; font-family: helvetica; }
 
 body.market-place{ background-color: #fff;}
 
-#header{ text-align: center; background: url('../images/header-bg.jpg') no-repeat; background-size: cover; padding: 35px 0px;}
-#header a img{ width: 75%; position:relative; top: 30px;}
+#header{ text-align: center; background: url('../images/header-bg.jpg') no-repeat; background-size: cover; padding: 20px 0px;}
+#header a img{ width: 110%; position:relative; top: 5px;}
 
 #mobile-menu{position: relative; background: #fa0400; text-align: center;  padding: 5px 20px; text-transform: uppercase; font-weight: bold; font-size: 20px; color: #fff;}
 
@@ -61,7 +61,8 @@ body.market-place{ background-color: #fff;}
 .login .content .btn-auth img{ position:relative; top: -3px;}
 .login .content .btn-auth span{ width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; position:relative; top: 5px;}
 
-.login #header a img, .registration #header a img{ width: 100%!important; top: 100px;}
+
+.login #header a img, .registration #header a img{ width: 100%!important; top: 60px;}
 
 .main-login{ margin-top: 60px;}
 
