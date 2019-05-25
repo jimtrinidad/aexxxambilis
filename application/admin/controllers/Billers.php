@@ -9,7 +9,7 @@ class Billers extends CI_Controller
         parent::__construct();
 
         // require login
-        check_authentication();
+        // check_authentication();
     }
 
     public function index()
@@ -62,6 +62,7 @@ class Billers extends CI_Controller
             $savedBillers   = $this->appdb->getRecords('Billers');
             $active_billers = array();
             foreach ($billers as $biller) {
+                print_r($biller);
                 $billerData = $this->appdb->getRowObject('Billers', md5($biller['BillerTag']), 'Code');
 
                 $saveData = array(
@@ -174,10 +175,10 @@ class Billers extends CI_Controller
 
 
 
-    public function encash_services()
+    public function ecash_services()
     {
         $viewData = array(
-            'pageTitle'         => 'Encash Services',
+            'pageTitle'         => 'Ecash Services',
             'pageDescription'   => '',
             'content_header'    => false,
             'accountInfo'       => user_account_details(),
@@ -186,20 +187,21 @@ class Billers extends CI_Controller
             )
         );
 
-        $viewData['services'] = $this->appdb->getRecords('EncashServices', array('Status' => 1), 'Name');
+        $viewData['services'] = $this->appdb->getRecords('EcashServices', array('Status' => 1), 'Name');
 
-        view('pages/billers/encash_services', $viewData, 'templates/main');
+        view('pages/billers/ecash_services', $viewData, 'templates/main');
 
     }
 
-    public function update_encash_services()
+    public function update_ecash_services()
     {
-        $data = $this->ecpay->get_encash_providers();
+        $data = $this->ecpay->get_ecash_providers();
+        print_r($data);
         if ($data) {
-            $savedItems   = $this->appdb->getRecords('EncashServices');
+            $savedItems   = $this->appdb->getRecords('EcashServices');
             $active_data = array();
             foreach ($data as $item) {
-                $itemData = $this->appdb->getRowObject('EncashServices', md5($item['Services']), 'Code');
+                $itemData = $this->appdb->getRowObject('EcashServices', md5($item['Services']), 'Code');
 
                 $saveData = array(
                         'LastUpdate'    => datetime()
@@ -215,19 +217,18 @@ class Billers extends CI_Controller
                     $active_data[]    = $itemData->Code;
                 }
 
-                $this->appdb->saveData('EncashServices', $saveData);
+                $this->appdb->saveData('EcashServices', $saveData);
             }
 
             foreach ($savedItems as $b) {
-                print_data($b);
                 if (in_array($b['Code'], $active_data)) {
                     $status = 1;
                 } else {
                     $status = 0;
-                    logger('Encash Services -> ' . $b['Name'] . ' is no longer active.');
+                    logger('Ecash Services -> ' . $b['Name'] . ' is no longer active.');
                 }
 
-                $this->appdb->saveData('EncashServices', array(
+                $this->appdb->saveData('EcashServices', array(
                     'Status' => $status,
                     'id'     => $b['id']
                 ));
@@ -236,10 +237,10 @@ class Billers extends CI_Controller
     }
 
 
-    public function save_encash_service()
+    public function save_ecash_service()
     {
 
-        $data = $this->appdb->getRowObject('EncashServices', get_post('Code'), 'Code');
+        $data = $this->appdb->getRowObject('EcashServices', get_post('Code'), 'Code');
         if ($data) {
             $randomLogoName = md5(microsecID());
 
@@ -276,7 +277,7 @@ class Billers extends CI_Controller
                     $saveData['Image'] = $uploadData['file_name'];
                 }
 
-                if (($ID = $this->appdb->saveData('EncashServices', $saveData))) {
+                if (($ID = $this->appdb->saveData('EcashServices', $saveData))) {
 
                     // delete old logo if edited
                     if (isset($saveData['Image']) && !empty($data->Image)) {
@@ -285,7 +286,7 @@ class Billers extends CI_Controller
 
                     $return_data = array(
                         'status'    => true,
-                        'message'   => 'Encash service has been saved.',
+                        'message'   => 'Ecash service has been saved.',
                         'id'        => $ID
                     );
                 } else {
@@ -305,6 +306,100 @@ class Billers extends CI_Controller
         }
 
         response_json($return_data);
+    }
+
+
+
+    /**
+    * TELCO
+    */
+    public function update_telco_topups()
+    {
+        $data = $this->ecpay->get_telco_topups();
+        if ($data) {
+            $savedItems   = $this->appdb->getRecords('TelcoTopUps');
+            $active_data = array();
+            foreach ($data as $item) {
+                if (isset($item['TelcoTag']) && isset($item['TelcoName'])) {
+                    $code     = md5($item['TelcoTag'] . $item['TelcoName'] . $item['Denomination'] . $item['ExtTag']);
+                    $itemData = $this->appdb->getRowObject('TelcoTopUps', $code, 'Code');
+
+                    $saveData = array(
+                            'LastUpdate'    => datetime()
+                        );
+
+                    $saveData = array_merge($item, $saveData);
+
+                    if (!$itemData) {
+                        $saveData['Code'] = $code;
+                    } else {
+                        $saveData['id']   = $itemData->id;
+                        $active_data[]    = $itemData->Code;
+                    }
+
+                    print_r($saveData);
+
+                    $this->appdb->saveData('TelcoTopUps', $saveData);
+                }
+            }
+
+            foreach ($savedItems as $b) {
+                if (in_array($b['Code'], $active_data)) {
+                    $status = 1;
+                } else {
+                    $status = 0;
+                    logger('Telco Topups -> ' . $b['TelcoTag'] . ' is no longer active.');
+                }
+
+                $this->appdb->saveData('TelcoTopUps', array(
+                    'Status' => $status,
+                    'id'     => $b['id']
+                ));
+            }
+        }
+    }
+
+    public function telco_topups()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Telco Topups',
+            'pageDescription'   => '',
+            'content_header'    => false,
+            'accountInfo'       => user_account_details(),
+            'jsModules'         => array(
+                'general'
+            )
+        );
+
+        $where = array(
+            'Status'    => 1
+        );
+
+                // SET SEARCH FILTER
+        $filters = array(
+            'search_name',
+            'search_telco'
+        );
+
+        foreach ($filters as $filter) {
+
+            $$filter = get_post($filter);
+
+            if ($filter == 'search_name' && $$filter != false) {
+                $where['TelcoTag LIKE ']  = "%{$search_name}%";
+            } else if ($filter == 'search_telco' && $$filter != '') {
+                $where['TelcoName']  = $search_telco;
+            }
+
+            // search params
+            $viewData[$filter] = $$filter;
+
+        }
+
+        $viewData['services'] = $this->appdb->getRecords('TelcoTopUps', $where, 'TelcoName, TelcoTag, (Denomination * 1)');
+
+        view('pages/billers/telco_topups', $viewData, 'templates/main');
+
     }
 
 }

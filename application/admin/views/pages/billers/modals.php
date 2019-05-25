@@ -52,10 +52,10 @@
   </div>
 </div>
 
-<div class="modal fade" id="encashServiceModal" tabindex="-1" role="dialog" aria-labelledby="encashServiceModal">
+<div class="modal fade" id="ecashServiceModal" tabindex="-1" role="dialog" aria-labelledby="ecashServiceModal">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
-      <form id="encashServiceForm" name="encashServiceForm" class="modalForm" action="<?php echo site_url('billers/save_encash_service') ?>" enctype="multipart/form-data">
+      <form id="ecashServiceForm" name="ecashServiceForm" class="modalForm" action="<?php echo site_url('billers/save_ecash_service') ?>" enctype="multipart/form-data">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title"></h4>

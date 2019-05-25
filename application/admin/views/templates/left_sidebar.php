@@ -27,7 +27,8 @@
       </a>
       <ul class="treeview-menu">
         <li class="<?php echo (is_current_url('billers', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers') ?>"><span>Billers</span></a></li>
-        <li class="<?php echo (is_current_url('billers', 'encash_services') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers/encash_services') ?>"><span>Encash Services</span></a></li>
+        <li class="<?php echo (is_current_url('billers', 'ecash_services') ? 'active' : ''); ?>"><a href="<?php echo site_url('billers/ecash_services') ?>"><span>Ecash Services</span></a></li>
+        <li class="<?php echo (is_current_url('billers', 'telco_topups') ? 'active' : ''); ?>"><a href="<?php echo site_url('telco/topups') ?>"><span>Telco Topups</span></a></li>
       </ul>
     </li>
     <li class="treeview">

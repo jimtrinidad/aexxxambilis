@@ -53,4 +53,5 @@ $route['default_controller'] = 'dashboard';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['encash/services'] = 'billers/encash_services';
+$route['ecash/services'] = 'billers/ecash_services';
+$route['telco/topups'] = 'billers/telco_topups';

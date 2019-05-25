@@ -23,8 +23,44 @@ class Account extends CI_Controller
         // send_email($data, false);
         // exit;
 
-        $data = $this->ecpay->get_encash_providers();
+        // $data = $this->ecpay->get_ecash_providers();
+        $data = $this->ecpay->ecash_transact(array(
+            'ServiceType'    => 'EASYTRIP',
+            'AccountNo'      => '520005121468',
+            'Identifier'     => 'JIM',
+            'Amount'         => 50,
+            'ClientReference'   => microsecID(true)
+        ));
+        // $data = $this->ecpay->bills_payment_transact(array(
+        //     'BillerTag'     => 'GHPHONE',
+        //     'AccountNo'    => '1026746256',
+        //     'Identifier'     => 'Jim Alvin Trinidad',
+        //     'Amount'        => 10,
+        //     'ClientReference'   => microsecID(true)
+        // ));
         print_data($data);
+        exit;
+
+        // BranchID + CellphoneNo+ Amount + Date (Mmddyy)
+
+        // $lines = file('/home/jim/Desktop/ecpay/ambilispartneroutlet.csv');
+        // $data  = array();
+        // foreach ($lines as $line) {
+        //     $item = str_getcsv($line);
+        //     if (count($item) == 2) {
+        //         $saveData = array(
+        //             'Code'  => microsecID(true),
+        //             'Name'  => $item[0],
+        //             'Address'   => $item[1],
+        //             'LastUpdate'    => datetime()
+        //         );
+
+        //         print_r($item);
+        //         var_dump($this->appdb->saveData('PartnerOutlets', $saveData));
+        //     }
+
+        // }
+
     }
 
 

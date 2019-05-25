@@ -15,7 +15,7 @@
     <?php
     if (count($items)) {
     ?>
-      <div class="row">
+      <div class="row gutter-5 justify-content-center">
       <?php foreach ($items as $item) { ?>
       	<div class="col-3 mb-2" onclick="Wallet.moneyPadalaRequest('<?php echo $item['id'] ?>')">
 					<div class="rounded bg-white text-center p-1 menu-btn-icon active" title="<?php echo $item['Description'] ?>">

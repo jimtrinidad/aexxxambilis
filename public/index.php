@@ -45,11 +45,13 @@ $allowed_subdomains = array(
 	'localhost'
 );
 
-$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
-if (count($host_parts) > 0) {
-	$sub_domain = $host_parts[0];
-	if (in_array($sub_domain, $allowed_subdomains)) {
-		$subdomain = $sub_domain;
+if (isset($_SERVER['HTTP_HOST'])) {
+	$host_parts = explode('.', strtolower($_SERVER['HTTP_HOST']));
+	if (count($host_parts) > 0) {
+		$sub_domain = $host_parts[0];
+		if (in_array($sub_domain, $allowed_subdomains)) {
+			$subdomain = $sub_domain;
+		}
 	}
 }
 defined('SUBDOMAIN') OR define('SUBDOMAIN', $subdomain);

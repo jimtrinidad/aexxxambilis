@@ -74,6 +74,7 @@
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
+				<!-- Delivery Address for Personal Orders -->
 				<div class="col-12 content">
 					<label class="label-info">Delivery Address</label>
 					<div class="info-field clearfix">

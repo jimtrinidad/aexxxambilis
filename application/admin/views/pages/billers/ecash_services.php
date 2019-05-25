@@ -34,7 +34,7 @@
                   echo   '<div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
                             <div class="input-group-btn">
-                              <button type="button" class="btn btn-xs btn-info" onClick="General.updateEncashService(\''.$c['Code'].'\')"><i class="fa fa-pencil"></i> Update</button>
+                              <button type="button" class="btn btn-xs btn-info" onClick="General.updateEcashService(\''.$c['Code'].'\')"><i class="fa fa-pencil"></i> Update</button>
                             </div>
                           </div>
                         </div>';

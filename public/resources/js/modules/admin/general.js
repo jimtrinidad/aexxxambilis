@@ -67,11 +67,11 @@ function General() {
     }
 
 
-    this.updateEncashService = function(code)
+    this.updateEcashService = function(code)
     {
-        var form  = '#encashServiceForm';
-        var modal = '#encashServiceModal';
-        Utils.show_form_modal(modal, form, 'Update Encash Service', function(){
+        var form  = '#ecashServiceForm';
+        var modal = '#ecashServiceModal';
+        Utils.show_form_modal(modal, form, 'Update Ecash Service', function(){
             $(form).find('.image-preview').prop('src', $('#item_' + code).find('.logo-small').prop('src'));
             $(form).find('#Code').val(code);
             $(form).find('#service_name').val($('#item_' + code).find('td:nth(1)').text());

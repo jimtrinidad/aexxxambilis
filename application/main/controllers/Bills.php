@@ -33,7 +33,7 @@ class Bills extends CI_Controller
 
         // SET SEARCH FILTER
         if (get_post('search')) {
-            $where['Name LIKE ']  = '%' . get_post('search') . '%';
+            $where['CONCAT(Name, Description) LIKE ']  = '%' . get_post('search') . '%';
         }
 
         $paginatationData = $this->appdb->getPaginationData('Billers', $page_limit, $page_start, $where, $order);
@@ -124,35 +124,54 @@ class Bills extends CI_Controller
                 if ($amount > 0) {
                     if ($latest_balance >= $amount) {
 
-                        if ($biller->Type == 1) {
-                            $desc = 'Bills';
-                        } else if ($biller->Type == 2) {
-                            $desc = 'Ticket';
-                        }
-
-                        $desc = $desc . ' Payment - ' . $biller->BillerTag . ' - ' . $biller->Description;
-
-
-                        $saveData = array(
-                            'Code'          => microsecID(),
-                            'AccountID'     => current_user(),
-                            'ReferenceNo'   => get_post('AccountNo'),
-                            'Description'   => $desc,
-                            'Date'          => date('Y-m-d H:i:s'),
-                            'Amount'        => $amount,
-                            'Type'          => 'Debit',
-                            'EndingBalance' => ($latest_balance - $amount)
+                        $ecparams   = array(
+                            'BillerTag'       => $biller->BillerTag,
+                            'AccountNo'       => get_post('AccountNo'),
+                            'Identifier'      => get_post('Identifier'),
+                            'Amount'          => $amount,
+                            'ClientReference' => microsecID(true)
                         );
 
-                        if ($this->appdb->saveData('WalletTransactions', $saveData)) {
-                            $return_data = array(
-                                'status'    => true,
-                                'message'   => 'Payment transaction has been made.'
+                        $ecresponse = $this->ecpay->bills_payment_transact($ecparams);
+
+                        if (isset($ecresponse['Status']) && $ecresponse['Status'] == 0) {
+
+                            if ($biller->Type == 1) {
+                                $desc = 'Bills';
+                            } else if ($biller->Type == 2) {
+                                $desc = 'Ticket';
+                            }
+
+                            $desc = $desc . ' Payment - ' . $biller->Description . ' - ' . ($ecresponse['Message'] ?? ' Success');
+
+
+                            $saveData = array(
+                                'Code'          => microsecID(true),
+                                'AccountID'     => current_user(),
+                                'ReferenceNo'   => $ecparams['ClientReference'],
+                                'Description'   => $desc,
+                                'Date'          => date('Y-m-d H:i:s'),
+                                'Amount'        => $amount,
+                                'Type'          => 'Debit',
+                                'EndingBalance' => ($latest_balance - $amount)
                             );
+
+                            if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Payment transaction has been made.'
+                                );
+                            } else {
+                                $return_data = array(
+                                    'status'    => false,
+                                    'message'   => 'Saving transaction failed.'
+                                );
+                            }
+
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => 'Saving transaction failed.'
+                                'message'   => $ecresponse['Message'] ?? 'Payment transaction failed.'
                             );
                         }
 
@@ -193,18 +212,17 @@ class Bills extends CI_Controller
             ),
         );
 
-        $page_limit = 1000;
-        $page_start = (int) $this->uri->segment(3);
-
         $order = 'Name';
-        $where = array();
+        $where = array(
+            'Status'    => 1
+        );
 
         // SET SEARCH FILTER
         if (get_post('search')) {
             $where['CONCAT(Name, " ", Description) LIKE ']  = '%' . get_post('search') . '%';
         }
 
-        $results = $this->appdb->getRecords('EncashServices', $where, $order);
+        $results = $this->appdb->getRecords('EcashServices', $where, $order);
 
         $items = array();
         foreach ($results as $i) {
@@ -217,6 +235,38 @@ class Bills extends CI_Controller
 
         // print_data($viewData, true);
 
-        view('main/bills/encash_services', $viewData, 'templates/main');
+        view('main/bills/ecash_services', $viewData, 'templates/main');
+    }
+
+    // show telco loading option page
+    // routed on /eload
+    public function eload()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Telco eLoading',
+            'pageSubTitle'  => 'AMBILIS Mag Load!',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            ),
+        );
+
+        $order = 'TelcoName, TelcoTag, (Denomination * 1)';
+        $where = array(
+            'Status'    => 1
+        );
+
+        $results = $this->appdb->getRecords('TelcoTopUps', $where, $order);
+
+        $items = array();
+        foreach ($results as $i) {
+            $i = (array) $i;
+            $items[$i['TelcoName']][] = $i;
+        }
+
+        $viewData['items']   = $items;
+
+        // print_data($viewData, true);
+
+        view('main/bills/telco_topups', $viewData, 'templates/main');
     }
 }

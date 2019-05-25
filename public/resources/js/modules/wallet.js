@@ -23,7 +23,25 @@ function Wallet() {
     {
         $('.modalForm').submit(function(e) {
             e.preventDefault();
-            Utils.save_form(this);
+            var _this = this;
+            bootbox.confirm({
+                message: "CONFIRM TRANSACTION?",
+                buttons: {
+                    confirm: {
+                        label: 'Confirm',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (r) {
+                    if (r) {
+                        Utils.save_form(_this);
+                    }
+                }
+            });
         });
 
         var ajaxReq = null;
@@ -118,14 +136,33 @@ function Wallet() {
     /**
     * eload
     */
-    this.eloadRequest = function()
+    this.eloadRequest = function(telco)
     {   
 
         var form  = '#eloadForm';
         var modal = '#eloadModal';
-        Utils.show_form_modal(modal, form, false, function(){
 
-        });
+        if (typeof(self.itemData[telco]) != 'undefined') {
+            var data  = self.itemData[telco];
+            
+            if ($(form).find('#LoadTag').hasClass("select2-hidden-accessible")) {
+                $(form).find('#LoadTag').select2('destroy');
+            }
+
+            Utils.show_form_modal(modal, form, telco + ' Load Transaction', function(){
+                var options = window.emptySelectOption;
+                $.each(data, function(i, e){
+                    options += `<option data-amount="${e.Denomination}" value="${e.Code}">${e.TelcoTag + ' - P' +e.Denomination}</option>`;
+                });
+                $(form).find('#LoadTag').html(options).prop('disabled', false).select2({
+                    width: 'style',
+                    theme: 'bootstrap4',
+                    placeholder: $(this).attr('placeholder'),
+                }).change(function(){
+                    $(form).find('#Amount').val($(this).find('option:selected').data('amount'));
+                });
+            });
+        }
 
     }
 
@@ -137,7 +174,7 @@ function Wallet() {
         if (data) {
             var form  = '#paymentForm';
             var modal = '#paymentModal';
-            Utils.show_form_modal(modal, form, false, function(){
+            Utils.show_form_modal(modal, form, data.Description, function(){
                 $(form).find('#Biller').val(data.Code);
                 $(form).find('#AccountNo').prop('placeholder', data.FirstField).prop('maxlength', data.FirstFieldWidth);
                 $(form).find('#AccountNoLabel').text(data.FirstField);

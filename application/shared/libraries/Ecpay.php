@@ -25,12 +25,14 @@ class Ecpay
      *
      * @access    private
      */
-    private $branch_id;
-    private $account_id;
-    private $username;
-    private $password;
+    public $branch_id;
+    public $account_id;
+    public $username;
+    public $password;
 
-    private $default_host = 'ecpay.ph';
+    public $default_host = 'ecpay.ph';
+
+    public $post_urls   = array();
 
     /**
      * Constructor
@@ -51,6 +53,13 @@ class Ecpay
         $this->username     = $authentication_config['username'];
         $this->password     = $authentication_config['password'];
 
+        $this->post_urls    = array(
+            // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
+            'bills'     => 'https://ecpay.ph/wsbillpay/',
+            'ecash'     => 'https://ecpay.ph/wsecash/',
+            'telco'     => 'https://ecpay.ph/wstopupv2/'
+        );
+
     }
 
     /**
@@ -59,7 +68,7 @@ class Ecpay
     public function get_billers()
     {
         $params = array(
-            'post_url'  => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
+            'post_url'  => $this->post_urls['bills'],
             'action'    => 'http://tempuri.org/ECPNBillsPayment/Service1/GetBillerList'
         );
         $body   = '<GetBillerList xmlns="http://tempuri.org/ECPNBillsPayment/Service1">' .
@@ -91,14 +100,80 @@ class Ecpay
         return false;
     }
 
-
     /**
-    * get encash services
+    * Validate billers account
     */
-    public function get_encash_providers()
+    public function validate_biller_account($fields = array())
     {
         $params = array(
-            'post_url'  => 'https://myecpay.ph/uat/wsecash/service1.asmx',
+            'post_url'  => $this->post_urls['bills'],
+            'action'    => 'http://tempuri.org/ECPNBillsPayment/Service1/ValidateAccount'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $body   = '<ValidateAccount xmlns="http://tempuri.org/ECPNBillsPayment/Service1">' .
+                    $this->default_body_params() .
+                    $other_fields .
+                  '</ValidateAccount>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->ValidateAccountResponse)) {
+            $items    = json_decode(json_encode($response->ValidateAccountResponse->ValidateAccountResult), true);
+            return $items;
+        } else {
+            logger('[validate_biller_account] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    /**
+    * Transact bills payment
+    */
+    public function bills_payment_transact($fields = array())
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['bills'],
+            'action'    => 'http://tempuri.org/ECPNBillsPayment/Service1/Transact'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $body   = '<Transact xmlns="http://tempuri.org/ECPNBillsPayment/Service1">' .
+                    $this->default_body_params(true) .
+                    $other_fields .
+                  '</Transact>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->TransactResponse)) {
+            $items    = json_decode(json_encode($response->TransactResponse->TransactResult), true);
+            return $items;
+        } else {
+            logger('[bills_payment_transact] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+
+    // END BILLERS
+
+    /**
+    * get ecash services
+    */
+    public function get_ecash_providers()
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['ecash'],
             'action'    => 'http://ecpay.ph/WKECash/GetServices'
         );
         $body   = '<GetServices xmlns="http://ecpay.ph/WKECash">' .
@@ -113,54 +188,181 @@ class Ecpay
             if (isset($items[0])) {
                 $data = json_decode($items[0], true);
                 if (isset($data['Description'])) {
-                    logger('[get_encash_providers] : ' . $data['Description']);
+                    logger('[get_ecash_providers] : ' . $data['Description']);
                 } else {
                     return $data;
                 }
             } else {
-                logger('[get_encash_providers] : Invalid response.');
+                logger('[get_ecash_providers] : Invalid response.');
             }
 
         } else {
-            logger('[get_encash_providers] : Cannot connect to host.');
+            logger('[get_ecash_providers] : Cannot connect to host.');
         }
 
         // print_data($response);
     }
 
-
-
-
-
-
-
-
-    private function default_body_params()
+    public function ecash_transact($fields = array()) 
     {
-        return '<AccountID>' . $this->account_id . '</AccountID>
+        $params = array(
+            'post_url'  => $this->post_urls['ecash'],
+            'action'    => 'http://ecpay.ph/WKECash/Transact'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $this->ci->load->library('encryption');
+        $this->ci->encryption->initialize(
+            array(
+                'driver' => 'openssl',
+                'cipher' => 'tripledes'
+            )
+        );
+
+        $sig = $this->ci->encryption->encrypt($this->branch_id . $this->username . $this->password);
+
+        $header = '<AuthHeader xmlns="http://ecpay.ph/WKECash">
+                        <signature>'. $sig .'</signature>
+                        <secretkey>'. substr(md5(date('Ymd')), 0, 12) .'</secretkey>
+                    </AuthHeader>';
+
+        $body   = '<Transact xmlns="http://ecpay.ph/WKECash">' .
+                    '<AccntID>' . $this->account_id . '</AccntID>
+                    <Username>' . $this->username . '</Username>
+                    <Password>' . $this->password . '</Password>
+                    <BranchID>' . $this->branch_id . '</BranchID>' .
+                    $other_fields .
+                  '</Transact>';
+
+        $response = $this->request($params, $body, $header);
+
+        if (isset($response->TransactResponse)) {
+            $items = json_decode(json_encode($response->TransactResponse->TransactResult), true);
+            return (isset($items[0]) ? json_decode($items[0], true) : false);
+        } else {
+            logger('[ecash_transact] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    // END ECASH
+
+
+    /**
+    * get telco topup
+    */
+    public function get_telco_topups()
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['telco'],
+            'action'    => 'http://ECPay/WSTopUp/GetTelcoList'
+        );
+        $body   = '<GetTelcoList xmlns="http://ECPay/WSTopUp">' .
+                    '<LoginInfo>' .
+                    $this->default_body_params(true) .
+                    '</LoginInfo>' .
+                  '</GetTelcoList>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->GetTelcoListResponse)) {
+            $items    = json_decode(json_encode($response->GetTelcoListResponse->GetTelcoListResult), true);
+
+            if (isset($items['TStruct'][0]['TelcoName'])) {
+
+                $records = array();
+                foreach ($items['TStruct'] as $item) {
+                    $records[] = $item;
+                }
+
+                return $records;
+
+            } else {
+                logger('[get_telco_topups] : ' . ($items['TStruct']['TelcoName'] ?? 'Error'));
+            }
+
+        } else {
+            logger('[get_telco_topups] : Cannot connect to host.');
+        }
+    }
+
+    public function telco_transact($fields = array()) 
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['telco'],
+            'action'    => 'http://ECPay/WSTopUp/Transact'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $body   = '<Transact xmlns="http://ECPay/WSTopUp">' .
+                    '<LoginInfo>' .
+                        $this->default_body_params(true) .
+                    '</LoginInfo>' .
+                    $other_fields .
+                  '</Transact>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->TransactResponse)) {
+            return json_decode(json_encode($response->TransactResponse->TransactResult), true);
+        } else {
+            logger('[telco_transact] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    // END TELCO
+
+    private function default_body_params($branch = false)
+    {
+        $str = '<AccountID>' . $this->account_id . '</AccountID>
                 <Username>' . $this->username . '</Username>
                 <Password>' . $this->password . '</Password>';
+
+        if ($branch) {
+            $str .= '<BranchID>'. $this->branch_id .'</BranchID>';
+        }
+
+        return $str;
     }
 
     /**
     *
     * @param $params[post_url, host, action]
     */
-    private function request($params, $body)
+    private function request($params, $body, $header = false)
     {
 
         if (!isset($params['post_url']) || !isset($params['action'])) {
             die('Invalid soap request params');
         }
 
+        $debug = false;
+
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
         $soapHost     = (isset($params['host']) ? $params['host'] : 'ecpay.ph');
+        $soap_header  = '';
 
+        if ($header) {
+            $soap_header = '<soap:Header>' . $header . '</soap:Header>';
+        }
+        
         $xml_post_string = '<?xml version="1.0" encoding="utf-8"?>
                                             <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                                             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                                             xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                                                '. $soap_header .'
                                                 <soap:Body>
                                                     ' . $body . '
                                                 </soap:Body>
@@ -176,9 +378,6 @@ class Ecpay
             "Content-length: ". strlen($xml_post_string),
         );
 
-        // print_r($headers);
-        // echo $xml_post_string . PHP_EOL;
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($ch, CURLOPT_URL, $soapUrl);
@@ -192,7 +391,12 @@ class Ecpay
         $response = curl_exec($ch); 
         curl_close($ch);
 
-        // echo $response . PHP_EOL;
+        if ($debug) {
+            echo 'URL: ' . $soapUrl . PHP_EOL;
+            print_r($headers);
+            echo $xml_post_string . PHP_EOL;
+            echo $response . PHP_EOL;
+        }
 
         // // converting
         $response1 = str_replace("<soap:Body>","",$response);

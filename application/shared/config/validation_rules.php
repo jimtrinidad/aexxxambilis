@@ -105,9 +105,9 @@ $config['add_payment'] = array(
 );
 
 $config['send_eload'] = array(
-	array('ServiceProvider', 'Service provider', 'trim|required'),
+	array('LoadTag', 'Load Type', 'trim|required'),
 	array('Number', 'Mobile number', 'trim|required|numeric|min_length[11]|max_length[11]'),
-	array('Amount', 'Load amount', 'trim|required|numeric'),
+	// array('Amount', 'Load amount', 'trim|required|numeric'),
 );
 
 

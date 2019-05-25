@@ -59,6 +59,12 @@ $config['biller_type'] = array(
     2   => 'Ticketing'
 );
 
+$config['telcos'] = array(
+    'GLOBE' => 'Globe',
+    'SMART' => 'Smart',
+    'SUN'   => 'Sun'
+);
+
 
 $config['delivery_agent_status'] = array(
     0 => 'Pending Application',

@@ -58,4 +58,5 @@ $route['i/(:any)'] = 'marketplace/view_alias/$1';
 
 $route['padala'] = 'bills/padala';
 $route['ticket'] = 'bills/ticket';
+$route['eload']  = 'bills/eload';
 $route['brands'] = 'marketplace/brands';
