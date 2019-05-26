@@ -1,7 +1,7 @@
 <div class="modal fade" id="paymentModal" role="dialog" aria-labelledby="paymentModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form id="paymentForm" name="paymentForm" class="modalForm" action="<?php echo site_url('bills/payment') ?>">
+      <form id="paymentForm" name="paymentForm" class="modalForm" action="<?php echo site_url('ewallet/bill') ?>">
         <input type="hidden" name="Biller" id="Biller">
         <div class="modal-header">
           <strong class="modal-title text-b-red"><?php echo $pageTitle ?></strong>
@@ -34,6 +34,9 @@
                 <input class="form-control" required type="number" step=".01" name="Amount" id="Amount" placeholder="Amount">
                 <span class="help-block hidden"></span>
               </div>
+            </div>
+            <div class="col-12 con-fee-cont">
+              <span class="text-danger small">Convenience Fee: <b class="con-fee">4.00</b></span>
             </div>
           </div>
         </div>
@@ -140,6 +143,24 @@
           <button type="submit" class="btn btn-success">Send a Load</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="successMessageModal" role="dialog" aria-labelledby="successMessageModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img class="trans-image-header" width="75">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table transaction-table">
+        </table>
+        <div class="text-center"><small class="trans-message text-success"></small></div>
+      </div>
     </div>
   </div>
 </div>

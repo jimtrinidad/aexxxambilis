@@ -38,7 +38,20 @@ function Wallet() {
                 },
                 callback: function (r) {
                     if (r) {
-                        Utils.save_form(_this);
+                        Utils.save_form(_this, function(res) {
+                            $('.modalForm').closest('div.modal').modal('hide');
+                            $('#successMessageModal .trans-image-header').prop('src', res.image);
+                            $('#successMessageModal .trans-message').text(res.message);
+                            var table = $('#successMessageModal .transaction-table');
+                            table.html('');
+                            $.each(res.data, function(i,e) {
+                                table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
+                            });
+                            $('#successMessageModal').modal({
+                                backdrop : 'static',
+                                keyboard : false
+                            });
+                        });
                     }
                 }
             });
@@ -180,6 +193,13 @@ function Wallet() {
                 $(form).find('#AccountNoLabel').text(data.FirstField);
                 $(form).find('#Identifier').prop('placeholder', data.SecondField).prop('maxlength', data.SecondFieldWidth);
                 $(form).find('#IdentifierLabel').text(data.SecondField);
+
+                if (data.ServiceCharge + 0 > 0) {
+                    $(form).find('.con-fee-cont').show();
+                    $(form).find('.con-fee').text(data.ServiceCharge);
+                } else {
+                    $(form).find('.con-fee-cont').hide();
+                }
             });
         }
     }

@@ -328,6 +328,16 @@ function logger($message)
     syslog(LOG_INFO, '[AMBILIS] ' . $message);
 }
 
+function clean_text($string)
+{   
+    // remove parentheses
+    $string = preg_replace("/\([^)]+\)/","",$string);
+    // trim
+    $string = trim($string);
+
+    return $string;
+}
+
 
 function slugit($str, $replace=array(), $delimiter='-')
 {

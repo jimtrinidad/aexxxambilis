@@ -117,4 +117,40 @@ class Settings extends CI_Controller
         view('pages/settings/setting_content', $viewData, 'templates/main');
     }
 
+
+    public function fund_wallet_instruction()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Fund Wallet Instructions',
+            'pageDescription'   => '',
+            'content_header'    => false,
+            'accountInfo'       => user_account_details()
+        );
+
+        $setting = $this->appdb->getRowObject('Settings', 'fund_wallet_instruction', 'key');
+
+        if (isset($_POST['setting_content'])) {
+            $saveData = array(
+                'value'         => get_post('setting_content'),
+                'last_update'   => datetime()
+            );
+
+            if ($setting) {
+                $saveData['id'] = $setting->id;
+            } else {
+                $saveData['key'] = 'fund_wallet_instruction';
+            }
+            if ($this->appdb->saveData('Settings', $saveData)) {
+                $viewData['success'] = 'Funding wallet instruction content has been saved!';
+                $setting = $this->appdb->getRowObject('Settings', 'fund_wallet_instruction', 'key');
+            } else {
+                $viewData['error'] = 'Saving failed.';
+            }
+        }
+
+        $viewData['setting_content'] = $setting->value ?? '';
+
+        view('pages/settings/setting_content', $viewData, 'templates/main');
+    }
+
 }

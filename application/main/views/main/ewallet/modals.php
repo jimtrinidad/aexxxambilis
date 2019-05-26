@@ -49,6 +49,16 @@
               </div>
             </div>
           </div>
+          <div class="row gutter-5">
+            <div class="col-12">
+              <?php
+              $setting = $this->appdb->getRowObject('Settings', 'fund_wallet_instruction', 'key');
+              if ($setting) {
+                echo $setting->value;
+              }
+              ?>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

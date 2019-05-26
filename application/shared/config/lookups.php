@@ -56,7 +56,8 @@ $config['mobile_service_provider'] = array(
 
 $config['biller_type'] = array(
     1   => 'Bills',
-    2   => 'Ticketing'
+    2   => 'Ticketing',
+    3   => 'Government'
 );
 
 $config['telcos'] = array(

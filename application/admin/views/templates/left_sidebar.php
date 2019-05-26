@@ -52,6 +52,7 @@
       <ul class="treeview-menu">
         <li class="<?php echo (is_current_url('settings', 'terms') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/terms') ?>">Terms & Condition</a></li>
         <li class="<?php echo (is_current_url('settings', 'how') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/how') ?>">How it Works</a></li>
+        <li class="<?php echo (is_current_url('settings', 'fund_wallet_instruction') ? 'active' : ''); ?>"><a href="<?php echo site_url('settings/fund_wallet_instruction') ?>">Funding Wallet</a></li>
       </ul>
     </li>
     <li class="<?php echo (is_current_url('outlets', 'index') ? 'active' : ''); ?>"><a href="<?php echo site_url('outlets') ?>"><span>Partner Outlets</span></a></li>

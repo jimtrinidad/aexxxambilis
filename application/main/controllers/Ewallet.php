@@ -72,6 +72,7 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
+
     public function encash()
     {
         if (validate('encash_request') == FALSE) {
@@ -162,6 +163,113 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
+    // bills payment
+    public function bill()
+    {
+        if (validate('add_payment') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $latest_balance = get_latest_wallet_balance();
+
+            $amount = get_post('Amount');
+            $biller = $this->appdb->getRowObject('Billers', get_post('Biller'), 'Code');
+            if ($biller) {
+                if ($amount > 0) {
+                    if ($latest_balance >= $amount) {
+
+                        $ecparams   = array(
+                            'BillerTag'       => $biller->BillerTag,
+                            'AccountNo'       => get_post('AccountNo'),
+                            'Identifier'      => get_post('Identifier'),
+                            'Amount'          => $amount,
+                            'ClientReference' => microsecID(true)
+                        );
+
+                        $ecresponse = $this->ecpay->bills_payment_transact($ecparams);
+                        // $ecresponse = array(
+                        //     'Status'    => 0,
+                        //     'Message'       => 'Success!',
+                        //     'ServiceCharge' => '15.00'
+                        // );
+
+                        if (isset($ecresponse['Status']) && $ecresponse['Status'] == 0) {
+
+                            $desc = lookup('biller_type', $biller->Type);
+                            $desc = $desc . ' Payment - ' . $biller->Description . ' - ' . ($ecresponse['Message'] ?? ' Success');
+
+                            $total_amount     = $amount + ((int) $ecresponse['ServiceCharge']);
+
+                            $saveData = array(
+                                'Code'          => microsecID(true),
+                                'AccountID'     => current_user(),
+                                'ReferenceNo'   => $ecparams['ClientReference'],
+                                'Description'   => $desc,
+                                'Date'          => date('Y-m-d H:i:s'),
+                                'Amount'        => $total_amount,
+                                'Type'          => 'Debit',
+                                'EndingBalance' => ($latest_balance - $total_amount),
+                                'Details'       => json_encode($ecresponse),
+                            );
+
+                            if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Payment transaction has been made.',
+                                    'image'     => public_url('assets/logo/' ) . logo_filename($biller->Image),
+                                    'data'      => array(
+                                        'Merchant'          => $biller->Description,
+                                        clean_text($biller->FirstField)    => get_post('AccountNo'),
+                                        clean_text($biller->SecondField)   => get_post('Identifier'),
+                                        'Reference Number'  => $saveData['ReferenceNo'],
+                                        'Amount'            => peso($amount),
+                                        'Transaction Fee'   => peso($ecresponse['ServiceCharge']),
+                                        'Transaction Date'  => datetime(),
+                                    )
+                                );
+                            } else {
+                                $return_data = array(
+                                    'status'    => false,
+                                    'message'   => 'Saving transaction failed.'
+                                );
+                            }
+
+                        } else {
+                            $return_data = array(
+                                'status'    => false,
+                                'message'   => isset($ecresponse['Message']) ? ($ecresponse['Message'] . ' ( ' . ($ecresponse['Status'] ?? 'x') . ' )') : 'Payment transaction failed.'
+                            );
+                        }
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Insufficient balance.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid amount.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid biller/merchant.'
+                    );
+            }
+
+        }
+
+        response_json($return_data);
+    }
+
+    // eccash
     public function money_padala()
     {
         if (validate('money_padala_request') == FALSE) {
@@ -173,7 +281,7 @@ class Ewallet extends CI_Controller
         } else {
 
             $latest_balance = get_latest_wallet_balance();
-            $amount = get_post('Amount');
+            $amount         = get_post('Amount');
 
             $service = $this->appdb->getRowObject('EcashServices', get_post('ServiceType'), 'Code');
             if ($service) {                
@@ -190,26 +298,40 @@ class Ewallet extends CI_Controller
                             'ClientReference' => microsecID(true)
                         );
                         $ecresponse = $this->ecpay->ecash_transact($ecparams);
+                        // $ecresponse = json_decode('{"statusid":"0","description":"Success","refno":"DD57A6E897B1","servicecharge":10.00,"serviceref":"R0000004148"}', true);
 
                         if (isset($ecresponse['statusid']) && $ecresponse['statusid'] == 0) {
 
                             $desc   = 'Money Padala - ' . $service->Name . ' - ' . ($ecresponse['description'] ?? '');
 
+                            $total_amount     = $amount + ((int) $ecresponse['servicecharge']);
+
                             $saveData = array(
                                 'Code'          => microsecID(true),
                                 'AccountID'     => current_user(),
-                                'ReferenceNo'   => $ecresponse['refno'] ?? $ecparams['ClientReference'],
+                                'ReferenceNo'   => $ecresponse['serviceref'] ?? $ecparams['ClientReference'],
                                 'Description'   => $desc,
                                 'Date'          => date('Y-m-d H:i:s'),
-                                'Amount'        => $amount,
+                                'Amount'        => $total_amount,
                                 'Type'          => 'Debit',
-                                'EndingBalance' => ($latest_balance - $amount)
+                                'EndingBalance' => ($latest_balance - $total_amount),
+                                'Details'       => json_encode($ecresponse),
                             );
 
                             if ($this->appdb->saveData('WalletTransactions', $saveData)) {
                                 $return_data = array(
                                     'status'    => true,
-                                    'message'   => $service->Name . ' transaction has been made.'
+                                    'message'   => $service->Name . ' transaction has been made.',
+                                    'image'     => public_url('assets/logo/' ) . logo_filename($service->Image),
+                                    'data'      => array(
+                                        'Merchant'          => $service->Description,
+                                        clean_text($service->FirstField)    => get_post('AccountNo'),
+                                        clean_text($service->SecondField)   => get_post('Identifier'),
+                                        'Reference Number'  => $saveData['ReferenceNo'],
+                                        'Amount'            => peso($amount),
+                                        'Transaction Fee'   => peso($ecresponse['servicecharge']),
+                                        'Transaction Date'  => datetime(),
+                                    )
                                 );
                             } else {
                                 $return_data = array(
@@ -221,7 +343,7 @@ class Ewallet extends CI_Controller
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => $ecresponse['description'] ?? 'Ecash transaction failed.'
+                                'message'   => isset($ecresponse['description']) ? ($ecresponse['description'] . ' ( ' . ($ecresponse['statusid'] ?? 'x') . ' )') : 'Ecash transaction failed.'
                             );
                         }
 
@@ -250,7 +372,7 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
-
+    // telco load
     public function eload()
     {
         if (validate('send_eload') == FALSE) {
@@ -278,6 +400,11 @@ class Ewallet extends CI_Controller
                             'Amount'       => $amount,
                             'Token'        => md5($this->ecpay->branch_id . get_post('Number') . $amount . date('mdy'))
                         ));
+                        // $ecresponse = array(
+                        //     'StatusCode'    => 0,
+                        //     'StatusMessage' => 'Success!',
+                        //     'TraceNo'       => 123123123,
+                        // );
 
                         if (isset($ecresponse['StatusCode']) && $ecresponse['StatusCode'] == 0) {
 
@@ -289,13 +416,23 @@ class Ewallet extends CI_Controller
                                 'Date'          => date('Y-m-d H:i:s'),
                                 'Amount'        => $amount,
                                 'Type'          => 'Debit',
-                                'EndingBalance' => ($latest_balance - $amount)
+                                'EndingBalance' => ($latest_balance - $amount),
+                                'Details'       => json_encode($ecresponse),
                             );
 
                             if ($this->appdb->saveData('WalletTransactions', $saveData)) {
                                 $return_data = array(
                                     'status'    => true,
-                                    'message'   => 'Mobile loading transaction has been made.'
+                                    'message'   => 'Mobile loading transaction has been made.',
+                                    'image'     => public_url('resources/images/telco/' ) . strtolower($service->TelcoName) . '.jpg',
+                                    'data'      => array(
+                                        'Telco'             => $service->TelcoName,
+                                        'Type'              => $service->TelcoTag,
+                                        'Number'            => get_post('Number'),
+                                        'Amount'            => peso($amount),
+                                        'Trace Number'      => $ecresponse['TraceNo'],
+                                        'Transaction Date'  => datetime(),
+                                    )
                                 );
                             } else {
                                 $return_data = array(
@@ -307,7 +444,7 @@ class Ewallet extends CI_Controller
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => $ecresponse['StatusMessage'] ?? 'eLoading transaction failed.'
+                                'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . ($ecresponse['StatusCode'] ?? 'x') . ' )') : 'eLoading transaction failed.'
                             );
                         }
 
