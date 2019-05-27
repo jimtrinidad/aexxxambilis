@@ -59,13 +59,13 @@ foreach ($results as $c) {
 			<li><a href="<?php echo site_url('brands')?>"><img src="<?php echo public_url(); ?>resources/images/menu/star.png"/>Brands</a></li>
 			<li><a href="<?php echo site_url('marketplace')?>"><img src="<?php echo public_url(); ?>resources/images/menu/marketplace.png"/>Marketplace</a></li>
 			<?php if (!isGuest()) { ?>
-			<li><a href="<?php echo site_url('account')?>"><img src="<?php echo public_url(); ?>resources/images/menu/my-account.png"/>My Account</a></li>
+			<li><a href="<?php echo site_url('account')?>"><img src="<?php echo public_url('assets/profile/') . photo_filename($accountInfo->Photo); ?>"/>My Account</a></li>
 			<li><a href="<?php echo site_url('ewallet')?>"><img src="<?php echo public_url(); ?>resources/images/menu/ewallet.png"/>eWallet</a></li>
 			<li><a href="<?php echo site_url('rewards')?>"><img src="<?php echo public_url(); ?>resources/images/menu/rewards.png"/>Rewards</a></li>
 			<li><a href="<?php echo site_url('connections')?>"><img src="<?php echo public_url(); ?>resources/images/menu/conn.png"/>Connections</a></li>
 			<li><a href="<?php echo site_url('bills')?>"><img src="<?php echo public_url(); ?>resources/images/menu/bills.png"/>Bills Payment</a></li>
 			<li><a href="<?php echo site_url('ticket')?>"><img src="<?php echo public_url(); ?>resources/images/menu/ticket.jpg"/>Ticket Payment</a></li>
-			<li><a href="<?php echo site_url('government')?>"><img src="<?php echo public_url(); ?>resources/images/menu/ticket.jpg"/>Government Payment</a></li>
+			<li><a href="<?php echo site_url('government')?>"><img src="<?php echo public_url(); ?>resources/images/menu/govt.png"/>Government Payment</a></li>
 			<li><a href="<?php echo site_url('padala')?>"><img src="<?php echo public_url(); ?>resources/images/menu/money-transfer.png"/>Money Padala</a></li>
 			<li><a href="<?php echo site_url('eload')?>"><img src="<?php echo public_url(); ?>resources/images/menu/eload.png"/>eLoad</a></li>
 			<li><a href="<?php echo site_url('store')?>"><img src="<?php echo public_url(); ?>resources/images/menu/mybusiness.png"/>My Business</a></li>
