@@ -24,13 +24,13 @@ class Account extends CI_Controller
         // exit;
 
         // $data = $this->ecpay->get_ecash_providers();
-        $data = $this->ecpay->ecash_transact(array(
-            'ServiceType'    => 'EASYTRIP',
-            'AccountNo'      => '520005121468',
-            'Identifier'     => 'JIM',
-            'Amount'         => 50,
-            'ClientReference'   => microsecID(true)
-        ));
+        // $data = $this->ecpay->ecash_transact(array(
+        //     'ServiceType'    => 'EASYTRIP',
+        //     'AccountNo'      => '520005121468',
+        //     'Identifier'     => 'JIM',
+        //     'Amount'         => 50,
+        //     'ClientReference'   => microsecID(true)
+        // ));
         // $data = $this->ecpay->bills_payment_transact(array(
         //     'BillerTag'     => 'GHPHONE',
         //     'AccountNo'    => '1026746256',
@@ -38,7 +38,25 @@ class Account extends CI_Controller
         //     'Amount'        => 10,
         //     'ClientReference'   => microsecID(true)
         // ));
-        print_data($data);
+        // $data = $this->ecpay->ecpay_check_balance();
+        // print_data($data);
+        // echo "before\n";
+        // $data = $this->ecpay->gate_check_balance();
+        // print_data($data);
+        // echo "transact\n";
+        // $no = '09668612848';
+        // $amount = '10';
+        // $data = $this->ecpay->telco_transact(array(
+        //     'Telco'        => 'GLOBE',
+        //     'CellphoneNo'  => $no,
+        //     'ExtTag'       => 'LD',
+        //     'Amount'       => $amount,
+        //     'Token'        => md5($this->ecpay->branch_id . $no . $amount . date('mdy'))
+        // ));
+        // print_data($data);
+        // echo "after\n";
+        // $data = $this->ecpay->gate_check_balance();
+        // print_data($data);
         exit;
 
         // BranchID + CellphoneNo+ Amount + Date (Mmddyy)

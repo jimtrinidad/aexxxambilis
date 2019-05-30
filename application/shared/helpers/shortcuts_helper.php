@@ -423,3 +423,178 @@ function get_upper_referrers($userID, $levels = 8)
 
 	return array_slice($partakers, 0, $levels);
 }
+
+
+function ecpay_save_transaction($data)
+{
+
+	$ci =& get_instance();
+
+	$deducted 		= $data['prev_bal'] - $data['new_bal'];
+	$commission		= $data['amount']	- $deducted;
+	$distribution	= profit_distribution($data['amount'], $commission, 1, true);
+
+	$transactionData = array(
+		'Code'					=> $data['code'],
+		'MerchantType'	=> $data['merch_type'],
+		'MerchantID'		=> $data['merch_id'],
+		'Amount'				=> $data['amount'],
+		'ServiceCharge'	=> $data['fee'],
+		'Commission'		=> $commission,
+		'NetAmount'			=> $deducted,
+		'UserID'				=> $data['user'],
+		'ReferenceNo'		=> $data['refno'],
+		'TransactionDate'	=> $data['trans_date'],
+		'ECRequestData'		=> json_encode($data['ecrequest']),
+		'ECResponseData'	=> json_encode($data['ecresponse']),
+		'InvoiceData'			=> json_encode($data['invoice']),
+		'RewardDistribution' => json_encode($distribution),
+	);
+
+	if (($ID = $ci->appdb->saveData('ECPayTransactions', $transactionData))) {
+		return distribute_transaction_rewards($transactionData, $ID);
+	} else {
+		logger('Saving ecpay transaction failed.');
+		return false;
+	}
+
+}
+
+
+function distribute_transaction_rewards($data, $transid)
+{   
+
+		$ci =& get_instance();
+
+    $has_error = false;
+
+    // user rewards (cashback, 1/8 shared)
+    // direct referrer reward (referral points, 1/8 shared)
+    // 6 upline of direct referrer (1/8 shared each)
+    
+    $user = $data['UserID'];
+    $distribution = json_decode($data['RewardDistribution']);
+    $buyerInfo = $ci->appdb->getRowObject('Users', $user);
+
+    // BUYER
+    $rewards = array(
+        array(
+            'reward_type'   => 'cashback',
+            'account_id'    => $user,
+            'order_id'      => $transid,
+            'from_user'     => null,
+            'amount'        => $distribution->cashback,
+            'trans_desc'    => 'Cashback from - ' . lookup('wallet_reward_transaction_type', $data['MerchantType']) . ' #' . $data['Code'],
+        ),
+        array(
+            'reward_type'   => 'shared',
+            'account_id'    => $user,
+            'order_id'      => $transid,
+            'from_user'     => null,
+            'amount'        => $distribution->divided_reward,
+            'trans_desc'    => 'Shared reward from - ' . lookup('wallet_reward_transaction_type', $data['MerchantType']) . ' #' . $data['Code'],
+        )
+
+    );
+
+    // REFERRER
+    if ($buyerInfo->Referrer) {
+        $referrerData = $ci->appdb->getRowObject('Users', $buyerInfo->Referrer);
+        if ($referrerData) {
+            $rewards[] = array(
+                'reward_type'   => 'referrer',
+                'account_id'    => $buyerInfo->Referrer,
+                'from_user'     => $user,
+                'order_id'      => $transid,
+                'amount'        => $distribution->referral,
+                'trans_desc'    => 'Referral points from ' . lookup('wallet_reward_transaction_type', $data['MerchantType']) . ' #' . $data['Code'] . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+            );
+            $rewards[] = array(
+                'reward_type'   => 'shared',
+                'account_id'    => $buyerInfo->Referrer,
+                'from_user'     => $user,
+                'order_id'      => $transid,
+                'amount'        => $distribution->divided_reward,
+                'trans_desc'    => 'Shared reward from ' . lookup('wallet_reward_transaction_type', $data['MerchantType']) . ' #' . $data['Code'] . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+            );
+
+            // UPPER REFFERS
+            $upper_referrers = get_upper_referrers($user);
+            foreach ($upper_referrers as $user_id) {
+                if (!in_array($user_id, array($user, $buyerInfo->Referrer))) {
+                    $rewards[] = array(
+                        'reward_type'   => 'shared',
+                        'account_id'    => $user_id,
+                        'order_id'      => $transid,
+                        'from_user'     => $user,
+                        'amount'        => $distribution->divided_reward,
+                        'trans_desc'    => 'Shared reward from #' . lookup('wallet_reward_transaction_type', $data['MerchantType']) . ' #' . $data['Code'] . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                    );
+                }
+            }
+        }
+    }
+
+    foreach ($rewards as $reward) {
+
+        $reward_type = $reward['reward_type'];
+        $rewardData = array(
+            'Code'        => microsecID(true),
+            'AccountID'   => $reward['account_id'],
+            'FromUserID'  => $reward['from_user'],
+            'OrderID'     => $reward['order_id'],
+            'Type'        => $reward_type,
+            'Amount'      => $reward['amount'],
+            'Description' => $reward['trans_desc'],
+            'TransactType'=> $data['MerchantType'],
+            'DateAdded'   => datetime()
+        );
+
+        if ($ci->appdb->saveData('WalletRewards', $rewardData)) {
+
+
+                $balance = get_latest_wallet_balance($reward['account_id']);
+
+                $transactions_data = array(
+                    'Code'          => microsecID(true),
+                    'AccountID'     => $reward['account_id'],
+                    'ReferenceNo'   => $rewardData['Code'],
+                    'Description'   => $reward['trans_desc'],
+                    'Date'          => datetime(),
+                    'Amount'        => $reward['amount'],
+                    'Type'          => 'Credit',
+                    'EndingBalance' => ($balance + $reward['amount'])
+                );
+
+                if (!$ci->appdb->saveData('WalletTransactions', $transactions_data)) {
+                    $has_error = true;
+                    logger('Saving ' . $reward_type . ' reward transaction failed.');
+                }
+
+        } else {
+            $has_error = true;
+            logger('Saving ' . $reward_type . ' reward failed.');
+        }
+
+        if ($has_error) {
+            break;
+        }
+
+    }
+
+    return !$has_error;
+}
+
+// 'code'          => $saveData['Code'],
+// 'merch_type'    => 3,
+// 'merch_id'      => $service->id,
+// 'amount'        => $amount,
+// 'prev_bal'      => $current_user,
+// 'new_bal'       => $new_balance,
+// 'fee'           => 0,
+// 'user'          => current_user(),
+// 'refno'         => $saveData['ReferenceNo'],
+// 'trans_data'    => $saveData['Date'],
+// 'ecrequest'     => $ecparams,
+// 'ecresponse'    => $ecresponse,
+// 'invoice'       => $invoice_data

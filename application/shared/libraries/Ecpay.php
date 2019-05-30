@@ -164,7 +164,6 @@ class Ecpay
         return false;
     }
 
-
     // END BILLERS
 
     /**
@@ -322,6 +321,67 @@ class Ecpay
     }
 
     // END TELCO
+
+
+    // CHECK BALANCE
+
+    public function ecpay_check_balance($fields = array())
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['bills'],
+            'action'    => 'http://tempuri.org/ECPNBillsPayment/Service1/CheckBalance'
+        );
+
+        $body   = '<CheckBalance xmlns="http://tempuri.org/ECPNBillsPayment/Service1">' .
+                    $this->default_body_params() .
+                  '</CheckBalance>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->CheckBalanceResponse)) {
+            $items    = json_decode(json_encode($response->CheckBalanceResponse->CheckBalanceResult), true);
+            if (isset($items['RemBal']) && is_numeric($items['RemBal'])) {
+                return $items['RemBal'];
+            } else {
+                logger('[ecpay_check_balance] : Invalid response. -> ' . json_encode($items));
+            }
+        } else {
+            logger('[ecpay_check_balance] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    public function gate_check_balance($fields = array())
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['telco'],
+            'action'    => 'http://ECPay/WSTopUp/CheckBalance'
+        );
+
+        $body   = '<CheckBalance xmlns="http://ECPay/WSTopUp">' .
+                    '<LoginInfo>' .
+                        $this->default_body_params(true) .
+                    '</LoginInfo>' .
+                  '</CheckBalance>';
+
+        $response = $this->request($params, $body);
+
+        if (isset($response->CheckBalanceResponse)) {
+            $items    = json_decode(json_encode($response->CheckBalanceResponse->CheckBalanceResult), true);
+            if (isset($items['RemBal']) && is_numeric($items['RemBal'])) {
+                return $items['RemBal'];
+            } else {
+                logger('[gate_check_balance] : Invalid response. -> ' . json_encode($items));
+            }
+        } else {
+            logger('[gate_check_balance] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    // END CHECK BALANCE
 
     private function default_body_params($branch = false)
     {

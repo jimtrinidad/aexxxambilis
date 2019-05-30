@@ -45,6 +45,14 @@ $config['wallet_rewards_type'] = array(
     'shared'    => 'Shared Rewards'
 );
 
+// also use on ecpay merch type (exclude purchase)
+$config['wallet_reward_transaction_type'] = array(
+    1   => 'Purchase',
+    2   => 'Bills Payment',
+    3   => 'Ticket Payment',
+    4   => 'Mobile Loading',
+    5   => 'ECash'
+);
 
 $config['mobile_service_provider'] = array(
     1 => 'Globe',

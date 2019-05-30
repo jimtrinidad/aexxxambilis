@@ -211,9 +211,9 @@ function number_to_words($number)
     return $f->format($number);
 }
 
-function peso($number, $showSign = true)
+function peso($number, $showSign = true, $decimal = 2)
 {
-    return ($showSign ? '₱' : '') . rtrim(rtrim(number_format($number, 2, ".", ","), '0'), '.');
+    return ($showSign ? '₱' : '') . rtrim(rtrim(number_format($number, $decimal, ".", ","), '0'), '.');
 }
 
 function show_price($srp, $discount)
@@ -247,10 +247,10 @@ function csrf_token_input_field()
 * @param commision value (percent or actual profit)
 * @param commision type (1 - transaction fee, 2 - commision percent)
 *
-* type 1 - get profit first (refer to excel for compuration)
-* type 2 - commission is the profit
+* type 1 - commission is the profit
+* type 2 - get profit first (refer to excel for compuration)
 */
-function profit_distribution($srp, $commision, $type)
+function profit_distribution($srp, $commision, $type, $distribution_only = false)
 {
     $discount         = 0;
     $discount_rate    = 0;
@@ -277,7 +277,10 @@ function profit_distribution($srp, $commision, $type)
         'supplier_price' => $supplier_price,
         'discounted_price' => $discounted_price,
         'discount_rate'  => $discount_rate,
-        'discount'       => $discount,
+        'discount'       => $discount
+    );
+
+    $profit_dist        = array(
         'profit'         => $profit,
         'company'        => $profit * 0.30,
         'investor'       => $profit * 0.25,
@@ -287,9 +290,13 @@ function profit_distribution($srp, $commision, $type)
         'shared_rewards' => $profit * 0.08,
     );
 
-    $data['divided_reward'] = ($data['shared_rewards'] > 0 ? ($data['shared_rewards'] / 8) : 0);
+    $profit_dist['divided_reward'] = ($profit_dist['shared_rewards'] > 0 ? ($profit_dist['shared_rewards'] / 8) : 0);
 
-    return $data;
+    if ($distribution_only) {
+        return $profit_dist;
+    }
+
+    return array_merge($data, $profit_dist);
 }
 
 /**

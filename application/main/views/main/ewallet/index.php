@@ -100,9 +100,9 @@
               echo '<small>' . date('m/d/y h:i a', strtotime($i['Date'])) . '</small>';
             echo '</td>';
             if ($i['Type'] == 'Credit') {
-              echo '<td><i class="fa fa-plus text-green" aria-hidden="true"></i> ' . peso($i['credit']) . '</td>';
+              echo '<td><i class="fa fa-plus text-green" aria-hidden="true"></i> ' . peso($i['credit'], true, 4) . '</td>';
             } else {
-              echo '<td><i class="fa fa-minus text-red" aria-hidden="true"></i> ' . peso($i['debit']) . '</td>';
+              echo '<td><i class="fa fa-minus text-red" aria-hidden="true"></i> ' . peso($i['debit'], true, 4) . '</td>';
             }
           echo '</tr>';
         }
