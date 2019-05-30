@@ -431,7 +431,7 @@ function ecpay_save_transaction($data)
 	$ci =& get_instance();
 
 	$deducted 		= $data['prev_bal'] - $data['new_bal'];
-	$commission		= $data['amount']	- $deducted;
+	$commission		= ($data['amount'] + ((int) $data['fee']))	- $deducted;
 	$distribution	= profit_distribution($data['amount'], $commission, 1, true);
 
 	$transactionData = array(
@@ -452,7 +452,10 @@ function ecpay_save_transaction($data)
 	);
 
 	if (($ID = $ci->appdb->saveData('ECPayTransactions', $transactionData))) {
-		return distribute_transaction_rewards($transactionData, $ID);
+		if ($commission > 0) {
+			return distribute_transaction_rewards($transactionData, $ID);
+		}
+		return true;
 	} else {
 		logger('Saving ecpay transaction failed.');
 		return false;
