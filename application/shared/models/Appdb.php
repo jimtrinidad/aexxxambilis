@@ -239,4 +239,59 @@ class Appdb extends CI_Model {
 		);
 	}
 
+	public function getECpayTransactions($limit, $start, $where = false, $order = false)
+	{
+		
+		// GET COUNT
+		$this->db->select('et.*');
+		$this->db->from('ECPayTransactions et');
+		$this->db->join('Users u', 'u.id = et.UserID', 'left');
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		$count 	= $this->db->count_all_results();
+
+		// GET RESULTS DATA
+
+		$this->db->select('et.*, Firstname, Lastname');
+		$this->db->from('ECPayTransactions et');
+		$this->db->join('Users u', 'u.id = et.UserID', 'left');
+
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		if ($order != false) {
+			$this->db->order_by($order);
+		}
+
+		$this->db->limit($limit, $start);
+
+		$data 	= $this->db->get()->result();
+		// echo $this->db->last_query();
+
+		return array(
+			'count'	=> $count,
+			'data'	=> $data
+		);
+	}
+
+	public function getRewardsData($where = false, $order = false)
+	{
+		$this->db->select('r.*, Firstname, Lastname');
+		$this->db->from('WalletRewards r');
+		$this->db->join('Users u', 'u.id = r.AccountID', 'left');
+
+		if ($where != false) {
+			$this->db->where($where);
+		}
+
+		if ($order != false) {
+			$this->db->order_by($order);
+		}
+
+		return $this->db->get()->result_array();
+	}
+
 }

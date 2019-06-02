@@ -438,6 +438,7 @@ function ecpay_save_transaction($data)
 		'Code'					=> $data['code'],
 		'MerchantType'	=> $data['merch_type'],
 		'MerchantID'		=> $data['merch_id'],
+		'MerchantName'	=> $data['merch_name'],
 		'Amount'				=> $data['amount'],
 		'ServiceCharge'	=> $data['fee'],
 		'Commission'		=> $commission,

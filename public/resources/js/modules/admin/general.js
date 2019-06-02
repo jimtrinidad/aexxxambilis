@@ -100,6 +100,44 @@ function General() {
 
     }
 
+
+    this.viewECData = function(id, field, title)
+    {
+        var data = this.getData(id);
+
+        $('#successMessageModal .title').text(title);
+        var table = $('#successMessageModal .transaction-table');
+        table.html('');
+        console.log($.parseJSON(data[field]));
+        $.each($.parseJSON(data[field]), function(i,e) {
+            table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
+        });
+        $('#successMessageModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    this.viewECRewards = function(id)
+    {
+        var data = this.getData(id);
+
+        $('#successMessageModal .title').text('Distributed Rewards');
+        var table = $('#successMessageModal .transaction-table');
+        table.html('');
+        if (data.Commission > 0) {
+            $.each(data.Rewards, function(i,e) {
+                table.append(`<tr><td>${e.Type}</td><td>${e.Firstname + ' ' + e.Lastname}</td><td>${e.Amount}</td></tr>`);
+            });
+        } else {
+            table.html(`<tr><td>No reward to distribute.</td></tr>`);
+        }
+        $('#successMessageModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
     this.editOutlet = function(id)
     {   
         var data = this.getData(id);
