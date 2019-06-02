@@ -68,6 +68,7 @@ class Accounts extends CI_Controller
             unset($item['Password']);
             unset($item['deletedAt']);
             $item['referrer_data'] = $this->appdb->getRowObject('Users', $item['Referrer']);
+            $item['Balance'] = get_latest_wallet_balance($item['id']);
             $accounts[] = $item;
         }
 

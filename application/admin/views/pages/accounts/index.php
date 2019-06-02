@@ -47,6 +47,7 @@
             <th>Name</th>
             <th class="hidden-xs hidden-sm">Email</th>
             <th class="hidden-xs">Contact</th>
+            <th>Balance</th>
             <th>Referrer</th>
             <th>Level</th>
             <th>Status</th>
@@ -61,6 +62,7 @@
                 echo '<td>' . $account['Firstname'] . ' ' . $account['Lastname'] . '</td>';
                 echo '<td class="hidden-xs hidden-sm">' . $account['EmailAddress'] . '</td>';
                 echo '<td class="hidden-xs">' . $account['Mobile'] . '</td>';
+                echo '<td>' . peso($account['Balance']) . '</td>';
                 echo '<td>' . ($account['referrer_data'] ? ($account['referrer_data']->Firstname . ' ' . $account['referrer_data']->Lastname) : '') . '</td>';
                 echo '<td>' . lookup('account_level', $account['AccountLevel']) . '</td>';
                 echo '<td>';
