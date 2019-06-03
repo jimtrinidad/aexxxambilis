@@ -70,7 +70,10 @@ class Marketplace extends CI_Controller
             'base_url'      => base_url('marketplace/index'),
             'total_rows'    => $paginatationData['count'],
             'per_page'      => $page_limit,
-            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin">',
+            'first_link'    => false,
+            'last_link'     => false,
+            ''
         );
 
         $viewData['products']   = $products;

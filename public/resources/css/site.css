@@ -193,6 +193,11 @@ a:hover {text-decoration: none;}
 
 .marketplace-content {background: rgb(245, 245, 245)}
 
+.pagination {
+    align-items: center;
+    justify-content: center;
+}
+
 
 /*end*/
 

@@ -105,7 +105,7 @@ function paginate($config)
 	// per_page
 
 	$default = array(
-		'num_links'		=> 3,
+		'num_links'		=> 2,
 		'uri_segment' 	=> 3
 	);
 

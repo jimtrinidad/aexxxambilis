@@ -94,7 +94,7 @@ class Ewallet extends CI_Controller
             'base_url'      => base_url('ewallet/transactions'),
             'total_rows'    => $paginatationData['count'],
             'per_page'      => $page_limit,
-            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin">'
         );
 
         $viewData['records']    = $items;

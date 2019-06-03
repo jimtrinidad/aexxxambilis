@@ -49,7 +49,7 @@ class Bills extends CI_Controller
             'base_url'      => base_url('bills/index'),
             'total_rows'    => $paginatationData['count'],
             'per_page'      => $page_limit,
-            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin">'
         );
 
         $viewData['billers']   = $billers;
@@ -95,7 +95,7 @@ class Bills extends CI_Controller
             'base_url'      => base_url('bills/ticket'),
             'total_rows'    => $paginatationData['count'],
             'per_page'      => $page_limit,
-            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin">'
         );
 
         $viewData['billers']   = $billers;
@@ -141,7 +141,7 @@ class Bills extends CI_Controller
             'base_url'      => base_url('bills/government'),
             'total_rows'    => $paginatationData['count'],
             'per_page'      => $page_limit,
-            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin">'
         );
 
         $viewData['billers']   = $billers;
