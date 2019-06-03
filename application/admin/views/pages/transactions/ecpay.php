@@ -46,7 +46,7 @@
                 echo '<td>' . peso($i['ServiceCharge'], true, 4) . '</td>';
                 echo '<td>' . peso($i['Commission'], true, 4) . '</td>';
                 echo '<td>' . peso($i['NetAmount'], true, 2) . '</td>';
-                echo '<td>' . date('m/d/y h:i A') . '</td>';
+                echo '<td>' . date('m/d/y h:i A', strtotime($i['TransactionDate'])) . '</td>';
                 echo '<td>
                         <div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
