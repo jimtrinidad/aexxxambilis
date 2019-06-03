@@ -256,7 +256,7 @@ class Ewallet extends CI_Controller
             $biller = $this->appdb->getRowObject('Billers', get_post('Biller'), 'Code');
             if ($biller) {
                 if ($amount > 0) {
-                    if ($latest_balance >= $amount) {
+                    if ($latest_balance >= ($amount + $biller->ServiceCharge)) {
 
                         $current_balance = $this->ecpay->ecpay_check_balance();
 

@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="col-12 con-fee-cont">
-              <span class="text-danger small">Convenience Fee: <b class="con-fee">4.00</b></span>
+              <span class="text-danger small">Merchant Service Charge: <b class="con-fee">4.00</b></span>
             </div>
           </div>
         </div>
