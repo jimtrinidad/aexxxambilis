@@ -347,7 +347,7 @@ class Ewallet extends CI_Controller
                             } else {
                                 $return_data = array(
                                     'status'    => false,
-                                    'message'   => isset($ecresponse['Message']) ? ($ecresponse['Message'] . ' ( ' . ($ecresponse['Status'] ?? 'x') . ' )') : 'Payment transaction failed.'
+                                    'message'   => isset($ecresponse['Message']) ? ($ecresponse['Message'] . ' ( ' . ($ecresponse['Status'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
                                 );
                             }
 
@@ -486,7 +486,7 @@ class Ewallet extends CI_Controller
                             } else {
                                 $return_data = array(
                                     'status'    => false,
-                                    'message'   => isset($ecresponse['description']) ? ($ecresponse['description'] . ' ( ' . ($ecresponse['statusid'] ?? 'x') . ' )') : 'Ecash transaction failed.'
+                                    'message'   => isset($ecresponse['description']) ? ($ecresponse['description'] . ' ( ' . ($ecresponse['statusid'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
                                 );
                             }
 
@@ -628,7 +628,7 @@ class Ewallet extends CI_Controller
                             } else {
                                 $return_data = array(
                                     'status'    => false,
-                                    'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . ($ecresponse['StatusCode'] ?? 'x') . ' )') : 'eLoading transaction failed.',
+                                    'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . ($ecresponse['StatusCode'] ?? 'x') . ' )') : 'Transaction failed. Please try again later',
                                 );
                             }
 

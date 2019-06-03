@@ -208,7 +208,6 @@ function Wallet() {
     {
         var data  = self.getData(id);
         if (data) {
-            console.log($.parseJSON(data.InvoiceData));
             var table = $('#invoiceMessageModal .transaction-table');
             table.html('');
             $.each($.parseJSON(data.InvoiceData), function(i,e) {
