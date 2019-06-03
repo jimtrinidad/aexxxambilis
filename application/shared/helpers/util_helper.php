@@ -329,6 +329,22 @@ function partner_commision_rate($c)
     return 0;
 }
 
+function ec_profit_distribution($profit)
+{
+    $profit_dist        = array(
+        'profit'         => $profit,
+        'company'        => $profit * 0.25,
+        'investor'       => $profit * 0.25,
+        'referral'       => $profit * 0.40,
+        'cashback'       => $profit * 0.02,
+        'shared_rewards' => $profit * 0.08,
+    );
+
+    $profit_dist['divided_reward'] = ($profit_dist['shared_rewards'] > 0 ? ($profit_dist['shared_rewards'] / 8) : 0);
+
+    return $profit_dist;
+}
+
 
 function logger($message)
 {

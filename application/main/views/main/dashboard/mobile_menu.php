@@ -58,7 +58,7 @@
 				</a>
 			</div>
 			<div class="col-4 icon-container">
-				<a href="<?php echo site_url('ewallet') ?>">
+				<a href="<?php echo site_url('transactions') ?>">
 					<img src="<?php echo public_url(); ?>resources/images/icons/bag.png" />
 					<span>My Transactions</span>
 				</a>

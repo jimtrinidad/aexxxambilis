@@ -29,6 +29,82 @@ class Ewallet extends CI_Controller
         view('main/ewallet/index', $viewData, 'templates/main');
     }
 
+    public function transactions()
+    {
+        $viewData = array(
+            'pageTitle'     => 'My Transactions',
+            'pageSubTitle'  => 'AMBILIS NANG Transactions',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            )
+        );
+
+        $transaction = get_transactions(current_user());
+        $viewData['transactions'] = $transaction['transactions'];
+        $viewData['summary']      = $transaction['summary'];
+
+        $page_limit = 500;
+        $page_start = (int) $this->uri->segment(3);
+
+        $where = array(
+            'UserID'    => current_user()
+        );
+        $order = 'TransactionDate DESC';
+
+        // SET SEARCH FILTER
+        $filters = array(
+            'search_user',
+            'search_name',
+        );
+        foreach ($filters as $filter) {
+
+            $$filter = get_post($filter);
+
+            if ($filter == 'search_user' && $$filter != false) {
+                $where['CONCAT(Firstname, " ", Lastname) LIKE ']  = "%{$search_user}%";
+            } else if ($filter == 'search_name' && $$filter != false) {
+                $where['MerchantName LIKE ']  = "%{$search_name}%";
+            }
+
+            // search params
+            $viewData[$filter] = $$filter;
+
+        }
+
+        $paginatationData = $this->appdb->getECpayTransactions($page_limit, $page_start, $where, $order);
+
+        // prepare account data
+        $items = array();
+        foreach ($paginatationData['data'] as $item) {
+            $item    = (array) $item;
+            $rewards = $this->appdb->getRewardsData(array(
+                            'OrderID'       => $item['id'],
+                            'TransactType'  => $item['MerchantType']
+                        ), 'Type');
+
+            foreach ($rewards as &$reward) {
+                $reward['Type']   = lookup('wallet_rewards_type', $reward['Type']);
+                $reward['Amount'] = peso($reward['Amount'], true, 4);
+            }
+            $item['Rewards'] = $rewards;
+            $items[] = $item;
+        }
+
+        $paginationConfig = array(
+            'base_url'      => base_url('ewallet/transactions'),
+            'total_rows'    => $paginatationData['count'],
+            'per_page'      => $page_limit,
+            'full_tag_open' => '<ul class="pagination pagination-sm no-margin pull-right">'
+        );
+
+        $viewData['records']    = $items;
+        $viewData['pagination'] = paginate($paginationConfig);
+
+        // print_data($items);
+
+        view('main/ewallet/transactions', $viewData, 'templates/main');
+    }
+
 
     public function add_deposit()
     {

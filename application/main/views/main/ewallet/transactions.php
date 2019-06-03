@@ -26,9 +26,9 @@
     <div class="content">
       <div class="row">
         <div class="col-3 text-center icon-container">
-          <a href="javascript:;" onclick="Wallet.addDeposit()">
+          <a href="<?php echo site_url('ewallet') ?>">
             <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
-            <span>Fund my Wallet</span>
+            <span>eWallet</span>
           </a>
         </div>
         <div class="col-3 text-center icon-container">
@@ -82,33 +82,37 @@
 
 
 <div class="bg-trans-80-white p-3">
-  <h5>eWallet Logs</h5>
-  <?php if (count($transactions)) { ?>
+  <h5>My Transactions</h5>
+  <?php if (count($records)) { ?>
   <div class="table-responsive">
     <table class="table">
-      <tbody>
-        <?php
-        foreach ($transactions as $i) {
-          echo '<tr>';
-            echo '<td scope="row">';
-              if ($i['Type'] == 'Credit') {
-                echo '<i class="fa fa-external-link-square text-green" aria-hidden="true"></i> ';
-              } else {
-                echo '<i class="fa fa-external-link-square text-red rotate" aria-hidden="true"></i> ';
-              }
-              echo $i['Description'] . '<br>';
-              echo '<small>' . date('m/d/y h:i a', strtotime($i['Date'])) . '</small>';
-            echo '</td>';
-            if ($i['Type'] == 'Credit') {
-              echo '<td><i class="fa fa-plus text-green" aria-hidden="true"></i> ' . peso($i['credit'], true, 4) . '</td>';
-            } else {
-              echo '<td><i class="fa fa-minus text-red" aria-hidden="true"></i> ' . peso($i['debit'], true, 4) . '</td>';
+          <thead>
+            <th scope="col" class="text-red">Type</th>
+            <th scope="col" class="text-red">Merchant</th>
+            <th scope="col" class="text-red">RefNo</th>
+            <th scope="col" class="text-red">Amount</th>
+            <th scope="col" class="text-red">Fee</th>
+            <th scope="col" class="text-red">DateTime</th>
+            <th scope="col" class="text-red"></th>
+          </thead>
+          <tbody>
+            <?php
+            foreach ($records as $i) {
+              echo "<tr class='text-left'>";
+                echo '<td scope="row">' . lookup('wallet_reward_transaction_type', $i['MerchantType']) . '</td>';
+                echo '<td scope="row">' . $i['MerchantName'] . '</td>';
+                echo '<td scope="row">' . $i['ReferenceNo'] . '</td>';
+                echo '<td scope="row">' . peso($i['Amount']) . '</td>';
+                echo '<td scope="row">' . peso($i['ServiceCharge'], true, 4) . '</td>';
+                echo '<td scope="row">' . date('m/d/y h:i A') . '</td>';
+                echo '<td scope="row" class="text-right">
+                          <button type="button" class="btn btn-sm btn-info" onClick="Wallet.viewInvoice('.$i['id'].')"><i class="fa fa-file-text-o"></i> Invoice</button>
+                      </td>';
+              echo '</tr>';
             }
-          echo '</tr>';
-        }
-        ?>
-      </tbody>
-    </table>
+            ?>
+          </tbody>
+        </table>
   </div>
   <?php 
     } else {
@@ -119,3 +123,9 @@
 </div>
 
 <?php view('main/ewallet/modals'); ?>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    Wallet.itemData = <?php echo json_encode($records, JSON_HEX_TAG); ?>;
+  });
+</script>

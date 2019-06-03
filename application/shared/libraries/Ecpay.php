@@ -455,7 +455,7 @@ class Ecpay
             echo 'URL: ' . $soapUrl . PHP_EOL;
             print_r($headers);
             echo $xml_post_string . PHP_EOL;
-            echo $response . PHP_EOL;
+            var_dump($response) . PHP_EOL;
         }
 
         // // converting

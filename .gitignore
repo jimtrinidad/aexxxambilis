@@ -24,3 +24,5 @@ application/admin/logs/*
 /public/assets/profile/*
 /public/assets/qr/*
 /public/assets/uploads/*
+
+application/shared/config/ecpay.php

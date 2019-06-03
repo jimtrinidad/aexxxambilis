@@ -432,7 +432,7 @@ function ecpay_save_transaction($data)
 
 	$deducted 		= $data['prev_bal'] - $data['new_bal'];
 	$commission		= ($data['amount'] + ((int) $data['fee']))	- $deducted;
-	$distribution	= profit_distribution($data['amount'], $commission, 1, true);
+	$distribution	= ec_profit_distribution($commission);
 
 	$transactionData = array(
 		'Code'					=> $data['code'],

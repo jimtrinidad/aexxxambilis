@@ -55,9 +55,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['u/(:any)'] = 'u/index/$1';
 $route['i/(:any)'] = 'marketplace/view_alias/$1';
+$route['business/(:any)'] = 'marketplace/view_store/$1';
 
 $route['padala'] = 'bills/padala';
 $route['ticket'] = 'bills/ticket';
 $route['government'] = 'bills/government';
 $route['eload']  = 'bills/eload';
 $route['brands'] = 'marketplace/brands';
+$route['transactions'] = 'ewallet/transactions';

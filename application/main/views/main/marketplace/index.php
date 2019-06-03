@@ -1,28 +1,24 @@
 <form id="searchProducts" action="<?php echo site_url('marketplace') ?>" method="get">
    <div class="row justify-content-center marketplace-header">
       <div class="col-md-8 text-center">
-        <!-- <h3>Marketplace</h3> -->
-         <!-- <div>
-            <div class="row no-gutters">
-              <div class="col-8">
-                <input type="text" name="search" autocomplete="off" class="form-control" placeholder="Search Product or Service" value="<?php echo get_post('search') ?>">
-              </div>
-              <div class="col-2 pl-1">
-                <button type="submit" class="btn btn-danger btn-block text-bold"><i class="fa fa-search"></i></button>
-              </div>
-              <div class="col-2 pl-1">
-                <button type="submit" class="btn btn-danger btn-block text-bold"><i class="fa fa-shopping-cart"></i></button>
-              </div>
+
+      <?php if (isset($StoreData) && $StoreData) { ?>
+          <h4 class="mb-0 mt-3"><?php echo $StoreData->Name ?? ''; ?></h4>
+          <p class="lead small mb-2">
+          <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $StoreData->Address ?? ''; ?></span>
+          <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/call.png" /> <?php echo $StoreData->Contact ?? ''; ?></span>
+          <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/email.png" /> <?php echo $StoreData->Email ?? ''; ?></span>
+          </p>
+      <?php } else { ?>
+          <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name . ($subcategory ? ' / ' . $subcategory->Name : '') : 'Marketplace' ?></h5>
+          <div class="input-group">
+            <input type="text" class="form-control bg-cream" name="search" placeholder="Search Items" value="<?php echo get_post('search') ?>">
+            <div class="input-group-append" id="button-addon4">
+            <button type="submit" class="btn bg-d-purple text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
-         </div> -->
-         <h5 class="secondary-title text-red text-center mt-4"><?php echo $category ? $category->Name . ($subcategory ? ' / ' . $subcategory->Name : '') : 'Marketplace' ?></h5>
-            <div class="input-group">
-              <input type="text" class="form-control bg-cream" name="search" placeholder="Search Items" value="<?php echo get_post('search') ?>">
-              <div class="input-group-append" id="button-addon4">
-              <button type="submit" class="btn bg-d-purple text-white" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
-              </div>
-              <a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn bg-red text-white" type="button"><span class="badge badge-warning cart_items_count"><?php echo $this->cart->total_items() ? $this->cart->total_items() : '' ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
-            </div>
+            <a href="<?php echo site_url('marketplace/cart') ?>" class="ml-1 btn bg-red text-white" type="button"><span class="badge badge-warning cart_items_count"><?php echo $this->cart->total_items() ? $this->cart->total_items() : '' ?></span><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+          </div>
+      <?php } ?>
       </div>
    </div>
 </form>
@@ -44,7 +40,7 @@
               <div class="row">
                 <div class="col-7">
                   <h2><a href="<?php echo site_url('marketplace/view/' . $item['Code']) ?>"><span class="text-red"><?php echo $item['Name'] ?></span></a><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></h2>
-                  <p><?php echo $item['seller']['Name'] ?></p>
+                  <p><a class="text-black" href="<?php echo site_url('business/'. $item['seller']['id'] . '-' . slugit($item['seller']['Name'])) ?>"><?php echo $item['seller']['Name'] ?></a></p>
                 </div>
                 <div class="col-5 text-right">
                   <strong class="price text-red"><?php echo show_price($item['Price'], $distribution['discount']); ?></strong>
