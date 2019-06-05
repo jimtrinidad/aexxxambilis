@@ -304,6 +304,8 @@ function user_account_details($id = false, $field = 'id')
 		$user->agent = lookup_row('DeliveryAgents', $user->id, 'UserID');
 
 		$store = $ci->appdb->getRowObjectWhere('StoreDetails', array('OwnerID' => $user->id, 'Status' => 1));
+
+		$user->StoreID = false;
 		if ($store) {
 			$user->StoreID = $store->Slug;
 		}
