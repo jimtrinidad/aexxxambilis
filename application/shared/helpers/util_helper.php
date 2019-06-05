@@ -364,6 +364,7 @@ function clean_text($string)
 
 function slugit($str, $replace=array(), $delimiter='-')
 {
+    $str = trim($str);
     if ( !empty($replace) ) {
         $str = str_replace((array)$replace, ' ', $str);
     }

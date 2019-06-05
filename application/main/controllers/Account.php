@@ -44,20 +44,20 @@ class Account extends CI_Controller
         // $data = $this->ecpay->gate_check_balance();
         // print_data($data);
         // echo "transact\n";
-        $no = '99668612848';
-        $amount = '10';
-        $data = $this->ecpay->telco_transact(array(
-            'Telco'        => 'GLOBE',
-            'CellphoneNo'  => $no,
-            'ExtTag'       => 'LD',
-            'Amount'       => $amount,
-            'Token'        => md5($this->ecpay->branch_id . $no . $amount . date('mdy'))
-        ));
-        print_data($data);
-        // echo "after\n";
-        $data = $this->ecpay->gate_check_balance();
-        var_dump($data);
-        exit;
+        // $no = '99668612848';
+        // $amount = '10';
+        // $data = $this->ecpay->telco_transact(array(
+        //     'Telco'        => 'GLOBE',
+        //     'CellphoneNo'  => $no,
+        //     'ExtTag'       => 'LD',
+        //     'Amount'       => $amount,
+        //     'Token'        => md5($this->ecpay->branch_id . $no . $amount . date('mdy'))
+        // ));
+        // print_data($data);
+        // // echo "after\n";
+        // $data = $this->ecpay->gate_check_balance();
+        // var_dump($data);
+        // exit;
 
         // BranchID + CellphoneNo+ Amount + Date (Mmddyy)
 
@@ -78,6 +78,16 @@ class Account extends CI_Controller
         //     }
 
         // }
+
+        $stores = $this->appdb->getRecords('StoreDetails', array());
+        foreach ($stores as $s) {
+            $saveData = array(
+                'id'    => $s['id'],
+                'Slug'  => slugit($s['Name'])
+            );
+            echo $s['Name'] . PHP_EOL;
+            var_dump($this->appdb->saveData('StoreDetails', $saveData));
+        }
 
     }
 

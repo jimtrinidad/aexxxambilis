@@ -21,7 +21,8 @@ function Wallet() {
     */
     this.set_events = function()
     {
-        $('.modalForm').submit(function(e) {
+        var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm');
+        walletForms.submit(function(e) {
             e.preventDefault();
             var _this = this;
             bootbox.confirm({
@@ -39,7 +40,7 @@ function Wallet() {
                 callback: function (r) {
                     if (r) {
                         Utils.save_form(_this, function(res) {
-                            $('.modalForm').closest('div.modal').modal('hide');
+                            $(_this).closest('div.modal').modal('hide');
                             $('#successMessageModal .trans-image-header').prop('src', res.image);
                             $('#successMessageModal .trans-message').text(res.message);
                             var table = $('#successMessageModal .transaction-table');

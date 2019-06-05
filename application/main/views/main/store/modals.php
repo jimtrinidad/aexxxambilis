@@ -9,6 +9,9 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
+          <div id="error_message_box" class="hide">
+            <div class="error_messages alert alert-danger text-danger" role="alert"></div>
+          </div>
 					<div class="form-group">
 						<label>Name</label>
 						<input type="text" class="form-control" name="Name" id="Name" placeholder="Store name">

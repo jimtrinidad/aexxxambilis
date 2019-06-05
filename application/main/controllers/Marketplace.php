@@ -47,8 +47,9 @@ class Marketplace extends CI_Controller
         }
 
         if (get_post('s')) {
-            $where['StoreID'] = get_post('s');
-            $viewData['StoreData'] = $this->appdb->getRowObject('StoreDetails', get_post('s'));
+            $storeData = $this->appdb->getRowObject('StoreDetails', get_post('s'), 'Slug');
+            $viewData['StoreData'] = $storeData;
+            $where['StoreID'] = $storeData->id ?? 0;
             $order = 'si.Name';
         }
 
@@ -125,9 +126,7 @@ class Marketplace extends CI_Controller
 
     public function view_store($slug = '')
     {
-        $code = explode('-', $slug)[0];
-        // var_dump($code);
-        $_POST['s'] = $code;
+        $_POST['s'] = $slug;
         $_POST['limit'] = 1000;
         $this->index();
     }

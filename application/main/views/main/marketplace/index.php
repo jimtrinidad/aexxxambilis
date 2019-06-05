@@ -40,7 +40,7 @@
               <div class="row">
                 <div class="col-7">
                   <h2><a href="<?php echo site_url('marketplace/view/' . $item['Code']) ?>"><span class="text-red"><?php echo $item['Name'] ?></span></a><?php echo ($item['Measurement'] ? ' / ' . $item['Measurement'] : '') ?></h2>
-                  <p><a class="text-black" href="<?php echo site_url('business/'. $item['seller']['id'] . '-' . slugit($item['seller']['Name'])) ?>"><?php echo $item['seller']['Name'] ?></a></p>
+                  <p><a class="text-black" href="<?php echo site_url('business/'. $item['seller']['Slug']) ?>"><?php echo $item['seller']['Name'] ?></a></p>
                 </div>
                 <div class="col-5 text-right">
                   <strong class="price text-red"><?php echo show_price($item['Price'], $distribution['discount']); ?></strong>

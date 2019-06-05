@@ -49,34 +49,60 @@ class Store extends CI_Controller
     public function update()
     {
 
-        $updateData = array(
-            'Name'      => get_post('Name'),
-            'Address'   => get_post('Address'),
-            'Contact'   => get_post('Contact'),
-            'Email'     => get_post('Email'),
-            'LastUpdate'=> datetime()
-        );
-
-        $StoreData = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
-        if ($StoreData) {
-            $updateData['id'] = $StoreData->id;
-        } else {
-            $updateData['Code']     = microsecID();
-            $updateData['OwnerID']  = current_user();
-            $updateData['Status']   = 0;
-        }
-
-        if (($ID = $this->appdb->saveData('StoreDetails', $updateData))) {
-            $return_data = array(
-                'status'    => true,
-                'message'   => 'Store profile has been updated.',
-                'id'        => $ID
-            );
-        } else {
+        if (validate('save_store_profile') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Saving profile failed. Please try again later.'
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
             );
+        } else {
+
+            $slug = slugit(get_post('Name'));
+            $slug_exists = $this->appdb->getRowObject('StoreDetails', $slug, 'Slug');
+            $StoreData   = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
+
+            if (!$slug_exists || ($slug_exists && $slug_exists->OwnerID != current_user())) {
+
+                $updateData = array(
+                    'Name'      => get_post('Name'),
+                    'Address'   => get_post('Address'),
+                    'Contact'   => get_post('Contact'),
+                    'Email'     => get_post('Email'),
+                    'Slug'      => $slug,
+                    'LastUpdate'=> datetime()
+                );
+
+                if ($StoreData) {
+                    $updateData['id'] = $StoreData->id;
+                } else {
+                    $updateData['Code']     = microsecID();
+                    $updateData['OwnerID']  = current_user();
+                    $updateData['Status']   = 0;
+                }
+
+                if (($ID = $this->appdb->saveData('StoreDetails', $updateData))) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Store profile has been updated.',
+                        'id'        => $ID
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Saving profile failed. Please try again later.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Some fields have errors.',
+                    'fields'    => array(
+                                'Name'  => 'Store name already exists'
+                            )
+                );
+            }
+
         }
 
         response_json($return_data);

@@ -67,6 +67,10 @@ $config['user_address'] = array(
 );
 
 
+$config['save_store_profile'] = array(
+	array('Name', 'Store name', 'trim|required')
+);
+
 $config['save_store_item'] = array(
 	array('Name', 'Product name', 'trim|required'),
 	array('Description', 'Product description', 'trim'),

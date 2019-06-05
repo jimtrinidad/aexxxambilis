@@ -49,6 +49,9 @@
 			Hi <a href="#"><?php echo $accountInfo->Firstname?>!</a> Welcome to your Mobile Business Menu. <br>Not you? <a href="<?php echo site_url('account/logout') ?>">Logout</a>
 			<br>
 			<small>Referral Link: <span class="text-primary"><?php echo site_url('u/' . $accountInfo->PublicID) ?></span></small>
+			<?php if ($accountInfo->StoreID) { ?>
+				<small style="display: block;line-height: 1">Store Link: <span class="text-primary"><?php echo site_url('business/' . $accountInfo->StoreID) ?></span></small>
+			<?php } ?>
 		</div>
 		<?php } ?>
 
