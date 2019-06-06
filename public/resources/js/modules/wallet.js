@@ -21,7 +21,7 @@ function Wallet() {
     */
     this.set_events = function()
     {
-        var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm');
+        var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm, #depositForm');
         walletForms.submit(function(e) {
             e.preventDefault();
             var _this = this;
