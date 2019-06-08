@@ -309,6 +309,10 @@ function user_account_details($id = false, $field = 'id')
 		if ($store) {
 			$user->StoreID = $store->Slug;
 		}
+
+		// connections
+		$user->connections = straight_connections(get_user_connections($user->id));
+
 	}
 
 
@@ -399,6 +403,57 @@ function get_transactions($userID)
   	'transactions'	=> array_slice($transactions, 0, 10),
   	'summary'				=> $summary
   );
+}
+
+/**
+* get downline
+*/
+function get_user_connections($userID, $level = 0)
+{
+	$ci =& get_instance();
+	$connections = array();
+	$referrer 		  = $ci->appdb->getRowObject('Users', $userID);
+	$referred_users = $ci->appdb->getRecords('Users', array('Referrer' => $userID));
+	// print_r($referred_users);
+
+	if ($level < 8) {
+		$level++;
+	}
+
+	foreach ($referred_users as $referred_user) {
+		$connections[] = array(
+				'referrerID'		=> $referred_user['Referrer'],
+				'referrerName'	=> $referrer->Firstname . ' ' . $referrer->Lastname,
+				'publicID'		=> $referred_user['PublicID'],
+				'id'					=> $referred_user['id'],
+				'name'				=> $referred_user['Firstname'] . ' ' . $referred_user['Lastname'],
+				'photo'				=> $referred_user['Photo'],
+				'connections'	=> get_user_connections($referred_user['id'], $level)
+		);
+		// $connections   = array_merge($connections, get_user_connections($referred_user['id']));
+	}
+
+	return array(
+		'level'				=> $level,
+		'connections'	=> $connections
+	);
+}
+
+function straight_connections($connection_layer)
+{
+	$connections = array();
+	foreach ($connection_layer['connections'] as $i) {
+		$i_con = $i['connections'];
+		unset($i['connections']);
+		$i['level']	= $connection_layer['level'];
+		$connections[] = $i;
+		$connections = array_merge($connections, straight_connections($i_con));
+	}
+
+	usort($connections, function($a, $b){
+		return $a['level'] > $b['level'];
+	});
+	return $connections;
 }
 
 /**

@@ -79,15 +79,18 @@ class Account extends CI_Controller
 
         // }
 
-        $stores = $this->appdb->getRecords('StoreDetails', array());
-        foreach ($stores as $s) {
-            $saveData = array(
-                'id'    => $s['id'],
-                'Slug'  => slugit($s['Name'])
-            );
-            echo $s['Name'] . PHP_EOL;
-            var_dump($this->appdb->saveData('StoreDetails', $saveData));
-        }
+        // $stores = $this->appdb->getRecords('StoreDetails', array());
+        // foreach ($stores as $s) {
+        //     $saveData = array(
+        //         'id'    => $s['id'],
+        //         'Slug'  => slugit($s['Name'])
+        //     );
+        //     echo $s['Name'] . PHP_EOL;
+        //     var_dump($this->appdb->saveData('StoreDetails', $saveData));
+        // }
+
+        // response_json(get_user_connections(current_user()));
+        response_json(straight_connections(get_user_connections(current_user())));
 
     }
 
