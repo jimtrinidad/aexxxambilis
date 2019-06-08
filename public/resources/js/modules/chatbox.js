@@ -209,7 +209,8 @@ function Chatbox() {
                     self.setRead(self.activeThread);
                 }
             }
-        }, 5000);
+            console.log($('.chatbubble').hasClass('opened') && self.activeThread && self.isTabActive);
+        }, 3000);
 
 
         self.textarea = $('#text_message').emojioneArea({
@@ -676,8 +677,8 @@ function Chatbox() {
             var recentNote = e.msg_count + ' messages';
             var badge = '';
             if (e.unread > 0) {
-                recentNote = '<span class="label label-danger">'+e.unread + '</span> new messages';
-                badge = '<span class="notif_badge label label-danger">'+e.unread + '</span>';
+                recentNote = '<span class="badge badge-danger">'+e.unread + '</span> new messages';
+                badge = '<span class="notif_badge badge badge-danger">'+e.unread + '</span>';
             }
             var isactive = '';
             if (e.id == self.activeThread) {
