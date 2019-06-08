@@ -504,7 +504,7 @@ class Message extends CI_Controller
     public function addparticipant()
     {
         $thread_id = get_post('thread_id');
-        $mID       = get_post('userID');
+        $mID       = get_post('public_id');
         $thread = $this->appdb->getRowObject('msg_threads', $thread_id, 'id');
         if ($thread) {
             $userData   = $this->appdb->getRowObject('Users', $mID, 'PublicID');
@@ -516,7 +516,7 @@ class Message extends CI_Controller
                         'message'   => 'Participant has been added.',
                         'data'      => array(
                             'user_id'   => $userData->id,
-                            'user_name' => $userData->FirstName . ' ' . $userData->LastName,
+                            'user_name' => $userData->Firstname . ' ' . $userData->Lastname,
                             'Photo'     => photo_filename($userData->Photo),
                             'latest'    => null
                         )

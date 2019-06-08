@@ -496,3 +496,7 @@
   min-height: 4em !important;
   max-height: 4em !important
 }
+
+#manageGroupModal .tt-menu {
+  width: 300px;
+}

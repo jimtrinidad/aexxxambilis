@@ -128,8 +128,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content" id="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 				<h4 class="modal-title" style="font-size:18px;"><b class="text-bold">Manage Group</b></h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body" id="modal-body">
 
@@ -150,7 +150,7 @@
 				                </span>
 				            </div>
 				            <input type="hidden" class="modal_thread_id" name="thread_id" value="">
-							<button type="submit" class="btn btn-primary btn-sm text-white small" style="margin-top: 11px;">Save Image</button>
+							<button type="submit" class="btn btn-primary btn-sm text-white small" style="margin-top: 11px;">Upload</button>
 						</form>
 					</div>
 				</div>

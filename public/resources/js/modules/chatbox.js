@@ -1099,7 +1099,7 @@ function Chatbox() {
             if (result) {
                 $.ajax({
                     url  : window.base_url('message/leavegroup'),
-                    type : 'post',
+                    type : 'get',
                     data: {
                         'thread_id' : thread_id,
                         'id'        : $this.data('user')
