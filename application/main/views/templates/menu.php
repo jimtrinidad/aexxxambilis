@@ -69,6 +69,7 @@ foreach ($results as $c) {
 			<li><a href="<?php echo site_url('padala')?>"><img src="<?php echo public_url(); ?>resources/images/menu/money-transfer.png"/>Money Padala</a></li>
 			<li><a href="<?php echo site_url('eload')?>"><img src="<?php echo public_url(); ?>resources/images/menu/eload.png"/>eLoad</a></li>
 			<li><a href="<?php echo site_url('store')?>"><img src="<?php echo public_url(); ?>resources/images/menu/mybusiness.png"/>My Business</a></li>
+			<li><a href="<?php echo site_url('amcloud')?>"><img src="<?php echo public_url(); ?>resources/images/menu/rewards.png"/>Ambilis Cloud</a></li>
 			<li><a href="<?php echo site_url('support')?>"><img src="<?php echo public_url(); ?>resources/images/menu/support.png"/>Support</a></li>
 			<li><a href="<?php echo site_url('howitworks')?>"><img src="<?php echo public_url(); ?>resources/images/menu/how.png"/>How it Works</a></li>
 			<li><a href="<?php echo site_url('terms')?>"><img src="<?php echo public_url(); ?>resources/images/menu/terms.png"/>Terms & Conditions</a></li>

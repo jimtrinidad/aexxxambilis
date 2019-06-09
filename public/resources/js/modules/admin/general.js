@@ -108,10 +108,14 @@ function General() {
         $('#successMessageModal .title').text(title);
         var table = $('#successMessageModal .transaction-table');
         table.html('');
-        console.log($.parseJSON(data[field]));
-        $.each($.parseJSON(data[field]), function(i,e) {
-            table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
-        });
+        var items = $.parseJSON(data[field]);
+        if (items) {
+            $.each(items, function(i,e) {
+                table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
+            });
+        } else {
+            table.html(`<tr><td>Not available.</td></tr>`);
+        }
         $('#successMessageModal').modal({
             backdrop : 'static',
             keyboard : false

@@ -209,7 +209,6 @@ function Chatbox() {
                     self.setRead(self.activeThread);
                 }
             }
-            console.log($('.chatbubble').hasClass('opened') && self.activeThread && self.isTabActive);
         }, 3000);
 
 

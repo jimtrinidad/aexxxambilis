@@ -90,7 +90,7 @@ class Account extends CI_Controller
         // }
 
         // response_json(get_user_connections(current_user()));
-        response_json(straight_connections(get_user_connections(current_user())));
+        // response_json(straight_connections(get_user_connections(current_user())));
 
     }
 

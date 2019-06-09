@@ -28,8 +28,12 @@ class Store extends CI_Controller
         $storeItems = array();
 
         if ($storeData) {
-            $storeItems = $this->appdb->getRecords('StoreItems', array('StoreID' => $storeData->id));
+            $storeItems  = $this->appdb->getRecords('StoreItems', array('StoreID' => $storeData->id));
+            $addressData = lookup_address($storeData);
+            $viewData['address'] = ucwords(strtolower(trim(($storeData->Address . (isset($addressData['Barangay']) ? ', ' . $addressData['Barangay'] : '') . (isset($addressData['MuniCity']) ? ', ' . $addressData['MuniCity'] : '')), ', ')));
         }
+
+        // print_data($viewData,true);
 
         $viewData['items']     = $storeItems;
         $viewData['StoreData'] = $storeData;
@@ -61,7 +65,7 @@ class Store extends CI_Controller
             $slug_exists = $this->appdb->getRowObject('StoreDetails', $slug, 'Slug');
             $StoreData   = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
 
-            if (!$slug_exists || ($slug_exists && $slug_exists->OwnerID != current_user())) {
+            if (!$slug_exists || ($slug_exists && $slug_exists->OwnerID == current_user())) {
 
                 $updateData = array(
                     'Name'      => get_post('Name'),
@@ -69,6 +73,9 @@ class Store extends CI_Controller
                     'Contact'   => get_post('Contact'),
                     'Email'     => get_post('Email'),
                     'Slug'      => $slug,
+                    'Province'  => get_post('Province'),
+                    'City'      => get_post('City'),
+                    'Barangay'  => get_post('Barangay'),
                     'LastUpdate'=> datetime()
                 );
 
@@ -194,9 +201,6 @@ class Store extends CI_Controller
                         'SearchKeywords'    => get_post('SearchKeywords'),
                         'Weight'            => get_post('Weight'),
                         'WeightUnit'        => get_post('WeightUnit'),
-                        'Province'          => get_post('Province'),
-                        'City'              => get_post('City'),
-                        'Barangay'          => get_post('Barangay'),
                         'LastUpdate'        => date('Y-m-d H:i:s')
                     );
 

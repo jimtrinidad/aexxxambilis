@@ -118,6 +118,42 @@ class Settings extends CI_Controller
     }
 
 
+    public function cloud()
+    {
+        $viewData = array(
+            'pageTitle'         => 'Ambilis Cloud',
+            'pageDescription'   => '',
+            'content_header'    => false,
+            'accountInfo'       => user_account_details()
+        );
+
+        $setting = $this->appdb->getRowObject('Settings', 'ambilis_cloud', 'key');
+
+        if (isset($_POST['setting_content'])) {
+            $saveData = array(
+                'value'         => get_post('setting_content'),
+                'last_update'   => datetime()
+            );
+
+            if ($setting) {
+                $saveData['id'] = $setting->id;
+            } else {
+                $saveData['key'] = 'ambilis_cloud';
+            }
+            if ($this->appdb->saveData('Settings', $saveData)) {
+                $viewData['success'] = 'Content has been saved!';
+                $setting = $this->appdb->getRowObject('Settings', 'ambilis_cloud', 'key');
+            } else {
+                $viewData['error'] = 'Saving failed.';
+            }
+        }
+
+        $viewData['setting_content'] = $setting->value ?? '';
+
+        view('pages/settings/setting_content', $viewData, 'templates/main');
+    }
+
+
     public function fund_wallet_instruction()
     {
         $viewData = array(

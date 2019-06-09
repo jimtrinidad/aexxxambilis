@@ -17,10 +17,6 @@
 						<input type="text" class="form-control" name="Name" id="Name" placeholder="Store name">
 					</div>
 					<div class="form-group">
-						<label>Address</label>
-						<textarea class="form-control" name="Address" id="Address" placeholder="Address"></textarea>
-					</div>
-					<div class="form-group">
 						<label>Contact</label>
 						<input type="text" class="form-control" name="Contact" id="Contact" placeholder="Contact">
 					</div>
@@ -28,6 +24,36 @@
 						<label>Email</label>
 						<input type="text" class="form-control" name="Email" id="Email" placeholder="Email">
 					</div>
+          <div class="form-group">
+            <label class="control-label" for="Province">Province</label>
+            <select id="Province" name="Province" class="form-control" onChange="General.loadCityOptions('#City', this, '#Barangay')">
+              <option value="">--</option>
+              <?php
+                foreach (lookup_all('UtilLocProvince', false, 'provDesc', false) as $v) {
+                  echo "<option value='" . $v['provCode'] . "'>" . $v['provDesc'] . "</option>";
+                }
+              ?>
+            </select>
+            <span class="help-block hidden"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="City">City/Municipality</label>
+            <select id="City" disabled="disabled"  name="City" class="form-control" onChange="General.loadBarangayOptions('#Barangay', this)">
+              <option value="">--</option>
+            </select>
+            <span class="help-block hidden"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="Barangay">Barangay</label>
+            <select id="Barangay" disabled="disabled" name="Barangay" class="form-control">
+              <option value="">--</option>
+            </select>
+            <span class="help-block hidden"></span>
+          </div>
+          <div class="form-group">
+            <label>Street/Building</label>
+            <textarea class="form-control" name="Address" id="Address" placeholder="Street/Building"></textarea>
+          </div>
 				</div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -216,38 +242,6 @@
                 <label class="control-label" for="SearchKeywords">Search Keywords</label>
                 <input type="text" class="form-control" id="SearchKeywords" name="SearchKeywords" placeholder="Search Keywords">
                 <span class="form-text text-muted small">Type the keyword then press entry to add.</span>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="form-group">
-                <label class="control-label" for="Province">Province</label>
-                <select id="Province" name="Province" class="form-control" onChange="General.loadCityOptions('#City', this, '#Barangay')">
-                  <option value="">--</option>
-                  <?php
-                    foreach (lookup_all('UtilLocProvince', false, 'provDesc', false) as $v) {
-                      echo "<option value='" . $v['provCode'] . "'>" . $v['provDesc'] . "</option>";
-                    }
-                  ?>
-                </select>
-                <span class="help-block hidden"></span>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="form-group">
-                <label class="control-label" for="City">City/Municipality</label>
-                <select id="City" disabled="disabled"  name="City" class="form-control" onChange="General.loadBarangayOptions('#Barangay', this)">
-                  <option value="">--</option>
-                </select>
-                <span class="help-block hidden"></span>
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="form-group">
-                <label class="control-label" for="Barangay">Barangay</label>
-                <select id="Barangay" disabled="disabled" name="Barangay" class="form-control">
-                  <option value="">--</option>
-                </select>
-                <span class="help-block hidden"></span>
               </div>
             </div>
 	          <div class="col-12">

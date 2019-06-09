@@ -27,4 +27,20 @@ class Support extends CI_Controller
 
     }
 
+    public function amcloud()
+    {
+        $viewData = array(
+            'pageTitle'     => 'Ambilis Cloud',
+            'pageSubTitle'  => '&nbsp;',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            ),
+        );
+
+        $setting = $this->appdb->getRowObject('Settings', 'ambilis_cloud', 'key');
+        $viewData['content'] = $setting->value ?? '';
+
+        view('main/misc/misc_page', $viewData, 'templates/main');
+    }
+
 }

@@ -9,7 +9,7 @@
 				<?php if ($StoreData) { ?>
 				  <h4 class="mb-0"><?php echo $StoreData->Name ?? ''; ?></h4>
 				  <p class="lead small mb-2">
-				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $StoreData->Address ?? ''; ?></span>
+				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/location.png" /> <?php echo $address ?? ''; ?></span>
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/call.png" /> <?php echo $StoreData->Contact ?? ''; ?></span>
 				  <span class="d-block"><img class="i-15" src="<?php echo public_url(); ?>resources/images/icons/email.png" /> <?php echo $StoreData->Email ?? ''; ?></span>
 				  </p>

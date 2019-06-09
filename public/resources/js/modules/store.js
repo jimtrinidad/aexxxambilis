@@ -57,7 +57,6 @@ function Store() {
 
     this.updateProfile = function()
     {
-        console.log(self.profile);
         var form  = '#storeProfileForm';
         var modal = '#storeProfileModal';
         Utils.show_form_modal(modal, form, false, function(){
@@ -67,6 +66,11 @@ function Store() {
                     'Address' : self.profile.Address,
                     'Contact' : self.profile.Contact,
                     'Email'   : self.profile.Email,
+                    'Province': self.profile.Province
+                });
+
+                General.loadCityOptions('#storeProfileModal #City', '#storeProfileModal #Province', '#storeProfileModal #Barangay', self.profile.City, function(){
+                    General.loadBarangayOptions('#storeProfileModal #Barangay', '#storeProfileModal #City', self.profile.Barangay);
                 });
             }
         });
@@ -134,9 +138,6 @@ function Store() {
                 $(form).find('#Description').summernote('destroy');
                 $(form).find('#Description').summernote();
 
-                General.loadCityOptions('#City', '#Province', '#Barangay', data.City, function(){
-                    General.loadBarangayOptions('#Barangay', '#City', data.Barangay);
-                });
             });
         }
     }

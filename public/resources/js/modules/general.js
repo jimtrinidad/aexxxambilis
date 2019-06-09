@@ -100,7 +100,6 @@ function General() {
 
     this.loadBarangayOptions = function(target, e, selected = false, callback = false)
     {
-        console.log(selected);
         $(target).html(window.emptySelectOption).prop('disabled', true);
 
         $.LoadingOverlay("show");

@@ -60,7 +60,7 @@
 					</content>
 					<div class="close-chat"><i class="fa fa-close"></i></div>
 				</div>
-				<div class="finder">
+				<div class="finder container-fluid">
 					<div class="row justify-content-center">
 						<div class="col-10 text-center padding-bottom-10">
 							<label class="text-bold">SEND PRIVATE MESSAGE</label>
@@ -114,7 +114,7 @@
 					<div class="textarea-cont">
 						<textarea placeholder="Type your message" name="e" id="text_message"  rows="2"></textarea>
 					</div>
-					<span class="send"><i class="fa fa-send"></i> Send</span>
+					<button class="btn btn-success btn-sm send"><i class="fa fa-send"></i><span class="d-none d-sm-inline"> Send</span></button>
 					<div class="clearfix"></div>
 					<span class="help-block textMessageHelp small"></span>
 				</div>

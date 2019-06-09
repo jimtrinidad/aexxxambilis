@@ -63,3 +63,5 @@ $route['government'] = 'bills/government';
 $route['eload']  = 'bills/eload';
 $route['brands'] = 'marketplace/brands';
 $route['transactions'] = 'ewallet/transactions';
+
+$route['amcloud'] = 'support/amcloud';

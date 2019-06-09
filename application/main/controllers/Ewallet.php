@@ -310,6 +310,11 @@ class Ewallet extends CI_Controller
                                         'Transaction Fee'   => peso($ecresponse['ServiceCharge']),
                                         'Transaction Date'  => datetime(),
                                     );
+
+                                    if ($ecresponse['ServiceCharge'] == 0) {
+                                        unset($invoice_data['Transaction Fee']);
+                                    }
+
                                     $return_data = array(
                                         'status'    => true,
                                         'message'   => 'Payment transaction has been made.',
@@ -449,6 +454,11 @@ class Ewallet extends CI_Controller
                                         'Transaction Fee'   => peso($ecresponse['servicecharge']),
                                         'Transaction Date'  => datetime(),
                                     );
+
+                                    if ($ecresponse['servicecharge'] == 0) {
+                                        unset($invoice_data['Transaction Fee']);
+                                    }
+                                    
                                     $return_data = array(
                                         'status'    => true,
                                         'message'   => $service->Name . ' transaction has been made.',

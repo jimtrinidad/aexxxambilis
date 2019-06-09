@@ -211,9 +211,14 @@ function Wallet() {
         if (data) {
             var table = $('#invoiceMessageModal .transaction-table');
             table.html('');
-            $.each($.parseJSON(data.InvoiceData), function(i,e) {
-                table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
-            });
+            var items = $.parseJSON(data.InvoiceData);
+            if (items) {
+                $.each(items, function(i,e) {
+                    table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
+                });
+            } else {
+                table.html(`<tr><td>Not available.</td></tr>`);
+            }
             $('#invoiceMessageModal').modal({
                 backdrop : 'static',
                 keyboard : false

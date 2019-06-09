@@ -6,7 +6,7 @@
 .chatbubble {
     position: fixed;
     bottom: 0;
-    right: 10px;
+    right: 0px;
     z-index: 1049;
     transform: translateY(555px);
     transition: transform .1s ease-in-out;
@@ -17,12 +17,13 @@
 }
 .chatbubble .unexpanded {
     display: block;
-	background: #089dc2;
+	  background: #089dc2;
     text-align: center;
     width: 105px;
     height: 50px;
     line-height: 50px;
-    right: 0;
+    position: relative;
+    right: 5px;
     bottom: 0;
     color: #fff;
     border-radius: 10px 10px 0 0;
@@ -316,10 +317,11 @@
 }
 
 .ui .write-form .textarea-cont {
-    width: 80%;
+    width: 75%;
     height: 55px;
     float: left;
-    margin: 0px 1% 0 4%;
+    margin-left: 3%;
+    margin-right: 3%;
 }
 .ui .write-form textarea {
   height: 100%;
@@ -343,12 +345,13 @@
   display: inline-block;
 }
 .ui .send {
-  color: #089dc2;
+  height: 56px;
+  width: 16%;
   text-transform: uppercase;
   font-weight: 700;
   float: right;
-  margin-right: 5px;
-  margin-top: 16px;
+  margin-right: 3%;
+  margin-top: 1px;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -412,11 +415,12 @@
 }
 
 @media (max-width: 768px) {
-	.chatbubble.opened .expanded {
-		width: 400px;
+
+	.chatbubble.opened .expanded, .chatbubble.opened {
+		width: 100%;
 	}
 	.ui {
-		width: 400px;
+		width: 100%;
 	}
 
 	.ui .left-menu {
@@ -439,15 +443,16 @@
 	}
 
 	.ui .write-form .textarea-cont {
-		width: 93%;
+		width: 75%;
 	}
 
-  .ui .send {
-    display: none;
+  .ui .send i.fa{
+    font-size: 24px;
   }
 
-	.ui .nav-tabs>li>a {
-		width: 74px;
+	.ui .nav-tabs .nav-item {
+		width: 100%;
+    display: block;
 	}
 
 	.ui .nav>li>a {
