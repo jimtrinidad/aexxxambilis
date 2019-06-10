@@ -5,7 +5,7 @@
 
 <div class="chatbubble">
     <div class="unexpanded">
-        <div class="title"><span class="bubble-unread hide badge badge-danger"></span> <i class="fa fa-comments-o" aria-hidden="true"></i> Message</div>
+        <div class="title"><span class="bubble-unread hide badge badge-danger"></span> <i class="fa fa-comments-o" aria-hidden="true"></i> BilisChat</div>
     </div>
     <div class="expanded chat-window">
 		<div class="ui">

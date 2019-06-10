@@ -116,31 +116,78 @@ class Ewallet extends CI_Controller
             );
         } else {
 
-            $saveData = array(
-                'Code'              => microsecID(),
-                'Bank'              => get_post('Bank'),
-                'Branch'            => get_post('Branch'),
-                'AccountID'         => current_user(),
-                'ReferenceNo'       => get_post('ReferenceNo'),
-                'TransactionDate'   => get_post('Date'),
-                'Amount'            => get_post('Amount'),
-                'Status'            => 0, // pending
-                'DateAdded'         => date('Y-m-d H:i:s')  
-            );
+            $exists = $this->appdb->getRowObjectWhere('WalletDeposits', array(
+                                                        'ReferenceNo'   => get_post('ReferenceNo'),
+                                                        'Amount'        => get_post('Amount'),
+                                                        'AccountID'     => current_user()
+                                                    ));
 
-            if (($ID = $this->appdb->saveData('WalletDeposits', $saveData))) {
+            if ($exists) {
 
                 $return_data = array(
-                    'status'    => true,
-                    'message'   => ucfirst(number_to_words(get_post('Amount'))) . ' pesos deposit has been requested. It will be credited to your wallet upon verification.',
-                    'id'        => $ID
+                    'status'    => false,
+                    'message'   => 'Duplicate transaction.',
                 );
 
             } else {
-                $return_data = array(
-                    'status'    => false,
-                    'message'   => 'Adding deposit slip failed. Please try again later.'
-                );
+
+                $randomName = md5(microsecID());
+
+                // validate file upload
+                $this->load->library('upload', array(
+                    'upload_path'   => UPLOADS_DIRECTORY,
+                    'allowed_types' => 'gif|jpg|png',
+                    // 'max_size'      => '1000', // 1mb
+                    // 'max_width'     => '1024',
+                    // 'max_height'    => '768',
+                    'overwrite'     => true,
+                    'file_name'     => $randomName
+                ));
+
+                if (!empty($_FILES['Photo']['name']) && $this->upload->do_upload('Photo') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading image failed.',
+                        'fields'    => array('Photo' => $this->upload->display_errors('',''))
+                    );
+                } else {
+
+                    // do save
+                    $uploadData     = $this->upload->data();
+
+                    $saveData = array(
+                        'Code'              => microsecID(),
+                        'Bank'              => get_post('Bank'),
+                        'Branch'            => get_post('Branch'),
+                        'AccountID'         => current_user(),
+                        'ReferenceNo'       => get_post('ReferenceNo'),
+                        'TransactionDate'   => get_post('Date'),
+                        'Amount'            => get_post('Amount'),
+                        'Status'            => 0, // pending
+                        'DateAdded'         => date('Y-m-d H:i:s')  
+                    );
+
+                    if (!empty($_FILES['Photo']['name'])) {
+                        $saveData['Photo'] = $uploadData['file_name'];
+                    }
+
+                    if (($ID = $this->appdb->saveData('WalletDeposits', $saveData))) {
+
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => ucfirst(number_to_words(get_post('Amount'))) . ' pesos deposit has been requested. It will be credited to your wallet upon verification.',
+                            'id'        => $ID
+                        );
+
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Adding deposit slip failed. Please try again later.'
+                        );
+                    }
+
+                }
+
             }
 
         }

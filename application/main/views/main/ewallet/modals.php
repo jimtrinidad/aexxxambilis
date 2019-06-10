@@ -48,6 +48,17 @@
                 <span class="help-block hidden"></span>
               </div>
             </div>
+            <div class="col-12">
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Deposit slip</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="Photo" name="Photo" accept="image/*">
+                  <label class="custom-file-label text-truncate" for="valid_id_two">Browse</label>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row gutter-5">
             <div class="col-12">

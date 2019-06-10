@@ -28,10 +28,12 @@ class Delivery extends CI_Controller
         $records = array();
         foreach ($results as $r) {
             $user = $this->appdb->getRowObject('Users', $r['UserID']);
-            unset($user->Password);
-            $r['accountData'] = $user;
+            if ($user) {
+                unset($user->Password);
+                $r['accountData'] = $user;
 
-            $records[$r['Code']] = $r;
+                $records[$r['Code']] = $r;
+            }
         }
         $viewData['records']   = $records;
 

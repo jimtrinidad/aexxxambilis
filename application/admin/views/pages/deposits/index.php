@@ -16,6 +16,7 @@
               <th>Amount</th>
               <th>Bank</th>
               <th>Branch</th>
+              <th>Slip</th>
               <th class="c">Verified Date</th>
             </tr>
           </thead>
@@ -30,6 +31,13 @@
                 echo '<td>' . peso($c['Amount']) . '</td>';
                 echo '<td>' . $c['Bank'] . '</td>';
                 echo '<td>' . $c['Branch'] . '</td>';
+                echo '<td>';
+                  if ($c['Photo']) {
+                    echo '<a href="'.public_url('assets/uploads/' . upload_filename($c['Photo'])).'" data-toggle="lightbox" data-gallery="example-gallery">
+                          <img src="'.public_url('assets/uploads/' . upload_filename($c['Photo'])).'" class="img-fluid logo-smaller">
+                      </a>';
+                  }
+                echo '</td>';
                 echo '<td>';
                 if ($c['Status'] == 0) {
                   echo   '<div class="box-tools">
@@ -59,3 +67,17 @@
 </div>
 
 <?php view('pages/product/modals.php'); ?>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+
+    Delivery.agents = <?php echo json_encode($records, JSON_HEX_TAG); ?>;
+  })
+</script>
