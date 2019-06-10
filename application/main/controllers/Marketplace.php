@@ -239,43 +239,52 @@ class Marketplace extends CI_Controller
         $product = $this->appdb->getRowObject('StoreItems', get_post('code'), 'Code');
         if ($product) {
 
-            $distribution = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
+            if (get_post('quantity') > 0) {
 
-            $data = array(
-                'id'    => $product->id, 
-                'name'  => $product->Name, 
-                'price' => $distribution['discounted_price'], 
-                'qty'   => get_post('quantity'), 
-                'img'   => product_filename($product->Image)
-            );
+                $distribution = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
 
-            if ($this->cart->insert($data)) {
-
-                $seller  = (array) $this->appdb->getRowObject('StoreDetails', $product->StoreID);
-                $p = array(
-                    'Image' => product_filename($product->Image),
-                    'Name'  => $product->Name,
-                    'Price' => peso($distribution['discounted_price']),
-                    'Seller'=> $seller['Name']
+                $data = array(
+                    'id'    => $product->id, 
+                    'name'  => $product->Name, 
+                    'price' => $distribution['discounted_price'], 
+                    'qty'   => get_post('quantity'), 
+                    'img'   => product_filename($product->Image)
                 );
 
-                $return_data = array(
-                    'status'     => true,
-                    'message'    => 'Item has been added to cart',
-                    'item_count' => $this->cart->total_items(),
-                    'data'       => $p
-                );
+                if ($this->cart->insert($data)) {
+
+                    $seller  = (array) $this->appdb->getRowObject('StoreDetails', $product->StoreID);
+                    $p = array(
+                        'Image' => product_filename($product->Image),
+                        'Name'  => $product->Name,
+                        'Price' => peso($distribution['discounted_price']),
+                        'Seller'=> $seller['Name']
+                    );
+
+                    $return_data = array(
+                        'status'     => true,
+                        'message'    => 'Item has been added to cart',
+                        'item_count' => $this->cart->total_items(),
+                        'data'       => $p
+                    );
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Failed to add on cart',
+                        'data'      => $data
+                    );
+                }
 
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Failed to add on cart',
-                    'data'      => $data
+                    'message'   => 'Invalid quantity',
                 );
             }
         } else {
             $return_data = array(
-                'status'    => true,
+                'status'    => false,
                 'message'   => 'Invalid product'
             );
         }
@@ -291,16 +300,36 @@ class Marketplace extends CI_Controller
             'qty'   => get_post('quantity')
         );
 
-        $this->cart->update($data);
-
         $item = $this->cart->get_item(get_post('rowid'));
-        $return_data = array(
-                'status'    => true,
-                'message'   => 'Invalid product',
-                'item_count'=> $this->cart->total_items(),
-                'subtotal'  => peso($item['subtotal']),
-                'total'     => peso($this->cart->total()),
+
+        if (get_post('quantity') > 0) {
+
+            if ($item) {
+
+                $this->cart->update($data);
+
+                $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Item has been updated',
+                        'item_count'=> $this->cart->total_items(),
+                        'subtotal'  => peso($item['subtotal']),
+                        'total'     => peso($this->cart->total()),
+                    );
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid product'
+                );
+            }
+
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid quantity',
+                'qty'       => ($item['qty'] ?? 0)
             );
+        }
 
         response_json($return_data);
     }
@@ -369,7 +398,7 @@ class Marketplace extends CI_Controller
                 if ($address) {
 
 
-                    $latest_balance = get_latest_wallet_balance();
+                    $latest_balance = get_latest_wallet_balance(current_user());
                     $order_amount   = $this->cart->total();
 
                     if ($latest_balance >= $order_amount) {

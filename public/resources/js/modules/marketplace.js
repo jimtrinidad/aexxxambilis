@@ -79,8 +79,13 @@ function Marketplace() {
                     'quantity' : qty
                 },
                 success: function (response) {
-                    tr.find('.cart_item_subtotal').text(response.subtotal);
-                    $('.cart_total_amount').text(response.total);
+                    if (response.status) {
+                        tr.find('.cart_item_subtotal').text(response.subtotal);
+                        $('.cart_total_amount').text(response.total);
+                    } else {
+                        // bootbox.alert(response.message);
+                        tr.find('input.cart_item_qty').val(response.qty);
+                    }
                 },
                 complete: function() {
                     $.LoadingOverlay('hide');
@@ -135,7 +140,7 @@ function Marketplace() {
             type: 'POST',
             data: params,
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status) {
                     window.location = public_url('order/invoice/' +  response.id);
                 } else {

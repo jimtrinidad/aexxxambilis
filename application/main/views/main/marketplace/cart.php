@@ -23,7 +23,7 @@
       </td>
       <td data-th="Price"><?php echo show_price($i['distribution']['srp'], $i['distribution']['discount']); ?></td>
       <td data-th="Quantity">
-        <input type="number" class="form-control text-center cart_item_qty" value="<?php echo $i['qty']; ?>">
+        <input type="number" min="1" class="form-control text-center cart_item_qty" value="<?php echo $i['qty']; ?>">
       </td>
       <td data-th="Subtotal" class="text-center cart_item_subtotal"><?php echo peso($i['subtotal']); ?></td>
       <td class="actions text-right" data-th="">
