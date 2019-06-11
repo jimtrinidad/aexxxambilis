@@ -219,11 +219,3 @@
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/typeahead-multiselect.js"></script>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/chatbox.js?<?php echo time()?>"></script>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.chatbubble .unexpanded').draggabilly({
-		  // options...
-		})
-	});
-</script>
