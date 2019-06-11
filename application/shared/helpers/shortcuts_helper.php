@@ -340,6 +340,29 @@ function user_full_name($data, $m = 1)
 	return ucwords($data['Firstname'] . $middle . $data['Lastname']);
 }
 
+// check if user have deposited atleast one
+function have_deposit($userID = false)
+{
+	if (!$userID) {
+		$userID = current_user();
+	}
+
+	$ci =& get_instance();
+
+	$sql = "SELECT COUNT(*) as count
+					FROM WalletDeposits
+					WHERE AccountID = {$userID}
+					AND Amount > 0
+					AND Status = 1";
+
+    $row = $ci->db->query($sql)->row();
+    if ($row && $row->count > 0) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+
 // wallet latest balance
 function get_latest_wallet_balance($userID = false)
 {

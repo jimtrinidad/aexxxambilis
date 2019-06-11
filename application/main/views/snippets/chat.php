@@ -3,9 +3,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js-bootstrap-css/1.2.1/typeaheadjs.min.css" />
 
+
 <div class="chatbubble">
     <div class="unexpanded">
-        <div class="title"><span class="bubble-unread hide badge badge-danger"></span> <i class="fa fa-comments-o" aria-hidden="true"></i> BilisChat</div>
+        <div class="title"><span class="bubble-unread hide badge badge-success"></span>
+        	<!-- <i class="fa fa-comments-o" aria-hidden="true"></i> BilisChat -->
+        	<img src="<?php echo public_url(); ?>resources/images/chat.png">
+        </div>
     </div>
     <div class="expanded chat-window">
 		<div class="ui">
@@ -210,7 +214,16 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js"></script>.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/draggabilly/2.2.0/draggabilly.pkgd.min.js"></script>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/typeahead-multiselect.js"></script>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/chatbox.js?<?php echo time()?>"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.chatbubble .unexpanded').draggabilly({
+		  // options...
+		})
+	});
+</script>

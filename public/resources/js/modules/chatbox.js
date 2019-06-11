@@ -58,8 +58,26 @@ function Chatbox() {
             self.isTabActive = false; 
         });
 
-        $('.chatbubble .unexpanded').click(function(){
-            self.openChatWindow();
+        var dragged     = false;
+        var $draggable  = $('.chatbubble .unexpanded').draggabilly({
+            containment: 'body'
+        });
+
+        $draggable.on( 'dragStart', function( event, pointer ) {
+            dragged = true;
+        });
+
+        $draggable.on( 'dragEnd', function( event, pointer ) {
+            setTimeout(function(){
+                dragged = false;
+            }, 100)
+        })
+
+        $('.chatbubble .unexpanded').click(function(e){
+            console.log(dragged);
+            if (!dragged) {
+                self.openChatWindow();
+            }
         });
 
         $('.chatbubble .close-chat').click(function(){

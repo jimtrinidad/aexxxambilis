@@ -15,6 +15,8 @@
 .chatbubble.opened {
     transform: translateY(0)
 }
+
+/*
 .chatbubble .unexpanded {
     display: block;
 	  background: #089dc2;
@@ -29,8 +31,50 @@
     border-radius: 10px 10px 0 0;
     cursor: pointer;
 }
+
+.chatbubble .unexpanded .title {
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.chatbubble .bubble-unread{
+	position: absolute;
+    top: -5px;
+    left: -10px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+}
+*/
+
+/*anne bilis*/
+.chatbubble .unexpanded {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    position: relative;    bottom: 0;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+}
+
+.chatbubble .unexpanded img {
+  width: 150px;
+}
+
+.chatbubble .bubble-unread {
+    position: absolute;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+    bottom: 31px;
+    right: 10px;
+}
+
+/*end*/
+
 .chatbubble .expanded {
-	-webkit-transition: width .1s ease-in-out;
+  -webkit-transition: width .1s ease-in-out;
     -moz-transition: width .1s ease-in-out;
     -o-transition: width .1s ease-in-out;
     transition: width .1s ease-in-out;
@@ -40,20 +84,16 @@
 }
 
 .chatbubble.opened .unexpanded {
-	display: none;
+  display: none;
 }
 .chatbubble.opened .expanded {
-	-webkit-transition: width .1s ease-in-out;
+  -webkit-transition: width .1s ease-in-out;
     -moz-transition: width .1s ease-in-out;
     -o-transition: width .1s ease-in-out;
     transition: width .1s ease-in-out;
-	width: 745px;
+  width: 745px;
 }
 
-.chatbubble .unexpanded .title {
-	font-weight: bold;
-	font-size: 13px;
-}
 
 .chatbubble .chat-window {
   overflow: auto;
@@ -68,14 +108,6 @@
     margin-top: 5px;
 }
 
-.chatbubble .bubble-unread{
-	position: absolute;
-    top: -5px;
-    left: -10px;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 14px;
-}
 
 .ui {
   margin: 0 auto;
@@ -416,9 +448,20 @@
 
 @media (max-width: 768px) {
 
+  .chatbubble .unexpanded img {
+    width: 100px;
+  }
+
+  .chatbubble .bubble-unread {
+    font-size: 12px;
+    bottom: 21px;
+    right: 3px;
+  }
+
 	.chatbubble.opened .expanded, .chatbubble.opened {
 		width: 100%;
 	}
+
 	.ui {
 		width: 100%;
 	}
