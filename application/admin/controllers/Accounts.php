@@ -46,7 +46,7 @@ class Accounts extends CI_Controller
 
             if ($filter == 'search_name' && $$filter != false) {
                 $where['CONCAT(Firstname, " ", Lastname) LIKE ']  = "%{$search_name}%";
-                $q[] = 'CONCAT(Firstname, " ", Lastname) LIKE "%{' . $search_name . '}%"';
+                $q[] = 'CONCAT(Firstname, " ", Lastname) LIKE "%' . $search_name . '%"';
             } else if ($filter == 'search_mid' && $$filter != false) {
                 $where['PublicID']  = $search_mid;
                 $q[] = 'PublicID = "' . $search_mid . '"';
