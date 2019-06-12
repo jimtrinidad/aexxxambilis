@@ -98,4 +98,32 @@
     </div>
     <!-- /.col -->
 
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-navy"><i class="fa fa-money"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Purchase/Payments</span>
+          <span class="info-box-number"><?php echo peso($debits) ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-teal"><i class="fa fa-gift"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Rewards</span>
+          <span class="info-box-number"><?php echo peso($rewards) ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+
   </div>
