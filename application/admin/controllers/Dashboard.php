@@ -30,6 +30,8 @@ class Dashboard extends CI_Controller
 
         $viewData['ecpay_wallet']  = $this->ecpay->ecpay_check_balance();
         $viewData['ecpay_gate']    = $this->ecpay->gate_check_balance();
+
+        $viewData['deposits']   = $this->db->query('SELECT SUM(Amount) AS amount FROM WalletDeposits WHERE Status = 1')->row()->amount;
         // print_data($viewData);
 
         view('pages/dashboard', $viewData, 'templates/main');
