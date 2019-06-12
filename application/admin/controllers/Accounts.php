@@ -30,7 +30,7 @@ class Accounts extends CI_Controller
         $where = array(
             'deletedAt' => NULL,
         );
-        $order = 'Status, Firstname';
+        $order = 'Status, EndingBalance DESC, Firstname';
 
         // SET SEARCH FILTER
         $filters = array(
@@ -39,18 +39,23 @@ class Accounts extends CI_Controller
             'search_account_status',
             'search_account_level',
         );
+        $q = array();
         foreach ($filters as $filter) {
 
-            $$filter = get_post($filter);
+            $$filter = $this->db->escape_like_str(get_post($filter));
 
             if ($filter == 'search_name' && $$filter != false) {
                 $where['CONCAT(Firstname, " ", Lastname) LIKE ']  = "%{$search_name}%";
+                $q[] = 'CONCAT(Firstname, " ", Lastname) LIKE "%{' . $search_name . '}%"';
             } else if ($filter == 'search_mid' && $$filter != false) {
                 $where['PublicID']  = $search_mid;
+                $q[] = 'PublicID = "' . $search_mid . '"';
             } else if ($filter == 'search_account_level' && $$filter != false) {
                 $where['AccountLevel']  = $search_account_level;
+                $q[] = 'AccountLevel = "' . $search_account_level . '"';
             } else if ($filter == 'search_account_status' && $$filter != '') {
                 $where['Status']  = $search_account_status;
+                $q[] = 'Status = "' . $search_account_status . '"';
             }
 
 
@@ -59,7 +64,7 @@ class Accounts extends CI_Controller
 
         }
 
-        $paginatationData = $this->appdb->getPaginationData('Users', $page_limit, $page_start, $where, $order);
+        $paginatationData = $this->appdb->getAccounts($page_limit, $page_start, $q, $order);
 
         // prepare account data
         $accounts = array();
@@ -68,7 +73,8 @@ class Accounts extends CI_Controller
             unset($item['Password']);
             unset($item['deletedAt']);
             $item['referrer_data'] = $this->appdb->getRowObject('Users', $item['Referrer']);
-            $item['Balance'] = get_latest_wallet_balance($item['id']);
+            // $item['Balance'] = get_latest_wallet_balance($item['id']);
+            $item['Balance'] = $item['EndingBalance'];
             $accounts[] = $item;
         }
 

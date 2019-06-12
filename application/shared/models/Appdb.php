@@ -277,6 +277,46 @@ class Appdb extends CI_Model {
 		);
 	}
 
+	public function getAccounts($limit, $start, $where = false, $order = false)
+	{
+		
+		$query = 'FROM Users AS u
+							LEFT JOIN WalletTransactions AS wt ON wt.AccountID = u.id
+							WHERE
+							   (
+										wt.id = (
+									      SELECT MAX(id)
+									      FROM WalletTransactions
+									      WHERE AccountID = u.id
+										)
+								    OR wt.id IS NULL
+							   )';
+
+		// GET COUNT
+		if ($where != false) {
+			$query .= ' AND ' . implode(' AND ', $where);
+		}
+
+		$count_query = 'SELECT COUNT(*) AS count ' . $query;
+		$count 	= $this->db->query($count_query)->row()->count;
+
+		// GET RESULTS DATA
+		$result_query = 'SELECT u.*,wt.EndingBalance ' . $query;
+
+		if ($order) {
+			$result_query .= ' ORDER BY ' . $order;
+		}
+
+		$result_query .= " LIMIT {$start}, {$limit}";
+
+		$data 	= $this->db->query($result_query)->result_array();
+
+		return array(
+			'count'	=> $count,
+			'data'	=> $data
+		);
+	}
+
 	public function getRewardsData($where = false, $order = false)
 	{
 		$this->db->select('r.*, Firstname, Lastname');

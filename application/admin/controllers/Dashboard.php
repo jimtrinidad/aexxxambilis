@@ -28,7 +28,8 @@ class Dashboard extends CI_Controller
                                                         FROM StoreItems 
                                                         WHERE Manufacturer IS NOT NULL AND Manufacturer != ""')->row()->count;
 
-
+        $viewData['ecpay_wallet']  = $this->ecpay->ecpay_check_balance();
+        $viewData['ecpay_gate']    = $this->ecpay->gate_check_balance();
         // print_data($viewData);
 
         view('pages/dashboard', $viewData, 'templates/main');
