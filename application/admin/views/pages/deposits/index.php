@@ -11,12 +11,12 @@
             <tr>
               <th>Code</th>
               <th>Depositor</th>
-              <th>Reference No</th>
+              <th>Transaction No</th>
               <th>Transaction Date</th>
               <th>Amount</th>
-              <th>Bank</th>
-              <th>Branch</th>
-              <th>Slip</th>
+              <th>Payment Center</th>
+              <th>Location</th>
+              <th>Sceenshot</th>
               <th class="c">Verified Date</th>
             </tr>
           </thead>

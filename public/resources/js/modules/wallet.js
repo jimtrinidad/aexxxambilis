@@ -62,7 +62,7 @@ function Wallet() {
             e.preventDefault();
             var _this = this;
             bootbox.confirm({
-                message: "CONFIRM DEPOSIT?",
+                message: "CONFIRM TRANSACTION?",
                 buttons: {
                     confirm: {
                         label: 'Confirm',

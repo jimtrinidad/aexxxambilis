@@ -83,11 +83,11 @@ $config['save_store_item'] = array(
 
 
 $config['add_deposit'] = array(
-	array('Bank', 'Bank', 'trim|required'),
-	array('Branch', 'Branch', 'trim|required'),
-	array('ReferenceNo', 'Reference Number', 'trim|required'),
-	array('Date', 'Deposit Date', 'trim|required'),
-	array('Amount', 'Deposit Amount', 'trim|required|numeric'),
+	array('Bank', 'Payment partner', 'trim|required'),
+	array('Branch', 'Location', 'trim|required'),
+	array('ReferenceNo', 'Transaction number', 'trim|required'),
+	array('Date', 'Transaction date', 'trim|required'),
+	array('Amount', 'Fund amount', 'trim|required|numeric')
 );
 
 $config['encash_request'] = array(

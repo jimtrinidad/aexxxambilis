@@ -108,10 +108,15 @@ class Ewallet extends CI_Controller
 
     public function add_deposit()
     {
+        if (empty($_FILES['Photo']['name']))
+        {
+            $this->form_validation->set_rules('Photo', 'Screenshot', 'required');
+        }
+
         if (validate('add_deposit') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Some fields have errors.',
+                // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {
@@ -147,8 +152,8 @@ class Ewallet extends CI_Controller
                 if (empty($_FILES['Photo']['name'])) {
                     $return_data = array(
                         'status'    => false,
-                        // 'message'   => 'Deposit/Transaction slip is required.',
-                        'fields'    => array('Photo' => 'Deposit/Transaction slip is required.')
+                        // 'message'   => 'Sceenshot/Slip  is required.',
+                        'fields'    => array('Photo' => 'Sceenshot/Slip  is required.')
                     );
                 } else if ($this->upload->do_upload('Photo') == false) {
                     $return_data = array(
@@ -178,14 +183,14 @@ class Ewallet extends CI_Controller
 
                         $return_data = array(
                             'status'    => true,
-                            'message'   => ucfirst(number_to_words(get_post('Amount'))) . ' pesos deposit has been requested. It will be credited to your wallet upon verification.',
+                            'message'   => ucfirst(number_to_words(get_post('Amount'))) . ' pesos fund has been requested. It will be credited to your wallet upon verification.',
                             'id'        => $ID
                         );
 
                     } else {
                         $return_data = array(
                             'status'    => false,
-                            'message'   => 'Adding deposit slip failed. Please try again later.'
+                            'message'   => 'Adding wallet fund failed. Please try again later.'
                         );
                     }
 

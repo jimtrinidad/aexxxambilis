@@ -66,7 +66,7 @@ class Deposits extends CI_Controller
                         'AccountID'     => $deposit->AccountID,
                         'ReferenceNo'   => $deposit->ReferenceNo,
                         'Date'          => date('Y-m-d h:i:s'),
-                        'Description'   => 'Fund my wallet - Bank Deposit',
+                        'Description'   => 'Fund my wallet - ' . $deposit->Bank . ' - ' . $deposit->Branch,
                         'Amount'        => $deposit->Amount,
                         'Type'          => 'Credit',
                         'EndingBalance' => $new_balance
