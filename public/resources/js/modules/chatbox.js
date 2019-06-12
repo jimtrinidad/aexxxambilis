@@ -74,7 +74,6 @@ function Chatbox() {
         })
 
         $('.chatbubble .unexpanded').click(function(e){
-            console.log(dragged);
             if (!dragged) {
                 self.openChatWindow();
             }
@@ -314,7 +313,7 @@ function Chatbox() {
             $(".chatbubble .messages").getNiceScroll(0).resize();
             $(".chatbubble .recent-threads").getNiceScroll(0).resize();
             $(".chatbubble .connection-list").getNiceScroll(0).resize();
-        }, 10)
+        }, 100)
     }
 
     this.openChatWindow = function(tab = false)

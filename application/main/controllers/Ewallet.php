@@ -144,10 +144,16 @@ class Ewallet extends CI_Controller
                     'file_name'     => $randomName
                 ));
 
-                if (!empty($_FILES['Photo']['name']) && $this->upload->do_upload('Photo') == false) {
+                if (empty($_FILES['Photo']['name'])) {
                     $return_data = array(
                         'status'    => false,
-                        'message'   => 'Uploading image failed.',
+                        // 'message'   => 'Deposit/Transaction slip is required.',
+                        'fields'    => array('Photo' => 'Deposit/Transaction slip is required.')
+                    );
+                } else if ($this->upload->do_upload('Photo') == false) {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Uploading slip failed.',
                         'fields'    => array('Photo' => $this->upload->display_errors('',''))
                     );
                 } else {
@@ -163,13 +169,10 @@ class Ewallet extends CI_Controller
                         'ReferenceNo'       => get_post('ReferenceNo'),
                         'TransactionDate'   => get_post('Date'),
                         'Amount'            => get_post('Amount'),
+                        'Photo'             => $uploadData['file_name'],
                         'Status'            => 0, // pending
                         'DateAdded'         => date('Y-m-d H:i:s')  
                     );
-
-                    if (!empty($_FILES['Photo']['name'])) {
-                        $saveData['Photo'] = $uploadData['file_name'];
-                    }
 
                     if (($ID = $this->appdb->saveData('WalletDeposits', $saveData))) {
 

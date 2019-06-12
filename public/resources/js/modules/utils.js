@@ -219,6 +219,8 @@ function Utils() {
 
         self.reset_form_errors(formSelector);
 
+        $(formSelector).find('.custom-file-input').next('.custom-file-label').text('');
+
         if (todo_fnc) {
             todo_fnc();
         }

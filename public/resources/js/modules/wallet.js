@@ -21,7 +21,7 @@ function Wallet() {
     */
     this.set_events = function()
     {
-        var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm, #depositForm');
+        var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm');
         walletForms.submit(function(e) {
             e.preventDefault();
             var _this = this;
@@ -56,6 +56,30 @@ function Wallet() {
                     }
                 }
             });
+        });
+
+        $('#depositForm').submit(function(e) {
+            e.preventDefault();
+            var _this = this;
+            bootbox.confirm({
+                message: "CONFIRM DEPOSIT?",
+                buttons: {
+                    confirm: {
+                        label: 'Confirm',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (r) {
+                    if (r) {
+                        Utils.save_form(_this);
+                    }
+                }
+            });
+            e.preventDefault();
         });
 
         var ajaxReq = null;
