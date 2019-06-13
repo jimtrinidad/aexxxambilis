@@ -199,6 +199,15 @@ a:hover {text-decoration: none;}
 }
 
 
+.modal-footer {
+  justify-content: space-evenly !important;
+}
+
+.bootbox .modal-footer .btn-default {
+    background-color: #dd3c45;
+    color: white;
+}
+
 /*end*/
 
 

@@ -31,12 +31,12 @@
             <span>Fund my Wallet</span>
           </a>
         </div>
-        <!-- <div class="col-3 text-center icon-container">
+        <div class="col-3 text-center icon-container">
           <a href="javascript:;" onclick="Wallet.encashRequest()">
             <img src="<?php echo public_url(); ?>resources/images/icons/encash-money.png" />
             <span>Encash</span>
           </a>
-        </div> -->
+        </div>
         <div class="col-3 text-center icon-container">
           <a href="<?php echo site_url('rewards') ?>">
             <img src="<?php echo public_url(); ?>resources/images/icons/rewards-money.png" />

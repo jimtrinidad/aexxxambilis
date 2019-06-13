@@ -209,7 +209,7 @@ class Ewallet extends CI_Controller
         if (validate('encash_request') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Some fields have errors.',
+                // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {
@@ -309,7 +309,7 @@ class Ewallet extends CI_Controller
         if (validate('add_payment') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Some fields have errors.',
+                // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {
@@ -466,7 +466,7 @@ class Ewallet extends CI_Controller
         if (validate('money_padala_request') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Some fields have errors.',
+                // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {
@@ -620,7 +620,7 @@ class Ewallet extends CI_Controller
         if (validate('send_eload') == FALSE) {
             $return_data = array(
                 'status'    => false,
-                'message'   => 'Some fields have errors.',
+                // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {

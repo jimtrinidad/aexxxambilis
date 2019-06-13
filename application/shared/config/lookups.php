@@ -101,3 +101,7 @@ $config['weight_units'] = array(
     1 => 'Grams',
     2 => 'Kilograms'
 );
+
+
+
+$config['countries'] = json_decode(file_get_contents(dirname(__FILE__) . '/countrycodes.json'), true);
