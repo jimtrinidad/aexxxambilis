@@ -106,7 +106,8 @@
                 echo '<td scope="row">' . peso($i['ServiceCharge'], true, 4) . '</td>';
                 echo '<td scope="row">' . date('m/d/y h:i A', strtotime($i['TransactionDate'])) . '</td>';
                 echo '<td scope="row" class="text-right">
-                          <button type="button" class="btn btn-sm btn-info" onClick="Wallet.viewInvoice('.$i['id'].')"><i class="fa fa-file-text-o"></i> Invoice</button>
+                          <button type="button" class="btn btn-sm btn-success" onClick="Wallet.viewRewards('.$i['id'].')"><i class="fa fa-gift"></i> <span class="d-none d-sm-inline">Rewards</span></button>
+                          <button type="button" class="btn btn-sm btn-info" onClick="Wallet.viewInvoice('.$i['id'].')"><i class="fa fa-file-text-o"></i> <span class="d-none d-sm-inline">Invoice</span></button>
                       </td>';
               echo '</tr>';
             }

@@ -233,12 +233,35 @@ function Wallet() {
     {
         var data  = self.getData(id);
         if (data) {
+            $('#invoiceMessageModal .modal-title').text('Invoice');
             var table = $('#invoiceMessageModal .transaction-table');
             table.html('');
             var items = $.parseJSON(data.InvoiceData);
             if (items) {
                 $.each(items, function(i,e) {
                     table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
+                });
+            } else {
+                table.html(`<tr><td>Not available.</td></tr>`);
+            }
+            $('#invoiceMessageModal').modal({
+                backdrop : 'static',
+                keyboard : false
+            });
+        }
+    }
+
+    this.viewRewards = function(id)
+    {
+        var data  = self.getData(id);
+        if (data) {
+            $('#invoiceMessageModal .modal-title').text('Distributed Rewards');
+            var table = $('#invoiceMessageModal .transaction-table');
+            table.html('');
+            var items = data.Rewards;
+            if (items) {
+                $.each(items, function(i,e) {
+                    table.append(`<tr><td>${e.Type}</td><td>${e.Firstname + ' ' + e.Lastname}</td><td>${e.Amount}</td></tr>`);
                 });
             } else {
                 table.html(`<tr><td>Not available.</td></tr>`);

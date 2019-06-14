@@ -82,7 +82,7 @@
                   <td>' . ($i['from'] ? $i['from']['contact'] : '') . '<br>' . ($i['from'] ? $i['from']['email'] : '') . '</td>
                   <td>' . lookup('wallet_rewards_type', $i['Type']) .  '</td>
                   <td>' . $i['Description'] .  '</td>
-                  <td>' . peso($i['Amount']) .  '</td>
+                  <td>' . peso($i['Amount'], true, 4) .  '</td>
                 </tr>';
         }
         ?>

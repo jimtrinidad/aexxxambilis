@@ -387,7 +387,7 @@ function get_latest_wallet_balance($userID = false)
 }
 
 
-function get_transactions($userID)
+function get_transactions($userID, $limit = 50)
 {	
 	if (!$userID) {
 		$userID = current_user();
@@ -423,7 +423,7 @@ function get_transactions($userID)
   $data['summary']      = $summary;
 
   return array(
-  	'transactions'	=> array_slice($transactions, 0, 10),
+  	'transactions'	=> array_slice($transactions, 0, $limit),
   	'summary'				=> $summary
   );
 }

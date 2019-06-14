@@ -79,7 +79,7 @@
                   <td>' . $i['PublicID'] . '</td>
                   <td>' . $i['Mobile'] . '<br>' . $i['EmailAddress']  . '</td>
                   <td>' . count($i['connections']) .  '</td>
-                  <td>' . peso($i['earnings']) .  '</td>
+                  <td>' . peso($i['earnings'], true, 4) .  '</td>
                 </tr>';
         }
         ?>

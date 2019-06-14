@@ -29,7 +29,7 @@
             </div>
             <div class="col-12">
               <div class="form-group">
-                <label class="control-label" for="ReferenceNo">Control/Transaction No.</label>
+                <label class="control-label" for="ReferenceNo">Control / Transaction No.</label>
                 <input class="form-control"  type="text" name="ReferenceNo" id="ReferenceNo" placeholder="Control/Transaction No.">
                 <span class="help-block hidden"></span>
               </div>
@@ -49,9 +49,10 @@
               </div>
             </div>
             <div class="col-12">
+              <label class="control-label" for="Amount">Screenshot / Deposit Slip</label>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text">Sceenshot</span>
+                  <span class="input-group-text">Image</span>
                 </div>
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" id="Photo" name="Photo" accept="image/*">
