@@ -77,16 +77,10 @@ class Ewallet extends CI_Controller
         $items = array();
         foreach ($paginatationData['data'] as $item) {
             $item    = (array) $item;
-            $rewards = $this->appdb->getRewardsData(array(
-                            'OrderID'       => $item['id'],
-                            'TransactType'  => $item['MerchantType']
-                        ), 'Type');
-
-            foreach ($rewards as &$reward) {
-                $reward['Type']   = lookup('wallet_rewards_type', $reward['Type']);
-                $reward['Amount'] = peso($reward['Amount'], true, 4);
-            }
-            $item['Rewards'] = $rewards;
+            $item['Rewards'] = get_rewards(array(
+                                    'OrderID'       => $item['id'],
+                                    'TransactType'  => $item['MerchantType']
+                                ), 'Type');
             $items[] = $item;
         }
 
@@ -381,15 +375,8 @@ class Ewallet extends CI_Controller
                                             unset($invoice_data['Transaction Fee']);
                                         }
 
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => 'Payment transaction has been made.',
-                                            'image'     => public_url('assets/logo/' ) . logo_filename($biller->Image),
-                                            'data'      => $invoice_data
-                                        );
-
                                         // save transaction and distribute reward
-                                        ecpay_save_transaction(array(
+                                        $trans_id = ecpay_save_transaction(array(
                                             'code'          => $saveData['Code'],
                                             'merch_type'    => ($biller->Type == 2 ? 3 : 2), // biller type 2 = ticket,
                                             'merch_id'      => $biller->id,
@@ -405,6 +392,17 @@ class Ewallet extends CI_Controller
                                             'ecresponse'    => $ecresponse,
                                             'invoice'       => $invoice_data
                                         ));
+
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'message'   => 'Payment transaction has been made.',
+                                            'image'     => public_url('assets/logo/' ) . logo_filename($biller->Image),
+                                            'data'      => $invoice_data,
+                                            'rewards'   => get_rewards(array(
+                                                            'OrderID'       => $trans_id,
+                                                            'TransactType'  => ($biller->Type == 2 ? 3 : 2)
+                                                        ), 'Type')
+                                        );
 
                                     } else {
                                         $return_data = array(
@@ -533,16 +531,9 @@ class Ewallet extends CI_Controller
                                         if ($ecresponse['servicecharge'] == 0) {
                                             unset($invoice_data['Transaction Fee']);
                                         }
-                                        
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => $service->Name . ' transaction has been made.',
-                                            'image'     => public_url('assets/logo/' ) . logo_filename($service->Image),
-                                            'data'      => $invoice_data
-                                        );
 
                                         // save transaction and distribute reward
-                                        ecpay_save_transaction(array(
+                                        $trans_id = ecpay_save_transaction(array(
                                             'code'          => $saveData['Code'],
                                             'merch_type'    => 5,
                                             'merch_id'      => $service->id,
@@ -558,6 +549,17 @@ class Ewallet extends CI_Controller
                                             'ecresponse'    => $ecresponse,
                                             'invoice'       => $invoice_data
                                         ));
+
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'message'   => $service->Name . ' transaction has been made.',
+                                            'image'     => public_url('assets/logo/' ) . logo_filename($service->Image),
+                                            'data'      => $invoice_data,
+                                            'rewards'   => get_rewards(array(
+                                                            'OrderID'       => $trans_id,
+                                                            'TransactType'  => 5
+                                                        ), 'Type')
+                                        );
 
                                     } else {
                                         $return_data = array(
@@ -685,15 +687,8 @@ class Ewallet extends CI_Controller
                                             'Transaction Date'  => datetime(),
                                         );
 
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => 'Mobile loading transaction has been made.',
-                                            'image'     => public_url('resources/images/telco/' ) . strtolower($service->TelcoName) . '.jpg',
-                                            'data'      => $invoice_data
-                                        );
-
                                         // save transaction and distribute reward
-                                        ecpay_save_transaction(array(
+                                        $trans_id = ecpay_save_transaction(array(
                                             'code'          => $saveData['Code'],
                                             'merch_type'    => 4,
                                             'merch_id'      => $service->id,
@@ -709,6 +704,17 @@ class Ewallet extends CI_Controller
                                             'ecresponse'    => $ecresponse,
                                             'invoice'       => $invoice_data
                                         ));
+
+                                        $return_data = array(
+                                            'status'    => true,
+                                            'message'   => 'Mobile loading transaction has been made.',
+                                            'image'     => public_url('resources/images/telco/' ) . strtolower($service->TelcoName) . '.jpg',
+                                            'data'      => $invoice_data,
+                                            'rewards'   => get_rewards(array(
+                                                            'OrderID'       => $trans_id,
+                                                            'TransactType'  => 4
+                                                        ), 'Type')
+                                        );
 
                                     } else {
                                         $return_data = array(

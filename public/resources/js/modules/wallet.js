@@ -4,6 +4,7 @@ function Wallet() {
     var self = this;
 
     this.itemData = {};
+    this.rewardData = false;
 
     /**
      * Initialize events
@@ -22,6 +23,7 @@ function Wallet() {
     this.set_events = function()
     {
         var walletForms = $('#paymentForm, #moneyPadalaForm, #encashForm, #eloadForm');
+        self.rewardData = false;
         walletForms.submit(function(e) {
             e.preventDefault();
             var _this = this;
@@ -40,6 +42,7 @@ function Wallet() {
                 callback: function (r) {
                     if (r) {
                         Utils.save_form(_this, function(res) {
+                            self.rewardData = res.rewards;
                             $(_this).closest('div.modal').modal('hide');
                             $('#successMessageModal .trans-image-header').prop('src', res.image);
                             $('#successMessageModal .trans-message').text(res.message);
@@ -48,6 +51,13 @@ function Wallet() {
                             $.each(res.data, function(i,e) {
                                 table.append(`<tr><td>${i}</td><td>${e}</td></tr>`);
                             });
+
+                            if (self.rewardData == false || typeof(self.rewardData) == 'undefined') {
+                                $('#successMessageModal .reward-modal-button').hide();
+                            } else {
+                                $('#successMessageModal .reward-modal-button').show();
+                            }
+
                             $('#successMessageModal').modal({
                                 backdrop : 'static',
                                 keyboard : false
@@ -251,17 +261,21 @@ function Wallet() {
         }
     }
 
-    this.viewRewards = function(id)
+    this.viewRewards = function(id, rewards = false)
     {
-        var data  = self.getData(id);
-        if (data) {
+        if (id != false) {
+            var data  = self.getData(id);
+            if (data) {
+                rewards = data.Rewards;
+            }
+        }
+        if (rewards) {
             $('#invoiceMessageModal .modal-title').text('Distributed Rewards');
             var table = $('#invoiceMessageModal .transaction-table');
             table.html('');
-            var items = data.Rewards;
-            if (items) {
-                $.each(items, function(i,e) {
-                    table.append(`<tr><td>${e.Type}</td><td>${e.Firstname + ' ' + e.Lastname}</td><td>${e.Amount}</td></tr>`);
+            if (rewards) {
+                $.each(rewards, function(i,e) {
+                    table.append(`<tr><td style="border-top: inherit">${e.Type}</td><td style="border-top: inherit">${e.Firstname + ' ' + e.Lastname}</td><td style="border-top: inherit">${e.Amount}</td></tr>`);
                 });
             } else {
                 table.html(`<tr><td>Not available.</td></tr>`);

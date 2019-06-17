@@ -539,7 +539,8 @@ function ecpay_save_transaction($data)
 
 	if (($ID = $ci->appdb->saveData('ECPayTransactions', $transactionData))) {
 		if ($commission > 0) {
-			return distribute_transaction_rewards($transactionData, $ID);
+			distribute_transaction_rewards($transactionData, $ID);
+			return $ID;
 		}
 		return true;
 	} else {
@@ -674,16 +675,15 @@ function distribute_transaction_rewards($data, $transid)
     return !$has_error;
 }
 
-// 'code'          => $saveData['Code'],
-// 'merch_type'    => 3,
-// 'merch_id'      => $service->id,
-// 'amount'        => $amount,
-// 'prev_bal'      => $current_user,
-// 'new_bal'       => $new_balance,
-// 'fee'           => 0,
-// 'user'          => current_user(),
-// 'refno'         => $saveData['ReferenceNo'],
-// 'trans_data'    => $saveData['Date'],
-// 'ecrequest'     => $ecparams,
-// 'ecresponse'    => $ecresponse,
-// 'invoice'       => $invoice_data
+function get_rewards($where = array(), $order = false)
+{
+	$ci =& get_instance();
+	$rewards = $ci->appdb->getRewardsData($where, $order);
+
+  foreach ($rewards as &$reward) {
+      $reward['Type']   = lookup('wallet_rewards_type', $reward['Type']);
+      $reward['Amount'] = peso($reward['Amount'], true, 4);
+  }
+
+  return $rewards;
+}

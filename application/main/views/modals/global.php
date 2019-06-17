@@ -29,3 +29,41 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="successMessageModal" role="dialog" aria-labelledby="successMessageModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img class="trans-image-header" width="75">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table transaction-table">
+        </table>
+        <div class="text-center"><small class="trans-message text-success"></small></div>
+      </div>
+      <div class="modal-footer reward-modal-button">
+        <button type="button" onclick="Wallet.viewRewards(false, Wallet.rewardData)" class="btn btn-info btn-sm"><i class="fa fa-gift"></i> Rewards</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="invoiceMessageModal" role="dialog" aria-labelledby="invoiceMessageModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: #fff;">
+      <div class="modal-header">
+        <h4 class="modal-title">Invoice</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tbody class="transaction-table"></tbody>
+        </table>
+        <div class="text-center"><small class="trans-message text-success"></small></div>
+      </div>
+    </div>
+  </div>
+</div>
