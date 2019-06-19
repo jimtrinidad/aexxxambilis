@@ -481,7 +481,15 @@ class Ewallet extends CI_Controller
 
                         if ($latest_balance >= $amount) {
 
-                            $current_balance = $this->ecpay->gate_check_balance();
+                            if ($service->WalletType == 1) {
+                                // ecpay wallet
+                                $current_balance = $this->ecpay->ecpay_check_balance();
+                            } else if ($service->WalletType == 2) {
+                                // gate wallet
+                                $current_balance = $this->ecpay->gate_check_balance();
+                            } else {
+                                $current_balance = false;
+                            }
 
                             if ($current_balance !== false) {
 
@@ -497,7 +505,13 @@ class Ewallet extends CI_Controller
 
                                 if (isset($ecresponse['statusid']) && $ecresponse['statusid'] == 0) {
 
-                                    $new_balance = $this->ecpay->gate_check_balance();
+                                    if ($service->WalletType == 1) {
+                                        // ecpay wallet
+                                        $new_balance = $this->ecpay->ecpay_check_balance();
+                                    } else if ($service->WalletType == 2) {
+                                        // gate wallet
+                                        $new_balance = $this->ecpay->gate_check_balance();
+                                    }
 
                                     $this->db->trans_start();
 

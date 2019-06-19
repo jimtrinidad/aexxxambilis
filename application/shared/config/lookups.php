@@ -102,6 +102,9 @@ $config['weight_units'] = array(
     2 => 'Kilograms'
 );
 
-
+$config['ecpay_wallet_type'] = array(
+    1 => 'ECPAY',
+    2 => 'GATE',
+);
 
 $config['countries'] = json_decode(file_get_contents(dirname(__FILE__) . '/countrycodes.json'), true);

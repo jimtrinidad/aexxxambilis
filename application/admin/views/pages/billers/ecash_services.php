@@ -15,6 +15,7 @@
               <th>Description</th>
               <th>FirstField</th>
               <th>SecondField</th>
+              <th>Wallet</th>
               <th>LastUpdate</th>
               <th class="c"></th>
             </tr>
@@ -29,6 +30,7 @@
                 echo '<td>' . $c['Description'] . '</td>';
                 echo '<td>' . $c['FirstField'] . '</td>';
                 echo '<td>' . $c['SecondField'] . '</td>';
+                echo '<td>' . lookup('ecpay_wallet_type', $c['WalletType']) . '</td>';
                 echo '<td>' . date('m/d/y', strtotime($c['LastUpdate'])) . '</td>';
                 echo '<td>';
                   echo   '<div class="box-tools">
