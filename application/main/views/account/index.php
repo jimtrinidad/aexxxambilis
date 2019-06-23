@@ -2,7 +2,7 @@
 			<div class="row">
 				<div class="col-3">
 					<img src="<?php echo $profile['photo'] ?>" width="100%" />
-					<a href="javascript:;" class="small d-block" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit Profile</a>
+					<a href="javascript:;" class="small d-block" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit <span class="d-none d-sm-inline">Profile</span></a>
 				</div>
 				<div class="col-6">
 		     	<div class="balance-info" style="margin-bottom: 10px;">
@@ -16,7 +16,8 @@
 		      	if ($accountInfo->agent->Status == 0) {
 		      		echo '<a href="javascript:;" class="btn btn-sm btn-info small">Delivery agent application on process</a>';
 		      	} else if ($accountInfo->agent->Status == 1) {
-		      		echo '<a href="javascript:;" class="text-success small">Active delivery agent</a>';
+		      		echo '<h5 class="text-success">Active delivery agent</h5>';
+		      		echo '<div><a href="javascript:;" class="btn btn-sm btn-info" onclick="General.getDeliveryCoverage()">Delivery Coverage Area</a></div>';
 		      	}
 		      } else {
 		      	echo '<a href="javascript:;" class="btn btn-sm btn-warning small" onclick="Account.applyAsAgent()">Apply as Delivery Agent</a>';
@@ -76,7 +77,7 @@
 				</div>
 				<!-- Delivery Address for Personal Orders -->
 				<div class="col-12 content">
-					<label class="label-info">Delivery Address</label>
+					<label class="label-info">Address</label>
 					<div class="info-field clearfix">
 						<span class="text"><?php echo $address ? ($address->Street . ', Barangay ' . $address->data['Barangay'] . ', ' . $address->data['MuniCity']) :'' ?></span>
 						<a class="icon" href="javascript:;" onclick="General.editUserAddress()"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
@@ -122,7 +123,6 @@
 
 	  	Account.info = <?php echo json_encode($profile, JSON_HEX_TAG); ?>;
 	  	General.address = <?php echo json_encode($address, JSON_HEX_TAG); ?>;
-	  	console.log(General.address);
 
 	  });
 	</script>

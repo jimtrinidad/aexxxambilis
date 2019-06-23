@@ -127,7 +127,11 @@ function lookup_row($tableName, $find, $field = 'id', $select = false)
 
 function lookup_address($codes)
 {
-    $address = array();
+    $address = array(
+        'Province'  => '',
+        'MuniCity'  => '',
+        'Barangay'  => ''
+    );
 
     $codes = (array) $codes;
 

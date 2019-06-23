@@ -67,8 +67,22 @@ $config['user_address'] = array(
 );
 
 
+$config['delivery_coverage_address'] = array(
+	array('DAAddressProvince', 'Province', 'trim|required'),
+	array('DAAddressCity', 'City/Municipal', 'trim|required'),
+);
+
 $config['save_store_profile'] = array(
-	array('Name', 'Store name', 'trim|required')
+	array('Name', 'Store name', 'trim|required'),
+	array('SDProvince', 'Province', 'trim|required'),
+	array('SDCity', 'City/Municipal', 'trim|required'),
+	array('SDBarangay', 'Barangay', 'trim|required'),
+);
+
+$config['store_address'] = array(
+	array('SAddressProvince', 'Province', 'trim|required'),
+	array('SAddressCity', 'City/Municipal', 'trim|required'),
+	array('SAddressBarangay', 'Barangay', 'trim|required'),
 );
 
 $config['save_store_item'] = array(

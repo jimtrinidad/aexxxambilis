@@ -6,6 +6,7 @@ function Store() {
     this.profile = false;
     this.categories = [];
     this.sub_categories = [];
+    this.store_locations;
 
     /**
      * Initialize events
@@ -24,12 +25,25 @@ function Store() {
     this.set_events = function()
     {
 
-        /**
-        * login submit
-        */
-        $('.modalForm').submit(function(e) {
+
+        $('#storeProfileForm, #itemForm').submit(function(e) {
             e.preventDefault();
             Utils.save_form(this);
+        });
+
+        $(document).on('click', '#addStoreLocation', function(e){
+            e.preventDefault();
+            self.addStoreLocation();
+        });
+
+        $('#storeAddressForm').submit(function(e) {
+            e.preventDefault();
+            Utils.save_form(this, function(rsp) {
+                if (rsp.status) {
+                    self.showStoreLocations();
+                    $('#storeAddressModal').modal('hide');
+                }
+            });
         });
 
     }
@@ -61,16 +75,17 @@ function Store() {
         var modal = '#storeProfileModal';
         Utils.show_form_modal(modal, form, false, function(){
             if (self.profile) {
+                console.log(self.profile);
                 Utils.set_form_input_value(form, {
                     'Name'    : self.profile.Name,
                     'Address' : self.profile.Address,
                     'Contact' : self.profile.Contact,
                     'Email'   : self.profile.Email,
-                    'Province': self.profile.Province
+                    'SDProvince': self.profile.Province
                 });
 
-                General.loadCityOptions('#storeProfileModal #City', '#storeProfileModal #Province', '#storeProfileModal #Barangay', self.profile.City, function(){
-                    General.loadBarangayOptions('#storeProfileModal #Barangay', '#storeProfileModal #City', self.profile.Barangay);
+                General.loadCityOptions('#SDCity', '#SDProvince', '#SDBarangay', self.profile.City, function(){
+                    General.loadBarangayOptions('#SDBarangay', '#SDCity', self.profile.Barangay);
                 });
             }
         });
@@ -160,6 +175,122 @@ function Store() {
                             } else {
                                 $.LoadingOverlay("hide");
                             }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    this.showStoreLocations = function()
+    {   
+
+        $.LoadingOverlay("show");
+
+        $.get(window.public_url('store/locations')).done(function(response) {
+            if (response.status) {
+
+                var $modalObj = $('#addessListModal');
+                $modalObj.find('.modal-title').text('Store Locations');
+                $modalObj.find('.add-address').attr('id', 'addStoreLocation');
+
+                self.store_locations = response.data;
+
+                if (Object.keys(response.data).length) {
+                    var tpl = '<tr><th>Province</th><th>City/Muni</th><th>Barangay</th><th>Street</th><th></th></tr>';
+
+                    $.each(response.data, function(i,e) {
+                        tpl += `<tr>
+                                    <td>${e.names.Province}</td>
+                                    <td>${e.names.MuniCity}</td>
+                                    <td>${e.names.Barangay}</td>
+                                    <td>${e.Street}</td>
+                                    <td style="width:90px;" class="text-center">
+                                        <a class="btn btn-sm btn-primary" href="javascript:;" title="Edit" onclick="Store.editStoreLocation(${e.id})"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-sm btn-danger" href="javascript:;" title="Delete" onclick="Store.deleteStoreLocation(${e.id})"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>`;
+                    });
+
+                    $modalObj.find('.address-table-list').html(tpl)
+                } else {
+                    $modalObj.find('.address-table-list').html('<td>No record found.</td>');
+                }
+                
+                $modalObj.modal({
+                    backdrop : 'static',
+                    keyboard : false
+                });
+
+            }
+            $.LoadingOverlay("hide");
+        });
+
+    }
+
+
+    this.addStoreLocation = function()
+    {   
+
+        var form  = '#storeAddressForm';
+        var modal = '#storeAddressModal';
+        Utils.show_form_modal(modal, form, 'Add Store Location', function(){
+            Utils.set_form_input_value(form, {
+                SAddressID       : '',
+                SAddressProvince : '',
+                SAddressCity     : '',
+                SAddressBarangay : '',
+                SAddressStreet   : ''
+            });
+        });
+
+    }
+
+    this.editStoreLocation = function(id)
+    {
+        var form  = '#storeAddressForm';
+        var modal = '#storeAddressModal';
+
+        if (self.store_locations[id] != 'undefined') {
+            var address = self.store_locations[id];
+            Utils.show_form_modal(modal, form, 'Edit Store Location', function() {
+                $(form).find('#SAddressCity').prop('disabled', false);
+                $(form).find('#SAddressBarangay').prop('disabled', false);
+                Utils.set_form_input_value(form, {
+                    SAddressID       : address.id,
+                    SAddressProvince : address.Province,
+                    SAddressCity     : address.City,
+                    SAddressBarangay : address.Barangay,
+                    SAddressStreet   : address.Street,
+                });
+
+                General.loadCityOptions('#SAddressCity', '#SAddressProvince', '#SAddressBarangay', address.City, function(){
+                    General.loadBarangayOptions('#SAddressBarangay', '#SAddressCity', address.Barangay);
+                });
+            });
+        }
+    }
+
+    this.deleteStoreLocation = function(id)
+    {
+        if (self.store_locations[id] != 'undefined') {
+            var address = self.store_locations[id];
+            bootbox.confirm('Are you sure you want to <label class="label label-danger">remove</label> ' + Object.values(address.names).reverse().join(' ') + ' location?', function(r){
+                if (r) {
+                    $.LoadingOverlay("show", {zIndex: 999});
+                    $.ajax({
+                        url: window.base_url('store/delete_location/' + address.id),
+                        type: 'GET',
+                        success: function (response) {
+                            if (response.status) {
+                                self.showStoreLocations();
+                            } else {
+                                bootbox.alert(response.message);
+                            }
+                        },
+                        complete: function() {
+                            $.LoadingOverlay("hide");
                         }
                     });
                 }

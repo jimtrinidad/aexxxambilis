@@ -12,7 +12,9 @@ function response_json($array, $cache = false, $add_token = true)
 	}
 
 	if ($add_token) {
-		$array['token'] = $ci->security->get_csrf_hash();
+		if (strtolower($_SERVER['REQUEST_METHOD']) != 'get') {
+			$array['token'] = $ci->security->get_csrf_hash();
+		}
 	}
 	$ci->output->set_content_type('application/json')->set_output(json_encode($array));
 }

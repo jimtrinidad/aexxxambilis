@@ -73,9 +73,9 @@ class Store extends CI_Controller
                     'Contact'   => get_post('Contact'),
                     'Email'     => get_post('Email'),
                     'Slug'      => $slug,
-                    'Province'  => get_post('Province'),
-                    'City'      => get_post('City'),
-                    'Barangay'  => get_post('Barangay'),
+                    'Province'  => get_post('SDProvince'),
+                    'City'      => get_post('SDCity'),
+                    'Barangay'  => get_post('SDBarangay'),
                     'LastUpdate'=> datetime()
                 );
 
@@ -276,6 +276,123 @@ class Store extends CI_Controller
                     'message'   => 'Deleting item failed.'
                 ));
             }
+        } else {
+            response_json(array(
+                'status'    => false,
+                'message'   => 'Invalid item.'
+            ));
+        }
+
+    }
+
+
+
+    public function locations()
+    {
+
+        $address = $this->appdb->getRecords('StoreLocations', array('UserID' => current_user()), 'Province');
+        $items   = array();
+        foreach ($address as $i) {
+            $i['names'] = lookup_address($i);
+            $items[$i['id']] = $i;
+        }
+        $return_data = array(
+            'status'  => true,
+            'data'    => $items
+        );
+        response_json($return_data);
+    }
+
+    public function save_location()
+    {
+
+        $storeData  = $this->appdb->getRowObject('StoreDetails', current_user(), 'OwnerID');
+
+        if ($storeData) {
+            if (validate('store_address') == FALSE) {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Some fields have errors.',
+                    'fields'    => validation_error_array()
+                );
+            } else {
+
+                $exists = $this->appdb->getRowObjectWhere('StoreLocations', array(
+                    'Barangay'          => get_post('SAddressBarangay'),
+                    'City'              => get_post('SAddressCity'),
+                    'Province'          => get_post('SAddressProvince'),
+                    'UserID'            => current_user()
+                ));
+
+                if (!$exists || ($exists  && $exists->id == get_post('SAddressID'))) {
+
+                    $saveData     = array(
+                        'Street'            => get_post('SAddressStreet'),
+                        'Barangay'          => get_post('SAddressBarangay'),
+                        'City'              => get_post('SAddressCity'),
+                        'Province'          => get_post('SAddressProvince'),
+                        'LastUpdate'        => datetime(),
+                    );
+
+                    $addressData = $this->appdb->getRowObject('StoreLocations', get_post('SAddressID'));
+                    if ($addressData) {
+                        $saveData['id'] = $addressData->id;
+                    } else {
+                        $saveData['UserID'] = current_user();
+                        $saveData['StoreID']= $storeData->id;
+                    }
+
+                    if (($ID = $this->appdb->saveData('StoreLocations', $saveData))) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Location has been saved successfully.',
+                            'id'        => $ID
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving failed. Please try again later.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Location already exists.'
+                    );
+                }
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Store data not found.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
+
+    public function delete_location($id = null)
+    {
+
+        $itemData = $this->appdb->getRowObjectWhere('StoreLocations', array('id' => $id, 'UserID' => current_user()));
+        if ($itemData) {
+
+            if ($this->appdb->deleteData('StoreLocations', $itemData->id)) {
+                
+                response_json(array(
+                    'status'    => true,
+                    'message'   => 'Location has been deleted.'
+                ));
+
+            } else {
+                response_json(array(
+                    'status'    => false,
+                    'message'   => 'Deleting failed.'
+                ));
+            }
+
         } else {
             response_json(array(
                 'status'    => false,

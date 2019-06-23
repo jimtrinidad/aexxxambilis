@@ -389,6 +389,105 @@ class Account extends CI_Controller
         response_json($return_data);
     }
 
+    public function delivery_coverage()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        $address = $this->appdb->getRecords('DeliveryAgentCoverageAddress', array('UserID' => current_user()), 'Province');
+        $items   = array();
+        foreach ($address as $i) {
+            $i['names'] = lookup_address($i);
+            $items[$i['id']] = $i;
+        }
+        $return_data = array(
+            'status'  => true,
+            'data'    => $items
+        );
+        response_json($return_data);
+    }
+
+    public function save_delivery_coverage()
+    {
+        if (isGuest()) {
+            redirect();
+        }
+
+        if (validate('delivery_coverage_address') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+
+            $saveData     = array(
+                'Barangay'          => get_post('DAAddressBarangay'),
+                'City'              => get_post('DAAddressCity'),
+                'Province'          => get_post('DAAddressProvince'),
+                'LastUpdate'        => datetime(),
+            );
+
+            $addressData = $this->appdb->getRowObject('DeliveryAgentCoverageAddress', get_post('DAAddressID'));
+            if ($addressData) {
+                $saveData['id'] = $addressData->id;
+            } else {
+                $saveData['UserID'] = current_user();
+            }
+
+            if (($ID = $this->appdb->saveData('DeliveryAgentCoverageAddress', $saveData))) {
+                $return_data = array(
+                    'status'    => true,
+                    'message'   => 'Covered area has been saved successfully.',
+                    'id'        => $ID
+                );
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Saving failed. Please try again later.'
+                );
+            }
+        }
+
+        response_json($return_data);
+    }
+
+
+    public function delete_delivery_coverage($id = null)
+    {
+
+        if (isGuest()) {
+            redirect();
+        }
+
+        $itemData = $this->appdb->getRowObjectWhere('DeliveryAgentCoverageAddress', array('id' => $id, 'UserID' => current_user()));
+        if ($itemData) {
+
+            if ($this->appdb->deleteData('DeliveryAgentCoverageAddress', $itemData->id)) {
+                
+                response_json(array(
+                    'status'    => true,
+                    'message'   => 'Covered area has been deleted.'
+                ));
+
+            } else {
+                response_json(array(
+                    'status'    => false,
+                    'message'   => 'Deleting failed.'
+                ));
+            }
+
+        } else {
+            response_json(array(
+                'status'    => false,
+                'message'   => 'Invalid item.'
+            ));
+        }
+
+    }
+
+
 
 
     /**

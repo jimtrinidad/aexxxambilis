@@ -25,8 +25,8 @@
 						<input type="text" class="form-control" name="Email" id="Email" placeholder="Email">
 					</div>
           <div class="form-group">
-            <label class="control-label" for="Province">Province</label>
-            <select id="Province" name="Province" class="form-control" onChange="General.loadCityOptions('#City', this, '#Barangay')">
+            <label class="control-label" for="SDProvince">Province</label>
+            <select id="SDProvince" name="SDProvince" class="form-control" onChange="General.loadCityOptions('#SDCity', this, '#SDBarangay')">
               <option value="">--</option>
               <?php
                 foreach (lookup_all('UtilLocProvince', false, 'provDesc', false) as $v) {
@@ -37,21 +37,21 @@
             <span class="help-block hidden"></span>
           </div>
           <div class="form-group">
-            <label class="control-label" for="City">City/Municipality</label>
-            <select id="City" disabled="disabled"  name="City" class="form-control" onChange="General.loadBarangayOptions('#Barangay', this)">
+            <label class="control-label" for="SDCity">City/Municipality</label>
+            <select id="SDCity" disabled="disabled"  name="SDCity" class="form-control" onChange="General.loadBarangayOptions('#SDBarangay', this)">
               <option value="">--</option>
             </select>
             <span class="help-block hidden"></span>
           </div>
           <div class="form-group">
-            <label class="control-label" for="Barangay">Barangay</label>
-            <select id="Barangay" disabled="disabled" name="Barangay" class="form-control">
+            <label class="control-label" for="SDBarangay">Barangay</label>
+            <select id="SDBarangay" disabled="disabled" name="SDBarangay" class="form-control">
               <option value="">--</option>
             </select>
             <span class="help-block hidden"></span>
           </div>
           <div class="form-group">
-            <label>Street/Building</label>
+            <label for="Address">Street/Building</label>
             <textarea class="form-control" name="Address" id="Address" placeholder="Street/Building"></textarea>
           </div>
 				</div>

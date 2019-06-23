@@ -34,27 +34,33 @@
 		
 		<div class="content">
 			<div class="row justify-content-center">
-				<div class="col-3 text-center icon-container">
+				<div class="col text-center icon-container">
 					<a href="javascript:;" onClick="Store.updateProfile()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/shop.png" class="i-45" />
 						<span>Update Profile</span>
 					</a>
 				</div>
-				<?php // if ($StoreData && $StoreData->Status == 1) { ?>
-				<div class="col-3 text-center icon-container">
+				<?php if ($StoreData && $StoreData->Status == 1) { ?>
+				<div class="col text-center icon-container">
 					<a href="javascript:;" onClick="Store.addProduct()">
 						<img src="<?php echo public_url(); ?>resources/images/icons/basket.png" class="i-45" />
 						<span>Sell Product or Service</span>
 					</a>
 				</div>
-				<?php //} ?>
-				<div class="col-3 text-center icon-container">
+				<div class="col text-center icon-container">
+					<a href="javascript:;" onclick="Store.showStoreLocations()">
+						<img src="<?php echo public_url(); ?>resources/images/icons/map.png" class="i-45" />
+						<span>Store Locations</span>
+					</a>
+				</div>
+				<?php } ?>
+				<div class="col text-center icon-container">
 					<a href="javascript:;">
 						<img src="<?php echo public_url(); ?>resources/images/icons/cart.png" class="i-45" />
 						<span>Sales Order</span>
 					</a>
 				</div>
-				<div class="col-3 text-center icon-container">
+				<div class="col text-center icon-container">
 					<a href="javascript:;">
 						<img src="<?php echo public_url(); ?>resources/images/icons/sales-report.png" class="i-45" />
 						<span>Sales Report</span>
@@ -117,6 +123,7 @@
 <?php } ?>
 
 <?php view('main/store/modals'); ?>
+<?php view('modals/address') ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.min.js"></script>

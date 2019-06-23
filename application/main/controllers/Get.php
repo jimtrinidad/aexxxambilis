@@ -103,4 +103,20 @@ class Get extends CI_Controller
     }
 
 
+    public function delivery_coverage()
+    {
+      check_authentication();
+      $address = $this->appdb->getRecords('DeliveryAgentCoverageAddress', array('UserID' => current_user()), 'Province');
+      $items   = array();
+      foreach ($address as $i) {
+        $i['names'] = lookup_address($i);
+        $items[$i['id']] = $i;
+      }
+      $return_data = array(
+        'status'  => true,
+        'data'    => $items
+      );
+      response_json($return_data);
+    }
+
 }
