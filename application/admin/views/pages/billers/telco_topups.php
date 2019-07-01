@@ -2,7 +2,7 @@
   <div class="col-xs-12">
     <div class="box box-primary">
             <div class="box-header">
-        <h3 class="box-title">ECPAY Telco Topups</h3>
+        <h3 class="box-title">Link Telco Topups</h3>
         <div class="box-tools">
           <form action="<?php echo site_url('billers/telco_topups') ?>" method="get" class="form-inline">
             <div class="form-group">

@@ -23,11 +23,23 @@
 			</div>
 		</div> -->
 
+		<?php if ($in_area) { ?>
+		
 		<div class="row">
 			<div class="col text-center">
-				<button class="add-to-cart-btn" onclick="Marketplace.addToCart('<?php echo $productData->Code ?>')">add to basket - <?php echo show_price($productData->Price, $distribution['discount']) ?></button>
+					<button class="add-to-cart-btn" onclick="Marketplace.addToCart('<?php echo $productData->Code ?>')">add to basket - <?php echo show_price($productData->Price, $distribution['discount']) ?></button>
 			</div>
 		</div>
+		<?php  } else { ?>
+		<div class="row">
+			<div class="col product-desc">
+				<h4 class="price text-danger"><?php echo show_price($productData->Price, $distribution['discount']) ?></h4>
+				<?php if (!isGuest()) { ?>
+				<b class="text-strong">Not available in your area.</b>
+				<?php } ?>
+			</div>
+		</div>
+		<?php  }  ?>
 
 		<div class="row">
 			<div class="col product-desc">

@@ -174,6 +174,11 @@ class Appdb extends CI_Model {
 			$this->db->where($where);
 		}
 
+		if (!isGuest()) {
+			$stores = get_near_stores(current_user());
+			$this->db->where_in('StoreID', $stores);
+		}
+
 		$count 	= $this->db->count_all_results();
 
 		// GET RESULTS DATA
@@ -185,6 +190,10 @@ class Appdb extends CI_Model {
 
 		if ($where != false) {
 			$this->db->where($where);
+		}
+
+		if (!isGuest()) {
+			$this->db->where_in('StoreID', $stores);
 		}
 
 		if ($order != false) {
@@ -280,6 +289,10 @@ class Appdb extends CI_Model {
 	public function getAccounts($limit, $start, $where = false, $order = false)
 	{
 		
+		$count_query = 'SELECT COUNT(*) AS count FROM Users AS u
+							WHERE
+							   id != ""';
+
 		$query = 'FROM Users AS u
 							LEFT JOIN WalletTransactions AS wt ON wt.AccountID = u.id
 							WHERE
@@ -295,9 +308,9 @@ class Appdb extends CI_Model {
 		// GET COUNT
 		if ($where != false) {
 			$query .= ' AND ' . implode(' AND ', $where);
+			$count_query .= ' AND ' . implode(' AND ', $where);
 		}
 
-		$count_query = 'SELECT COUNT(*) AS count ' . $query;
 		$count 	= $this->db->query($count_query)->row()->count;
 
 		// GET RESULTS DATA

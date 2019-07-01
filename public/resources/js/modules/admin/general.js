@@ -24,7 +24,9 @@ function General() {
 
         $('.modalForm').submit(function(e) {
             e.preventDefault();
-            Utils.save_form(this, function() {
+            console.log($(this).prop('id'));
+            Utils.save_form(this, function(res) {
+                console.log(res);
                 location.reload();
             });
         });
@@ -81,7 +83,7 @@ function General() {
 
 
     this.viewOrderInvoice = function(code)
-    {   
+    {
 
         $.LoadingOverlay("show", {zIndex: 999});
         $.ajax({
@@ -98,6 +100,29 @@ function General() {
             }
         });
 
+    }
+
+    this.updateOrderStatus = function(code, status)
+    {
+
+        var $status_selector = $('#orderStatusForm #order_status');
+
+        $status_selector.val(status);
+        $status_selector.find('option').removeClass('hide');
+
+        $.each($status_selector.find('option'), function(i,e) {
+            var val = $(e).prop('value');
+            if (val < status) {
+                $(e).addClass('hide');
+            }
+        });
+
+        $('#orderStatusForm #Code').val(code);
+
+        $('#orderStatusModal').modal({
+            backdrop : 'static',
+            keyboard : false
+        });
     }
 
 

@@ -9,7 +9,7 @@
 						<p><?php echo $userData->Mobile; ?></p>
 						<p><?php echo $userData->EmailAddress; ?></p>
 						<br />
-						<p class="text-bold">BILLING DETAILS</p>
+						<p class="text-bold">DELIVERY ADDRESS</p>
 						<p><?php echo $address->Street . ', Barangay ' . $address->data['Barangay']; ?>, </p>
 						<p><?php echo $address->data['MuniCity'] . ', ' . $address->data['Province']; ?></p>
 						<br />

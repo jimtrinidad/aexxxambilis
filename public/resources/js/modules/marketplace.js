@@ -132,25 +132,30 @@ function Marketplace() {
 
     this.placeOrder = function()
     {
-        $.LoadingOverlay("show", {zIndex: 999});
-        var params = {};
-        params[$global.csrfName] = $global.csrfVal;
-        $.ajax({
-            url: window.base_url('marketplace/place_order'),
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                // console.log(response);
-                if (response.status) {
-                    window.location = public_url('order/invoice/' +  response.id);
-                } else {
-                    bootbox.alert(response.message);
-                }
-            },
-            complete: function() {
-                $.LoadingOverlay('hide');
+        bootbox.confirm('Confirm your order with a total price of <b>'+ $('#total_amount_to_pay').text() +'</b>', function(r) {
+            if (r) {
+                $.LoadingOverlay("show", {zIndex: 999});
+                var params = {};
+                params[$global.csrfName] = $global.csrfVal;
+                $.ajax({
+                    url: window.base_url('marketplace/place_order'),
+                    type: 'POST',
+                    data: params,
+                    success: function (response) {
+                        // console.log(response);
+                        if (response.status) {
+                            $('body').html('');
+                            window.location = public_url('order/invoice/' +  response.id);
+                        } else {
+                            bootbox.alert(response.message);
+                        }
+                    },
+                    complete: function() {
+                        $.LoadingOverlay('hide');
+                    }
+                });
             }
-        });
+        })
     }
 
 }

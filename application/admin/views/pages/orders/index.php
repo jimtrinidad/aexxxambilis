@@ -15,7 +15,7 @@
               <th>ItemCount</th>
               <th>Amount</th>
               <th>Company</th>
-              <th>Inverstor</th>
+              <th>DeliveryAgent</th>
               <th>Status</th>
               <th>Date</th>
               <th class="c"></th>
@@ -25,6 +25,15 @@
             <?php
             foreach ($records as $c) {
               $d = json_decode($c['Distribution']);
+
+              if ($c['agent'] == 0) {
+                $agent = '<span class="text-gray">not needed</span>';
+              } else if ($c['agent'] == 1) {
+                $agent = '<a data-order="'.$c['Code'].'" class="set_del_agent text-red">not set</a>';
+              } else {
+                $agent = '<span class="text-green">' . $c['agentData']->Firstname . ' ' . $c['agentData']->Lastname . '</span>';
+              }
+
               echo "<tr class='text-left' id='deposit_{$c['Code']}'>";
                 echo '<td>' . $c['Code'] . '</td>';
                 echo '<td>' . $c['user']->Firstname . ' ' . $c['user']->Lastname . '</td>';
@@ -32,14 +41,17 @@
                 echo '<td>' . $c['ItemCount'] . '</td>';
                 echo '<td>' . peso($c['TotalAmount']) . '</td>';
                 echo '<td>' . peso($d->company) . '</td>';
-                echo '<td>' . peso($d->investor) . '</td>';
+                echo '<td>' . $agent . '</td>';
                 echo '<td>' . lookup('order_status', $c['Status']) . '</td>';
                 echo '<td>' . date('y/m/d', strtotime($c['DateOrdered'])) . '</td>';
                 echo '<td>';
                   echo   '<div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
-                            <div class="input-group-btn">
-                              <button type="button" class="btn btn-xs btn-info" onClick="General.viewOrderInvoice('.$c['Code'].')"><i class="fa fa-file-text-o"></i> Invoice</button>
+                            <div class="input-group-btn">';
+                    if ($c['Status'] <=3) {
+                      echo '<button type="button" class="btn btn-xs btn-success" onClick="General.updateOrderStatus('.$c['Code'].', '.$c['Status'].')"><i class="fa fa-pencil"></i> Status</button>';
+                    }
+                 echo         '<button type="button" class="btn btn-xs btn-info" onClick="General.viewOrderInvoice('.$c['Code'].')"><i class="fa fa-file-text-o"></i> Invoice</button>
                             </div>
                           </div>
                         </div>';
@@ -55,3 +67,5 @@
     <!-- /.box -->
   </div>
 </div>
+
+<?php view('pages/orders/modals'); ?>

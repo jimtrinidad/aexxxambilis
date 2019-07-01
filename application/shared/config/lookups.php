@@ -42,7 +42,8 @@ $config['wallet_rewards_type'] = array(
     'discount'  => 'Discounts',
     'cashback'  => 'Cashback',
     'referrer'  => 'Referrer Points',
-    'shared'    => 'Shared Rewards'
+    'shared'    => 'Shared Rewards',
+    'delivery'  => 'Delivery'
 );
 
 // also use on ecpay merch type (exclude purchase)

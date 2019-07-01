@@ -136,7 +136,7 @@ function Utils() {
     this.show_form_errors = function(form, fields, message = false)
     {
         var errors = '';
-        if (message) {
+        if (message && typeof(fields) == 'undefined') {
             errors += '<small class="d-block">' + message + '</small>';
         }
         $.each(fields, function(i,e){

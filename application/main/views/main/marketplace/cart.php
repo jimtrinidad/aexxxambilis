@@ -10,14 +10,19 @@
       <th style="width:15%"></th>
     </tr>
   </thead>
+  <?php foreach ($items as $k => $store) { ?>
   <tbody>
-  <?php foreach ($items as $i) { ?>
+    <tr>
+      <th colspan="5" style="vertical-align: middle;">
+        <b><a class="text-info" href="<?php echo site_url('business/'. $store['slug']) ?>"><?php echo $store['name'] ?></a></b>
+      </th>
+    </tr>
+  <?php foreach ($store['items'] as $i) { ?>
     <tr id="rowid_<?php echo $i['rowid']; ?>">
-      <td data-th="Product">
-          <div class="float-left" style="width: 100px;"><img src="<?php echo public_url('assets/products/') . $i['img']?>" style="width: 90px;height: auto;" class="img-responsive" /></div>
-          <div>
-            <h4 class="nomargin cart_product_name"><?php echo $i['name']; ?></h4>
-            <p>By: <a href="javascript:;"><?php echo $i['seller']; ?></a></p>
+      <td data-th="Product" style="padding-left: 30px;">
+          <div class="float-left" style="width: 100px;"><img src="<?php echo public_url('assets/products/') . $i['img']?>" style="width: 60px;height: auto;" class="img-responsive" /></div>
+          <div class="itemname">
+            <b class="nomargin cart_product_name"><?php echo $i['name']; ?></b>
           </div>
           <div class="clearfix"></div>
       </td>
@@ -29,10 +34,12 @@
       <td class="actions text-right" data-th="">
         <button onclick="Marketplace.updateCartItem('<?php echo $i['rowid']; ?>')" class="btn btn-info btn-sm" title="Update"><i class="fa fa-refresh"></i></button>
         <button onclick="Marketplace.removeCartItem('<?php echo $i['rowid']; ?>')"class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-trash-o"></i></button>
+        <div class="clearfix"></div>
       </td>
     </tr>
   <?php } ?>
   </tbody>
+  <?php } ?>
   <tfoot>
     <tr>
       <td><a href="<?php echo site_url('marketplace') ?>" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>

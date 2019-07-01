@@ -383,6 +383,10 @@ table#cart>tfoot>tr>td {
   vertical-align: middle;
 }
 
+table#cart .itemname {
+  padding-top: 10px;
+}
+
 @media screen and (max-width: 600px) {
   table#cart tbody td .form-control {
     width: 20%;
@@ -397,6 +401,10 @@ table#cart>tfoot>tr>td {
   }
   .actions .btn-danger {
     float: right;
+    margin: 0;
+  }
+  table#cart .itemname {
+    padding-top: 0;
   }
   table#cart thead {
     display: none;

@@ -1,30 +1,31 @@
 <div class="my-account container">
 			<div class="row">
-				<div class="col-3">
+				<div class="col-4 col-sm-3 text-center">
 					<img src="<?php echo $profile['photo'] ?>" width="100%" />
-					<a href="javascript:;" class="small d-block" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit <span class="d-none d-sm-inline">Profile</span></a>
+					<a href="javascript:;" class="btn btn-sm btn-success small d-block" onclick="Account.editProfile()"><i class="fa fa-pencil"></i> Edit <span class="d-none d-sm-inline">Profile</span></a>
 				</div>
-				<div class="col-6">
-		     	<div class="balance-info" style="margin-bottom: 10px;">
-		        <p>Balance: <?php echo peso($summary['balance']) ?></p>
-		        <p>Total Transactions: <?php echo number_format($summary['transactions']) ?></p>
-		        <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
-		        <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
-		      </div>
+				<div class="col-5 col-sm-7">
+		     	<div class="balance-info" style="margin-bottom: 5px;">
+			        <p>Balance: <?php echo peso($summary['balance']) ?></p>
+			        <p>Total Transactions: <?php echo number_format($summary['transactions']) ?></p>
+			        <p>Total Debits: <?php echo peso($summary['debit']) ?></p>
+			        <p>Total Credits: <?php echo peso($summary['credit']) ?></p>
+			      </div>
 		      <?php
 		      if ($accountInfo->agent) {
 		      	if ($accountInfo->agent->Status == 0) {
 		      		echo '<a href="javascript:;" class="btn btn-sm btn-info small">Delivery agent application on process</a>';
 		      	} else if ($accountInfo->agent->Status == 1) {
-		      		echo '<h5 class="text-success">Active delivery agent</h5>';
-		      		echo '<div><a href="javascript:;" class="btn btn-sm btn-info" onclick="General.getDeliveryCoverage()">Delivery Coverage Area</a></div>';
+		      		echo '<b class="text-success">Active delivery agent</b>';
+		      		echo '<div><a href="javascript:;" class="btn btn-sm btn-info" onclick="General.getDeliveryCoverage()">Covered Area</a></div>';
+		      		echo '<div class="mt-1"><a href="'.site_url('account/order_delivery').'" class="btn btn-sm btn-warning">Delivery Orders</a></div>';
 		      	}
 		      } else {
 		      	echo '<a href="javascript:;" class="btn btn-sm btn-warning small" onclick="Account.applyAsAgent()">Apply as Delivery Agent</a>';
 		      }
 		      ?>
 		    </div>
-				<div class="col-3">
+				<div class="col-3 col-sm-2">
 					<img src="<?php echo public_url('assets/qr/') . get_qr_file($accountInfo->RegistrationID); ?>" width="100%" />
 				</div>
 			</div>	

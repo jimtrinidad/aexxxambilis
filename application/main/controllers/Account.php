@@ -92,6 +92,12 @@ class Account extends CI_Controller
         // response_json(get_user_connections(current_user()));
         // response_json(straight_connections(get_user_connections(current_user())));
 
+        $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+        $delivery_man = find_delivery_agent($address);
+
+        print_data($address);
+        var_dump($delivery_man);
+
     }
 
 
@@ -102,9 +108,7 @@ class Account extends CI_Controller
 
     public function index()
     {
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         $userData = user_account_details();
 
@@ -152,9 +156,7 @@ class Account extends CI_Controller
     public function save_profile()
     {
 
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
         
         if (validate('account_update') == FALSE) {
             $return_data = array(
@@ -241,9 +243,7 @@ class Account extends CI_Controller
 
     public function save_address()
     {
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         if (validate('user_address') == FALSE) {
             $return_data = array(
@@ -297,86 +297,93 @@ class Account extends CI_Controller
 
     public function delivery_agent_application()
     {
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         $user = $this->appdb->getRowObject('Users', get_post('user_id'), 'RegistrationID');
 
         if ($user) {
 
-            $this->load->library('upload');
-            $upload_status = true;
-            $uploadData    = array();
-            $upload_errors = array();
+            if (isset($_FILES['file']['name']) && !empty($_FILES['file']['name'])) {
 
-            foreach ($_FILES['file']['name'] as $i => $name) {
+                $this->load->library('upload');
+                $upload_status = true;
+                $uploadData    = array();
+                $upload_errors = array();
 
-                $randomname = md5(random_letters());
+                foreach ($_FILES['file']['name'] as $i => $name) {
 
-                // validate file upload
-                $config = array(
-                    'upload_path'   => UPLOADS_DIRECTORY,
-                    'allowed_types' => 'gif|jpg|png',
-                    // 'max_size'      => '1000', // 1mb
-                    // 'max_width'     => '1024',
-                    // 'max_height'    => '768',
-                    'overwrite'     => true,
-                    'file_name'     => $randomname
-                );
-                $this->upload->initialize($config);
+                    $randomname = md5(random_letters());
 
-                $_FILES['userFile']['name']         = $_FILES['file']['name'][$i];
-                $_FILES['userFile']['type']         = $_FILES['file']['type'][$i];
-                $_FILES['userFile']['tmp_name']     = $_FILES['file']['tmp_name'][$i];
-                $_FILES['userFile']['error']        = $_FILES['file']['error'][$i];
-                $_FILES['userFile']['size']         = $_FILES['file']['size'][$i];
+                    // validate file upload
+                    $config = array(
+                        'upload_path'   => UPLOADS_DIRECTORY,
+                        'allowed_types' => 'gif|jpg|png',
+                        // 'max_size'      => '1000', // 1mb
+                        // 'max_width'     => '1024',
+                        // 'max_height'    => '768',
+                        'overwrite'     => true,
+                        'file_name'     => $randomname
+                    );
+                    $this->upload->initialize($config);
 
-                if ($this->upload->do_upload('userFile') == false) {
-                    $upload_errors[$i] = $this->upload->display_errors('','');
-                    $upload_status = false;
-                } else {
-                    $fileData = $this->upload->data();
-                    $uploadData[$i] = $fileData['file_name'];
+                    $_FILES['userFile']['name']         = $_FILES['file']['name'][$i];
+                    $_FILES['userFile']['type']         = $_FILES['file']['type'][$i];
+                    $_FILES['userFile']['tmp_name']     = $_FILES['file']['tmp_name'][$i];
+                    $_FILES['userFile']['error']        = $_FILES['file']['error'][$i];
+                    $_FILES['userFile']['size']         = $_FILES['file']['size'][$i];
+
+                    if ($this->upload->do_upload('userFile') == false) {
+                        $upload_errors[$i] = $this->upload->display_errors('','');
+                        $upload_status = false;
+                    } else {
+                        $fileData = $this->upload->data();
+                        $uploadData[$i] = $fileData['file_name'];
+                    }
+
                 }
 
-            }
+                if ($upload_status) {
 
-            if ($upload_status) {
-
-                $saveData  = array(
-                    'Status'        => 0,
-                    'Requirements'  => json_encode($uploadData),
-                    'DateApplied'   => datetime(),
-                    'LastUpdate'    => datetime()
-                );
-                $agentData = $this->appdb->getRowObject('DeliveryAgents', $user->id, 'UserID');
-                if ($agentData) {
-                    $saveData['id'] = $StoreData->id;
-                } else {
-                    $saveData['Code']     = microsecID(true);
-                    $saveData['UserID']   = $user->id;
-                }
-
-                if (($ID = $this->appdb->saveData('DeliveryAgents', $saveData))) {
-                    $return_data = array(
-                        'status'    => true,
-                        'message'   => 'Delivery Agent application has been submitted.',
-                        'id'        => $ID
+                    $saveData  = array(
+                        'Status'        => 0,
+                        'Requirements'  => json_encode($uploadData),
+                        'DateApplied'   => datetime(),
+                        'LastUpdate'    => datetime()
                     );
+                    $agentData = $this->appdb->getRowObject('DeliveryAgents', $user->id, 'UserID');
+                    if ($agentData) {
+                        $saveData['id'] = $StoreData->id;
+                    } else {
+                        $saveData['Code']     = microsecID(true);
+                        $saveData['UserID']   = $user->id;
+                    }
+
+                    if (($ID = $this->appdb->saveData('DeliveryAgents', $saveData))) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Delivery Agent application has been submitted.',
+                            'id'        => $ID
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Saving application failed. Please try again later.'
+                        );
+                    }
+
                 } else {
                     $return_data = array(
-                        'status'    => false,
-                        'message'   => 'Saving application failed. Please try again later.'
-                    );
+                                'status'    => false,
+                                'message'   => 'Uploading image failed.',
+                                'fields'    => $upload_errors
+                            );
                 }
 
             } else {
                 $return_data = array(
-                            'status'    => false,
-                            'message'   => 'Uploading image failed.',
-                            'fields'    => $upload_errors
-                        );
+                    'status'    => false,
+                    'message'   => 'Document required.'
+                );
             }
 
         } else {
@@ -391,9 +398,7 @@ class Account extends CI_Controller
 
     public function delivery_coverage()
     {
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         $address = $this->appdb->getRecords('DeliveryAgentCoverageAddress', array('UserID' => current_user()), 'Province');
         $items   = array();
@@ -410,9 +415,7 @@ class Account extends CI_Controller
 
     public function save_delivery_coverage()
     {
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         if (validate('delivery_coverage_address') == FALSE) {
             $return_data = array(
@@ -457,9 +460,7 @@ class Account extends CI_Controller
     public function delete_delivery_coverage($id = null)
     {
 
-        if (isGuest()) {
-            redirect();
-        }
+        check_authentication();
 
         $itemData = $this->appdb->getRowObjectWhere('DeliveryAgentCoverageAddress', array('id' => $id, 'UserID' => current_user()));
         if ($itemData) {
@@ -487,6 +488,149 @@ class Account extends CI_Controller
 
     }
 
+
+    /**
+    * get orders to deliver
+    */
+    public function order_delivery()
+    {
+        check_authentication();
+
+        $userData = user_account_details();
+
+        if ($userData->agent && $userData->agent->Status) {
+
+            // print_data($userData);
+
+            $viewData = array(
+                'pageTitle'     => 'Delivery Orders',
+                'pageSubTitle'  => 'Orders To Deliver',
+                'accountInfo'   => $userData,
+                'jsModules'     => array(
+                    'account',
+                    'general'
+                )
+            );
+
+            $transaction = get_transactions(current_user());
+            $viewData['transactions'] = $transaction['transactions'];
+            $viewData['summary']      = $transaction['summary'];
+
+            $query = 'SELECT * 
+                        FROM Orders 
+                        WHERE DeliveryMethod = 2 
+                        AND Status != 5
+                        AND DeliveryAgent = ?
+                      ORDER BY Status, DateOrdered DESC
+                      LIMIT 10';
+
+            $orders = $this->db->query($query, array(current_user()))->result_array();
+
+            foreach ($orders as &$o) {
+                $o['Address'] = (array)$this->appdb->getRowObject('UserAddress', $o['AddressID']);
+                $o['Address']['Names'] = lookup_address($o['Address']);
+
+                $o['Distribution'] = json_decode($o['Distribution'], true);
+                $user = $this->appdb->getRowObject('Users', $o['OrderBy']);
+                $o['user'] = array(
+                    'name'   => $user->Firstname . ' ' . $user->Lastname,
+                    'email'  => $user->EmailAddress,
+                    'mobile' => $user->Mobile
+                );
+            }
+
+            $viewData['orders'] = $orders;
+
+            // print_data($orders);
+
+            view('account/order_delivery', $viewData, 'templates/main');
+
+        } else {
+            redirect();
+        }
+
+    }
+
+    public function order_delivery_detail($code = false)
+    {
+        check_authentication();
+
+        $orderData = $this->appdb->getRowObjectWhere('Orders', array('Code' => $code, 'DeliveryAgent' => current_user()));
+        if ($orderData) {
+
+            $userData = user_account_details();
+
+            $viewData = array(
+                'pageTitle'     => 'Delivery Order',
+                'pageSubTitle'  => 'Order To Deliver',
+                'accountInfo'   => $userData,
+                'jsModules'     => array(
+                    'account',
+                    'general'
+                )
+            );
+
+            $o = (array) $orderData;
+
+            $o['Address'] = (array)$this->appdb->getRowObject('UserAddress', $o['AddressID']);
+            $o['Address']['Names'] = lookup_address($o['Address']);
+
+            $o['Distribution'] = json_decode($o['Distribution'], true);
+            $user = $this->appdb->getRowObject('Users', $o['OrderBy']);
+            $o['user'] = array(
+                'name'   => $user->Firstname . ' ' . $user->Lastname,
+                'email'  => $user->EmailAddress,
+                'mobile' => $user->Mobile
+            );
+
+            $items   = $this->appdb->getRecords('OrderItems', array('OrderID' => $orderData->id));
+            $stores  = array();
+            foreach ($items as $i) {
+
+                // only get item that require delivery
+                $itemData = $this->appdb->getRowObject('StoreItems', $i['ItemID']);
+                if ($itemData && $itemData->DeliveryMethod == 2) {
+                    $i['itemData'] = $itemData;
+                    $i['Distribution'] = json_decode($i['Distribution']);
+                    $stores[$itemData->StoreID]['items'][] = $i;
+                }
+            }
+
+            if (count($stores)) {
+
+                foreach ($stores as $i => &$d) {
+                    $storeData = $this->appdb->getRowObject('StoreDetails', $i);
+                    $d['name']      = $storeData->Name;
+                    $d['contact']   = $storeData->Contact;
+                    $d['email']     = $storeData->Email;
+                    $d['address']   = array(
+                        'street'    => $storeData->Address,
+                        'names'     => array_filter(array_values(array_reverse(lookup_address($storeData))))
+                    );
+                    $d['branches'] = array();
+                    $branches  = $this->appdb->getRecords('StoreLocations', array('StoreID' => $i));
+                    foreach ($branches as $x) {
+                        $d['branches'][] = array(
+                            'street'    => $x['Street'],
+                            'names'     => array_filter(array_values(array_reverse(lookup_address($x))))
+                        );
+                    }
+                }
+
+            }
+
+            $viewData['store_items'] = $stores;
+            $viewData['orderData']   = json_decode(json_encode($o));
+
+            // print_data($viewData);
+
+            view('account/order_delivery_detail', $viewData, 'templates/main');
+
+        } else {
+            redirect();
+        }
+
+    }
 
 
 

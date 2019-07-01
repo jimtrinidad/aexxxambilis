@@ -28,6 +28,18 @@ function get_post($key)
 	return $ci->input->get_post($key);
 }
 
+function post($key)
+{
+	$ci =& get_instance();
+	return $ci->input->post($key);
+}
+
+function get($key)
+{
+	$ci =& get_instance();
+	return $ci->input->get($key);
+}
+
 /**
 * is ajax request
 */
@@ -289,7 +301,7 @@ function get_user($userID)
 }
 
 
-function user_account_details($id = false, $field = 'id')
+function user_account_details($id = false, $connections = true)
 {
 	$ci =& get_instance();
 
@@ -297,7 +309,7 @@ function user_account_details($id = false, $field = 'id')
 		$id = $ci->session->userdata('identifier');
 	}
 
-	$user = lookup_row('Users', $id, $field);
+	$user = lookup_row('Users', $id);
 
 	if ($user) {
 		$user->fullname = user_full_name($user, 0);
@@ -311,7 +323,9 @@ function user_account_details($id = false, $field = 'id')
 		}
 
 		// connections
-		$user->connections = straight_connections(get_user_connections($user->id));
+		if ($connections) {
+			$user->connections = straight_connections(get_user_connections($user->id));
+		}
 
 	}
 
@@ -550,7 +564,9 @@ function ecpay_save_transaction($data)
 
 }
 
-
+/**
+* distribute ecpay transaction rewards
+*/
 function distribute_transaction_rewards($data, $transid)
 {   
 
@@ -686,4 +702,304 @@ function get_rewards($where = array(), $order = false)
   }
 
   return $rewards;
+}
+
+
+/**
+* distribute order transaction reward
+*/
+function distribute_order_rewards($order_id)
+{   
+		$ci =& get_instance();
+    $has_error = false;
+    $orderData = $ci->appdb->getRowObject('Orders', $order_id);
+    if ($orderData) {
+
+        // buyer rewards (cashback, 1/8 shared), log discounts on transactions and rewards but not credited on wallet
+        // direct referrer reward (referral points, 1/8 shared)
+        // 6 upline of direct referrer (1/8 shared each)
+
+        $buyerInfo = $ci->appdb->getRowObject('Users', $orderData->OrderBy);
+
+        $distribution = json_decode($orderData->Distribution);
+
+        // BUYER
+        $rewards = array(
+            array(
+                'reward_type'   => 'discount',
+                'account_id'    => $orderData->OrderBy,
+                'order_id'      => $orderData->id,
+                'from_user'     => null,
+                'amount'        => $distribution->discount,
+                'trans_desc'    => 'Discounted from order - Order #' . $orderData->Code,
+            ),
+            array(
+                'reward_type'   => 'cashback',
+                'account_id'    => $orderData->OrderBy,
+                'order_id'      => $orderData->id,
+                'from_user'     => null,
+                'amount'        => $distribution->cashback,
+                'trans_desc'    => 'Cashback from order - Order #' . $orderData->Code,
+            ),
+            array(
+                'reward_type'   => 'shared',
+                'account_id'    => $orderData->OrderBy,
+                'order_id'      => $orderData->id,
+                'from_user'     => null,
+                'amount'        => $distribution->divided_reward,
+                'trans_desc'    => 'Shared reward from order - Order #' . $orderData->Code,
+            )
+
+        );
+
+        // REFERRER
+        if ($buyerInfo->Referrer) {
+            $referrerData = $ci->appdb->getRowObject('Users', $buyerInfo->Referrer);
+            if ($referrerData) {
+                $rewards[] = array(
+                    'reward_type'   => 'referrer',
+                    'account_id'    => $buyerInfo->Referrer,
+                    'from_user'     => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'amount'        => $distribution->referral,
+                    'trans_desc'    => 'Referral points from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                );
+                $rewards[] = array(
+                    'reward_type'   => 'shared',
+                    'account_id'    => $buyerInfo->Referrer,
+                    'from_user'     => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'amount'        => $distribution->divided_reward,
+                    'trans_desc'    => 'Shared reward from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                );
+
+                // UPPER REFFERS
+                $upper_referrers = get_upper_referrers($orderData->OrderBy);
+                foreach ($upper_referrers as $user_id) {
+                    if (!in_array($user_id, array($orderData->OrderBy, $buyerInfo->Referrer))) {
+                        $rewards[] = array(
+                            'reward_type'   => 'shared',
+                            'account_id'    => $user_id,
+                            'order_id'      => $orderData->id,
+                            'from_user'     => $orderData->OrderBy,
+                            'amount'        => $distribution->divided_reward,
+                            'trans_desc'    => 'Shared reward from Order #' . $orderData->Code . ' by ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                        );
+                    }
+                }
+            }
+        }
+
+        // DELIVERY AGENT
+        if ($orderData->DeliveryMethod == 2 && $orderData->DeliveryAgent) {
+        	$rewards[] = array(
+                    'reward_type'   => 'delivery',
+                    'account_id'    => $orderData->DeliveryAgent,
+                    'from_user'     => $orderData->OrderBy,
+                    'order_id'      => $orderData->id,
+                    'amount'        => $distribution->delivery,
+                    'trans_desc'    => 'Delivery payment from Order #' . $orderData->Code . ' of ' . strtoupper($buyerInfo->Firstname . ' ' . $buyerInfo->Lastname),
+                );
+        }
+
+        foreach ($rewards as $data) {
+
+            $reward_type = $data['reward_type'];
+            $rewardData = array(
+                'Code'        => microsecID(true),
+                'AccountID'   => $data['account_id'],
+                'FromUserID'  => $data['from_user'],
+                'OrderID'     => $data['order_id'],
+                'Type'        => $reward_type,
+                'Amount'      => $data['amount'],
+                'Description' => $data['trans_desc'],
+                'DateAdded'   => datetime()
+            );
+            if ($ci->appdb->saveData('WalletRewards', $rewardData)) {
+
+                // if discount type. no changes on wallet, just record the on reward logs
+                if ($reward_type != 'discount') {
+                    $balance = get_latest_wallet_balance($data['account_id']);
+
+                    $transactions_data = array(
+                        'Code'          => microsecID(true),
+                        'AccountID'     => $data['account_id'],
+                        'ReferenceNo'   => $rewardData['Code'],
+                        'Description'   => $data['trans_desc'],
+                        'Date'          => datetime(),
+                        'Amount'        => $data['amount'],
+                        'Type'          => 'Credit',
+                        'EndingBalance' => ($balance + $data['amount'])
+                    );
+
+                    if (!$ci->appdb->saveData('WalletTransactions', $transactions_data)) {
+                        $has_error = true;
+                        logger('Saving ' . $reward_type . ' reward transaction failed.');
+                    }
+                }
+            } else {
+                $has_error = true;
+                logger('Saving ' . $reward_type . ' reward failed.');
+            }
+
+            if ($has_error) {
+                break;
+            }
+
+        }
+
+
+    } else{
+        $has_error = true;
+        logger('Order data not found.');
+    }
+
+    return !$has_error;
+}
+
+/**
+* return order payment
+*/
+function refund_order($order_id)
+{
+	$ci =& get_instance();
+  $has_error = false;
+  $orderData = $ci->appdb->getRowObject('Orders', $order_id);
+  if ($orderData) {
+  	
+  	$amount  = $orderData->TotalAmount;
+  	$balance = get_latest_wallet_balance($orderData->OrderBy);
+
+  	$refno   = 'CC'.$orderData->Code;
+  	$transct = $ci->appdb->getRowObject('WalletTransactions', $refno, 'ReferenceNo');
+
+  	if (!$transct) {
+	  	$transactions_data = array(
+	        'Code'          => microsecID(true),
+	        'AccountID'     => $orderData->OrderBy,
+	        'ReferenceNo'   => $refno,
+	        'Description'   => 'Canceled order refund. Order#' . $orderData->Code,
+	        'Date'          => datetime(),
+	        'Amount'        => $amount,
+	        'Type'          => 'Credit',
+	        'EndingBalance' => ($balance + $amount)
+	    );
+
+	    if ($ci->appdb->saveData('WalletTransactions', $transactions_data)) {
+	        return true;
+	        logger($orderData->Code . ' order payment refunded.');
+	    } else {
+	    	logger($orderData->Code . ' order refund failed.');
+	    }
+	  } else {
+	  	logger($orderData->Code . ' order was already refunded.');
+	  }
+  }
+
+  return false;
+}
+
+
+function record_order_status($order_id, $status, $remarks = false)
+{
+
+	$ci =& get_instance();
+
+	$saveData = array(
+		'OrderID'	 => $order_id,
+		'Status'	 => $status,
+		'Datetime' => datetime()
+	);
+
+	if ($remarks) {
+		$saveData['Remarks'] = $remarks;
+	}
+
+	return $ci->appdb->saveData('OrderStatus', $saveData);
+
+}
+
+
+// get stores id on user location
+function get_near_stores($user)
+{
+	$ci =& get_instance();
+
+	$store_ids = array();
+
+	$sql = "SELECT id FROM StoreDetails
+					WHERE City IN (
+						SELECT City FROM UserAddress WHERE UserID = {$user}
+					)";
+
+	$results = $ci->db->query($sql)->result_array();
+	foreach ($results as $r) {
+		$store_ids[] = $r['id'];
+	}
+
+	$sql = "SELECT StoreID FROM StoreLocations
+					WHERE City IN (
+						SELECT City FROM UserAddress WHERE UserID = {$user}
+					)";
+
+	$results = $ci->db->query($sql)->result_array();
+	foreach ($results as $r) {
+		$store_ids[] = $r['StoreID'];
+	}
+
+	$store_ids = array_unique($store_ids);
+	if (count($store_ids)) {
+		return $store_ids;
+	}
+	return false;
+}
+
+
+function find_delivery_agent($address)
+{
+
+	// find all agents in the area
+	$ci =& get_instance();
+	$sql = "SELECT UserID
+					FROM DeliveryAgentCoverageAddress
+					WHERE Barangay = ?
+					OR (Barangay = '' AND City = ?)";
+	$results = $ci->db->query($sql, array($address->Barangay, $address->City))->result_array();
+
+	$userids = array();
+	foreach ($results as $r) {
+		$userids[] = $r['UserID'];
+	}
+
+	if (count($userids)) {
+		// all agent with no/lowest active order and lowest completed order
+		$sql = "SELECT DeliveryAgent, SUM(IF(Status <= 3, 1, 0)) AS Active, SUM(IF(Status = 4, 1, 0)) AS Completed FROM Orders
+						WHERE DeliveryAgent IS NOT NULL
+						AND DeliveryAgent IN (".implode(',', $userids).")
+						GROUP BY DeliveryAgent
+						ORDER BY Active, Completed";
+
+		$items  = $ci->db->query($sql)->result_array();
+		$found	= array();
+
+		foreach ($items as $r) {
+			$found[] = $r['DeliveryAgent'];
+		}
+
+		// return agent that doesnt have any previous record
+		foreach ($userids as $user) {
+			if (!in_array($user, $found)) {
+				return $user;
+			}
+		}
+
+		// return first found result, already sorted by query
+		if (isset($found[0])) {
+			return $found[0];
+		}
+
+	}
+	
+	return false;
+
 }

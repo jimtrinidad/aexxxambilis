@@ -38,7 +38,7 @@ function Account() {
             self.register(this);
         });
 
-        $('#updateProfileForm').submit(function(e) {
+        $('#updateProfileForm, #deliveryAgentApplicationForm').submit(function(e) {
             e.preventDefault();
             Utils.save_form(this, function(){
                 location.reload();

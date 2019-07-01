@@ -3,7 +3,7 @@
     <div class="box box-primary small">
 
       <div class="box-header">
-        <h3 class="box-title">ECPay Transactions</h3>
+        <h3 class="box-title">Link Transactions</h3>
         <div class="box-tools">
           <form action="<?php echo site_url('transactions/ecpay') ?>" method="get" class="form-inline">
             <div class="form-group">

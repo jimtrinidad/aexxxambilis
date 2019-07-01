@@ -57,7 +57,9 @@
                   </p>
                 </div>
                 <div class="col-5 text-right mt-2">
+                  <?php if (!isGuest()) { ?>
                   <a href="javascript:;" class="pr-button bg-red text-white mb-2" onclick="Marketplace.addToCart('<?php echo $item['Code'] ?>')"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                  <?php } ?>
                   <a href="tel:<?php echo $item['seller']['Contact']; ?>"  class="pr-button bg-yellow text-black mb-2"><i class="fa fa-phone" aria-hidden="true"></i></a>
                 </div>
               </div>
@@ -73,7 +75,7 @@
       </div>
     <?php
     } else {
-        echo '<div class="col-sm-12"><h4 class="h4">No record found.</h4></div>';
+        echo '<div class="col text-center"><h4 class="h4 pt-4">No item found in your location.</h4></div>';
     }
     ?>
 </div>

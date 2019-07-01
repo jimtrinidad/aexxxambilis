@@ -115,8 +115,9 @@ function Utils() {
 
     this.show_form_errors = function(form, fields, message = false)
     {
+        console.log(fields, message);
         var errors = '';
-        if (message) {
+        if (message && typeof(fields) == 'undefined') {
             errors += '<p class="small">' + message + '</p>';
         }
         $.each(fields, function(i,e){
@@ -172,7 +173,7 @@ function Utils() {
                         error_callback();
                     } else {
                         // bootbox.alert(response.message);
-                        self.show_form_errors(form, response.fields);
+                        self.show_form_errors(form, response.fields, response.message);
                     }
                 }
             },

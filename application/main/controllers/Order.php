@@ -22,7 +22,7 @@ class Order extends CI_Controller
             ),
         );
 
-        $orderData = $this->appdb->getRowObject('Orders', $code, 'Code');
+        $orderData = $this->appdb->getRowObjectWhere('Orders', array('OrderBy' => current_user(), 'Code' => $code));
 
         if ($orderData) {
 

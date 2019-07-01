@@ -105,7 +105,7 @@ function Chatbox() {
             self.selectFriend(this);
         });
 
-        $('.chatbubble .top').on('click', 'button.manage_group', function(){
+        $('.chatbubble .top').on('click', '.manage_group', function(){
             self.manageGroup(this);
         });
 
@@ -732,7 +732,7 @@ function Chatbox() {
                 participants.push(e.user_name);
             });
             if (data.type == 2) {
-                $('.chatbubble .top .info .name').html('<span>' + data.name + `</span> <button class="btn btn-sm btn-primary manage_group" data-thread_id="${data.id}"><i class="fa fa-cog"></i>Manage</button>`);
+                $('.chatbubble .top .info .name').html('<span>' + data.name + `</span> <a href="javascript:;" class="manage_group small" data-thread_id="${data.id}"><i class="fa fa-cog"></i>Manage</a>`);
             } else {
                 $('.chatbubble .top .info .name').text(data.name);
             }

@@ -42,33 +42,44 @@ class Delivery extends CI_Controller
 
     public function save_agent_status()
     {
-        $agent = $this->appdb->getRowObject('DeliveryAgents', get_post('Code'), 'Code');
-        if ($agent) {
 
-            $updateData = array(
-                'id'           => $agent->id,
-                'Status'       => get_post('agent_status'),
-                'ManType'      => get_post('agent_man_type'),
-                'LastUpdate'   => datetime(),
+        if (validate('verify_delivery_agent') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
             );
+        } else {
 
-            if ($this->appdb->saveData('DeliveryAgents', $updateData)) {
-                $return_data = array(
-                    'status'    => true,
-                    'message'   => 'Delivery Agent status has been updated.'
+            $agent = $this->appdb->getRowObject('DeliveryAgents', get_post('Code'), 'Code');
+            if ($agent) {
+
+                $updateData = array(
+                    'id'           => $agent->id,
+                    'Status'       => get_post('agent_status'),
+                    'ManType'      => get_post('agent_man_type'),
+                    'LastUpdate'   => datetime(),
                 );
+
+                if ($this->appdb->saveData('DeliveryAgents', $updateData)) {
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Delivery Agent status has been updated.'
+                    );
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Updating agent status failed.'
+                    );
+                }
+
             } else {
                 $return_data = array(
                     'status'    => false,
-                    'message'   => 'Updating agent status failed.'
+                    'message'   => 'Invalid agent data'
                 );
             }
 
-        } else {
-            $return_data = array(
-                'status'    => false,
-                'message'   => 'Invalid agent data'
-            );
         }
 
         response_json($return_data);

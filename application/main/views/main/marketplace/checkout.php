@@ -7,21 +7,23 @@
 				<div class="col-3 text-right">Quantity</div>
 			</div>
 		</div>
-		<div class="card bg-light px-2 py-1 mt-2 rounded-0 small">
 			<?php 
-				$x = 0;
-				foreach ($items as $i) { 				
-					if ($x++ > 0) {
-						echo '<span class="border-top my-2"></span>';
-					}
+				foreach ($items as $store) {
+					echo '<div class="card bg-light px-2 py-1 mt-2 rounded-0 small">';
+					echo '<div class="mb-2"><a class="text-bold text-info" href="javascript:;">'. $store['name'] . '</a></div>';
+					$x = 0;
+					foreach ($store['items'] as $i) {
+						if ($x++ > 0) {
+							echo '<span class="border-top my-2"></span>';
+						}
 			?>
 
 			<div class="row gutter-5 mb-1">
 				<div class="col-6">
-					<div class="float-left" style="width: 80px;"><img src="<?php echo public_url('assets/products/') . $i['img']?>" style="width: 70px;height: auto;" class="img-responsive" /></div>
-          <div>
+					<div class="float-left" style="width: 80px;"><img src="<?php echo public_url('assets/products/') . $i['img']?>" style="width: 60px;height: auto;" class="img-responsive" /></div>
+          <div class="pt-3">
             <b class="nomargin cart_product_name"><?php echo $i['name']; ?></b>
-            <p>By: <a href="javascript:;"><?php echo $i['seller']; ?></a></p>
+            
           </div>
           <div class="clearfix"></div>
 				</div>
@@ -37,8 +39,12 @@
 				</div>
 				<div class="col-3 text-right">Qty: <?php echo $i['qty']; ?></div>
 			</div>
-			<?php } ?>
-		</div>
+
+			<?php 
+				}
+				echo '</div>';
+			} 
+			?>
 	</div>
 	<div class="col-12 col-md-4">
 		<div class="card bg-light rounded-0">
@@ -96,7 +102,7 @@
 		    	</div>
 		    	<div class="row gutter-5 mt-3 text-bold">
 		    		<div class="col-7">Total</div>
-		    		<div class="col-5 text-right"><b class="text-danger"><?php echo peso($this->cart->total()) ?></b></div>
+		    		<div class="col-5 text-right"><b class="text-danger" id="total_amount_to_pay"><?php echo peso($this->cart->total()) ?></b></div>
 		    	</div>
 		    	<div class="row mt-2">
 		    		<div class="col-12">
