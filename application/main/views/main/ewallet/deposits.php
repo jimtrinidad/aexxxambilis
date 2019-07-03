@@ -100,9 +100,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col" class="text-red">TransNo</th>
-          <th scope="col" class="text-red">ReferenceNo</th>
           <th scope="col" class="text-red">Date</th>
+          <!-- <th scope="col" class="text-red">TransNo</th> -->
+          <th scope="col" class="text-red">ReferenceNo</th>
           <th scope="col" class="text-red">Amount</th>
           <th scope="col" class="text-red">Payment</th>
           <th scope="col" class="text-red">Slip</th>
@@ -113,9 +113,9 @@
         <?php
             foreach ($transactions as $c) {
               echo "<tr class='text-left' id='deposit_{$c['Code']}'>";
-                echo '<td scope="row">' . $c['Code'] . '</td>';
+                echo '<td scope="row">' . $c['TransactionDate'] . '</td>';
+                // echo '<td>' . $c['Code'] . '</td>';
                 echo '<td>' . $c['ReferenceNo'] . '</td>';
-                echo '<td>' . $c['TransactionDate'] . '</td>';
                 echo '<td>' . peso($c['Amount']) . '</td>';
                 echo '<td>' . $c['Bank'] . '</td>';
                 echo '<td>';
