@@ -129,7 +129,8 @@
                 if ($c['Status'] == 0) {
                   echo '<span class="text-warning">Pending</span>';
                 } else if ($c['Status'] == 1) {
-                  echo date('m/d/y h:i a', strtotime($c['VerifiedDate']));
+                  echo '<span class="text-success">Verified</span><br>';
+                  echo date('m/d h:i a', strtotime($c['VerifiedDate']));
                 } else if ($c['Status'] == 2) {
                   echo '<span class="text-danger">Declined</span>';
                 }
