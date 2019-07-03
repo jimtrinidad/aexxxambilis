@@ -30,7 +30,7 @@
             <th>Amount</th>
             <th>Fee</th>
             <th>Commission</th>
-            <th>ECWallet Deduction</th>
+            <th>Wallet Deduction</th>
             <th>DateTime</th>
             <th class="c"></th>
           </thead>

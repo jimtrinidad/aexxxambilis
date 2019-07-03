@@ -15,7 +15,7 @@ class Transactions extends CI_Controller
     public function ecpay()
     {
         $viewData = array(
-            'pageTitle'         => 'ECPay Transactions',
+            'pageTitle'         => 'Link Transactions',
             'pageDescription'   => '',
             'content_header'    => false,
             'accountInfo'       => user_account_details(),

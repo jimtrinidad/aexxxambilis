@@ -26,9 +26,9 @@
     <div class="content">
       <div class="row justify-content-center">
         <div class="col-3 text-center icon-container">
-          <a href="javascript:;" onclick="Wallet.addDeposit()">
+          <a href="<?php echo site_url('ewallet') ?>">
             <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
-            <span>Fund my Wallet</span>
+            <span>eWallet</span>
           </a>
         </div>
         <div class="col-3 text-center icon-container">
@@ -88,40 +88,75 @@
 
 
 <div class="bg-trans-80-white p-3">
-  <h5>eWallet Logs</h5>
+  <div class="float-left"><h5 class="my-1">Fund Logs</h5></div>
+  <div class="float-right">
+    <a href="javascript:;" onclick="Wallet.addDeposit()">
+      <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" style="max-width: 32px;vertical-align: bottom;"/>
+      <span>Add Fund</span>
+    </a>
+  </div>
   <?php if (count($transactions)) { ?>
   <div class="table-responsive">
     <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="text-red">TransNo</th>
+          <th scope="col" class="text-red">ReferenceNo</th>
+          <th scope="col" class="text-red">Date</th>
+          <th scope="col" class="text-red">Amount</th>
+          <th scope="col" class="text-red">Payment</th>
+          <th scope="col" class="text-red">Slip</th>
+          <th scope="col" class="text-red">Status</th>
+        </tr>
+      </thead>
       <tbody>
         <?php
-        foreach ($transactions as $i) {
-          echo '<tr>';
-            echo '<td scope="row">';
-              if ($i['Type'] == 'Credit') {
-                echo '<i class="fa fa-external-link-square text-green" aria-hidden="true"></i> ';
-              } else {
-                echo '<i class="fa fa-external-link-square text-red rotate" aria-hidden="true"></i> ';
-              }
-              echo $i['Description'] . '<br>';
-              echo '<small>' . date('m/d/y h:i a', strtotime($i['Date'])) . '</small>';
-            echo '</td>';
-            if ($i['Type'] == 'Credit') {
-              echo '<td><i class="fa fa-plus text-green" aria-hidden="true"></i> ' . peso($i['credit'], true, 4) . '</td>';
-            } else {
-              echo '<td><i class="fa fa-minus text-red" aria-hidden="true"></i> ' . peso($i['debit'], true, 4) . '</td>';
+            foreach ($transactions as $c) {
+              echo "<tr class='text-left' id='deposit_{$c['Code']}'>";
+                echo '<td scope="row">' . $c['Code'] . '</td>';
+                echo '<td>' . $c['ReferenceNo'] . '</td>';
+                echo '<td>' . $c['TransactionDate'] . '</td>';
+                echo '<td>' . peso($c['Amount']) . '</td>';
+                echo '<td>' . $c['Bank'] . '</td>';
+                echo '<td>';
+                  if ($c['Photo']) {
+                    echo '<a href="'.public_url('assets/uploads/') . upload_filename($c['Photo']).'" data-toggle="lightbox" data-gallery="example-gallery">
+                          <img src="'.public_url('assets/uploads/') . upload_filename($c['Photo']).'" class="img-fluid" style="max-width:50px;">
+                      </a>';
+                  }
+                echo '</td>';
+                echo '<td>';
+                if ($c['Status'] == 0) {
+                  echo '<span class="text-warning">Pending</span>';
+                } else if ($c['Status'] == 1) {
+                  echo date('m/d/y h:i a', strtotime($c['VerifiedDate']));
+                } else if ($c['Status'] == 2) {
+                  echo '<span class="text-danger">Declined</span>';
+                }
+                echo '</td>';
+              echo '</tr>';
             }
-          echo '</tr>';
-        }
         ?>
       </tbody>
     </table>
   </div>
   <?php 
     } else {
-      echo '<h3>No transaction found.</h3>';
+      echo '<h3>No record found.</h3>';
     } 
   ?>
   
 </div>
 
 <?php view('main/ewallet/modals'); ?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+  })
+</script>

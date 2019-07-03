@@ -56,22 +56,28 @@
 
   <div class="secondary-account-menu">
     <div class="row mt-4">
-      <div class="col-4 icon-container">
+      <div class="col-3 icon-container">
         <a href="<?php echo site_url('store') ?>">
-          <img src="<?php echo public_url(); ?>resources/images/icons/market-stand.png" />
-          <span>My Business</span>
+          <img src="<?php echo public_url(); ?>resources/images/icons/market-stand.png" class="img-fluid" />
+          <span>Business</span>
         </a>
       </div>
-      <div class="col-4 icon-container">
+      <div class="col-3 icon-container">
         <a href="<?php echo site_url('transactions') ?>">
-          <img src="<?php echo public_url(); ?>resources/images/icons/bag.png" />
-          <span>My Transactions</span>
+          <img src="<?php echo public_url(); ?>resources/images/icons/bag.png" class="img-fluid"  />
+          <span>Transactions</span>
         </a>
       </div>
-      <div class="col-4 icon-container">
+      <div class="col-3 icon-container">
+        <a href="<?php echo site_url('deposits') ?>">
+          <img src="<?php echo public_url(); ?>resources/images/icons/money.png" class="img-fluid"  />
+          <span>Deposits</span>
+        </a>
+      </div>
+      <div class="col-3 icon-container">
         <a href="<?php echo site_url('connections') ?>">
-          <img src="<?php echo public_url(); ?>resources/images/icons/connections.png" />
-          <span>My Connections</span>
+          <img src="<?php echo public_url(); ?>resources/images/icons/connections.png" class="img-fluid"  />
+          <span>Connections</span>
         </a>
       </div>
     </div>

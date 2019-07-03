@@ -118,7 +118,10 @@ border-radius: 50% 50%;
 
 .secondary-account-menu{ padding-left: 20px; padding-right: 20px; }
 .secondary-account-menu .icon-container{ text-align: center; }
-.secondary-account-menu .icon-container span{ font-size: 13px; font-weight: bold; line-height: 16px; display:block; margin-top: 5px;}
+.secondary-account-menu .icon-container span{ font-size: 10px; font-weight: bold; line-height: 16px; display:block; margin-top: 5px;}
+.secondary-account-menu .icon-container img {
+    max-height: 50px;
+}
 
 .menu-categories h3{ font-size: 17px; margin-bottom: 0px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 .menu-categories p{font-size: 12px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0px;}

@@ -100,6 +100,36 @@ class Ewallet extends CI_Controller
     }
 
 
+    public function deposits()
+    {
+        $viewData = array(
+            'pageTitle'     => 'My Deposits',
+            'pageSubTitle'  => 'AMBILIS Mag-Fund',
+            'accountInfo'   => user_account_details(),
+            'jsModules'     => array(
+            )
+        );
+
+        $transaction = get_transactions(current_user());
+        $viewData['transactions'] = $transaction['transactions'];
+        $viewData['summary']      = $transaction['summary'];
+
+        $page_limit = 500;
+        $page_start = (int) $this->uri->segment(3);
+
+        $where = array(
+            'AccountID'    => current_user()
+        );
+        $order = 'DateAdded DESC';
+
+        $results = $this->appdb->getRecords('WalletDeposits', $where, $order);
+
+        $viewData['transactions']    = $results;
+
+        view('main/ewallet/deposits', $viewData, 'templates/main');
+    }
+
+
     public function add_deposit()
     {
         if (empty($_FILES['Photo']['name']))
