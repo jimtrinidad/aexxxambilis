@@ -134,6 +134,7 @@ class Account extends CI_Controller
             'account_firstname' => $userData['Firstname'],
             'account_lastname'  => $userData['Lastname'],
             'account_mobile'    => $userData['Mobile'],
+            'account_country'   => ($userData['CountryCode'] ? $userData['CountryCode'] : 'ph'),
             'account_email'     => $userData['EmailAddress'],
             'account_bank_name' => $userData['BankName'],
             'account_bank_no'   => $userData['BankAccountNo'],
@@ -194,11 +195,15 @@ class Account extends CI_Controller
                     // do save
                     $uploadData     = $this->upload->data();
 
+                    $countryData    = json_decode(get_post('countryData'));
+
                     $saveData     = array(
                         'id'                => $user->id,
                         'Firstname'         => get_post('account_firstname'),
                         'Lastname'          => get_post('account_lastname'),
                         'EmailAddress'      => get_post('account_email'),
+                        'CountryCode'       => $countryData->iso2,
+                        'DialCode'          => $countryData->dialCode,
                         'Mobile'            => get_post('account_mobile'),
                         'BankName'          => get_post('account_bank_name'),
                         'BankAccountNo'     => get_post('account_bank_no'),
@@ -765,6 +770,8 @@ class Account extends CI_Controller
                 $registrationID = get_post('RegistrationID');
                 $PublicID       = generate_public_id(get_post('Lastname'));
 
+                $countryData    = json_decode(get_post('countryData'));
+
                 $insertData     = array(
                     'Referrer'          => $referrer->id,
                     'PublicID'          => $PublicID,
@@ -772,6 +779,8 @@ class Account extends CI_Controller
                     'Firstname'         => get_post('Firstname'),
                     'Lastname'          => get_post('Lastname'),
                     'EmailAddress'      => get_post('EmailAddress'),
+                    'CountryCode'       => $countryData->iso2,
+                    'DialCode'          => $countryData->dialCode,
                     'Mobile'            => get_post('Mobile'),
                     'Password'          => $this->authentication->hash_password(get_post('Password')),
                     'AccountLevel'      => 1, // default, regular user,

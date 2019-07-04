@@ -4,6 +4,7 @@ function Account() {
 
     this.info,
     this.address,
+    this.iti
 
     /**
      * Initialize events
@@ -38,8 +39,19 @@ function Account() {
             self.register(this);
         });
 
-        $('#updateProfileForm, #deliveryAgentApplicationForm').submit(function(e) {
+        $('#deliveryAgentApplicationForm').submit(function(e) {
             e.preventDefault();
+            Utils.save_form(this, function(){
+                location.reload();
+            });
+        });
+
+        $('#updateProfileForm').submit(function(e) {
+            e.preventDefault();
+
+            var countryData = self.iti.getSelectedCountryData();
+            $(this).find('#countryData').val(JSON.stringify(countryData));
+
             Utils.save_form(this, function(){
                 location.reload();
             });
@@ -158,6 +170,8 @@ function Account() {
             background              : "rgba(255, 255, 255, 0.1)"
         })
 
+        var countryData = self.iti.getSelectedCountryData();
+        $(e).find('#countryData').val(JSON.stringify(countryData));
 
         Utils.append_csrf_token(e);
         var formData = new FormData(e);
@@ -209,6 +223,8 @@ function Account() {
         var modal = '#updateProfileModal';
         Utils.show_form_modal(modal, form, false, function(){
             if (self.info) {
+                self.initializeMobileInput('#account_mobile', self.info.account_country);
+                $('.iti.iti--allow-dropdown').css('width', '100%');
                 $(form).find('.image-preview').prop('src', self.info.photo);
                 Utils.set_form_input_value(form, self.info);
             }
@@ -223,6 +239,51 @@ function Account() {
             Utils.set_form_input_value(form, self.info);
             $(form).find('.custom-file-label').text('Choose file');
         });
+    }
+
+    this.initializeMobileInput = function(id, def = 'ph')
+    {
+        if (self.iti) {
+            self.iti.destroy();
+        }
+        var input = document.querySelector(id);
+        self.iti = window.intlTelInput(input, {
+            initialCountry: def,
+            preferredCountries: ["ph", 'bn'],
+            separateDialCode: true
+        });
+
+        errorMsg = document.querySelector("#error-msg"),
+        validMsg = document.querySelector("#valid-msg");
+
+        // here, the index maps to the error code returned from getValidationError - see readme
+        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+        var reset = function() {
+            input.classList.remove("error");
+            errorMsg.innerHTML = "";
+            errorMsg.classList.add("hide");
+            validMsg.classList.add("hide");
+        };
+
+        // on blur: validate
+        input.addEventListener('blur', function() {
+            reset();
+            if (input.value.trim()) {
+                if (self.iti.isValidNumber()) {
+                    validMsg.classList.remove("hide");
+                } else {
+                    input.classList.add("error");
+                    var errorCode = self.iti.getValidationError();
+                    errorMsg.innerHTML = errorMap[errorCode];
+                    errorMsg.classList.remove("hide");
+                }
+            }
+        });
+
+        // on keyup / change flag: reset
+        input.addEventListener('change', reset);
+        input.addEventListener('keyup', reset);
     }
 
 }

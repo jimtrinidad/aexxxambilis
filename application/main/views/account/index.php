@@ -41,7 +41,7 @@
 				<div class="col-12 content">
 					<label class="label-info">Mobile Number</label>
 					<div class="info-field clearfix">
-						<span class="text">+63 - <?php echo $accountInfo->Mobile ?></span>
+						<span class="text"><?php echo ($accountInfo->DialCode ? '+' . $accountInfo->DialCode . ' - ' : '') . $accountInfo->Mobile ?></span>
 						<span class="icon"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 					</div>
 				</div>
@@ -117,7 +117,21 @@
 			</div> -->
 			
 			
-		</div>	
+		</div>
+
+
+	<?php view('account/modals') ?>
+	<?php view('modals/address') ?>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/css/intlTelInput.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/js/utils.js"></script>
+
+    <style type="text/css">
+      .iti-mobile .iti__country {
+        padding: 5px 10px;
+      }
+    </style>
 
 	<script type="text/javascript">
 	  $(document).ready(function(){
@@ -127,6 +141,3 @@
 
 	  });
 	</script>
-
-	<?php view('account/modals') ?>
-	<?php view('modals/address') ?>

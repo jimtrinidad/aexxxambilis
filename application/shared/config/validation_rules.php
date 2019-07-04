@@ -19,7 +19,7 @@ $config['account_registration'] = array(
 	    array(
 	        'is_unique' => 'Email address already exists.'
 	    )),
-	array('Mobile', 'Mobile number', 'trim|required|numeric|exact_length[10]|is_unique[Users.Mobile]',
+	array('Mobile', 'Mobile number', 'trim|required|is_unique[Users.Mobile]',
 		array(
 	        'is_unique' => 'Mobile number already exists.'
 	    )),
@@ -43,7 +43,7 @@ $config['account_update'] = array(
 	    array(
 	        'unique_account_email' => 'Email address already exists.'
 	    )),
-	array('account_mobile', 'Mobile number', 'trim|required|numeric|exact_length[10]|callback_unique_account_mobile',
+	array('account_mobile', 'Mobile number', 'trim|required|callback_unique_account_mobile',
 		array(
 	        'unique_account_mobile' => 'Mobile number already exists.'
 	    ))

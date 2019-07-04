@@ -3,6 +3,7 @@
     <div class="modal-content">
       <form id="updateProfileForm" name="updateProfileForm" class="modalForm" action="<?php echo site_url('account/save_profile') ?>">
         <input type="hidden" name="user_id" id="user_id">
+        <input type="hidden" name="countryData" id="countryData">
         <div class="modal-header">
           <strong class="modal-title text-b-red">Update Profile</strong>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -45,12 +46,11 @@
 
           <div class="row gutter-5">
             <div class="col-12">
-              <label class="control-label" for="account_mobile">Mobile</label>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1">+63</span>
-                </div>
-                <input type="text" name="account_mobile" id="account_mobile" class="form-control" placeholder="10 digits number. eg:9171234567" maxlength="10" aria-label="Mobile" aria-describedby="basic-addon1">
+              <div class="form-group">
+                <label class="control-label" for="account_mobile">Mobile</label>
+                <input type="text" name="account_mobile" id="account_mobile" class="form-control">
+                <span id="valid-msg" class="hide text-success small"></span>
+                <span id="error-msg" class="hide text-danger small"></span>
               </div>
             </div>
             <div class="col-12">

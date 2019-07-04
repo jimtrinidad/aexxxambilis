@@ -52,7 +52,7 @@ body.market-place{ background-color: #fff;}
 
 .registration p, .registration ul li{ font-size: 14px; }
 .registration ul{ list-style: none; }
-.registration ul li{ background: url('../images/bullet-list-icon.png') no-repeat 0px 3px; padding-left: 23px;}
+.registration .form-text ul li{ background: url('../images/bullet-list-icon.png') no-repeat 0px 3px; padding-left: 23px;}
 
 .login{ background: #fff; }
 
