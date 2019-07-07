@@ -118,6 +118,7 @@ function Marketplace() {
                                 }
                             } else {
                                 bootbox.alert(response.message);
+                                $.LoadingOverlay('hide');
                             }
                         },
                         complete: function() {

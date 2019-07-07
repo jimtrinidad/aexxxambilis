@@ -176,7 +176,10 @@ class Appdb extends CI_Model {
 
 		if (!isGuest()) {
 			$stores = get_near_stores(current_user());
-			$this->db->where_in('StoreID', $stores);
+			$this->db->group_start();
+				$this->db->where_in('StoreID', $stores);
+				$this->db->or_where('DeliveryMethod !=', 2);
+			$this->db->group_end();
 		}
 
 		$count 	= $this->db->count_all_results();
@@ -193,7 +196,10 @@ class Appdb extends CI_Model {
 		}
 
 		if (!isGuest()) {
-			$this->db->where_in('StoreID', $stores);
+			$this->db->group_start();
+				$this->db->where_in('StoreID', $stores);
+				$this->db->or_where('DeliveryMethod !=', 2);
+			$this->db->group_end();
 		}
 
 		if ($order != false) {
@@ -204,6 +210,7 @@ class Appdb extends CI_Model {
 
 		$data 	= $this->db->get()->result();
 		// echo $this->db->last_query();
+		// exit;
 
 		return array(
 			'count'	=> $count,

@@ -125,6 +125,62 @@ function General() {
         });
     }
 
+    this.viewOrderStatus = function(code)
+    {
+        $.LoadingOverlay("show");
+
+        $.get(window.base_url('orders/get_order_status/' + code)).done(function(response) {
+
+            if (response.status) {
+
+                var $modalObj = $('#viewOrderStatusModal');
+
+                if (Object.keys(response.data).length) {
+                    var tpl = '';
+
+                    $.each(response.data, function(i,e) {
+
+                        var by = '';
+                        if (e.UpdatedBy && e.UpdatedBy != '') {
+                            by = `<div class="small pull-right">By: ${e.UpdatedBy}</div>`;
+                        }
+
+                        tpl += `<div class="text-info">
+                                    <span class="text-bold">${e.Status}</span> <span class="small text-black ml-2">&nbsp;&nbsp;${e.Datetime}</span>
+                                    ${by}
+                                </div>`;
+
+                        if (e.Remarks && e.Remarks != '') {
+                            tpl += `<div class="small "><b>Remarks:</b> <span>${e.Remarks}</span></div>`;
+                        }
+
+                        if (e.Image && e.Image != '') {
+                            // tpl += `<div class="float-right"><img src="${e.Image}" class="img-fluid" style="max-width: 300px;"></div>`;
+                            tpl += `<div class="">
+                                        <a href="${e.Image}" data-toggle="lightbox" data-gallery="example-gallery">
+                                            <img src="${e.Image}" class="img-fluid" style="max-width:150px;">
+                                        </a>
+                                  </div>`;
+                        }
+
+                        tpl += '<div class="clearfix"></div><hr/>';
+                    });
+
+                    $modalObj.find('.order_status_cont').html(tpl)
+                } else {
+                    $modalObj.find('.order_status_cont').html('<td>No record found.</td>');
+                }
+                
+                $modalObj.modal({
+                    backdrop : 'static',
+                    keyboard : false
+                });
+
+            }
+            $.LoadingOverlay("hide");
+        });
+    }
+
 
     this.viewECData = function(id, field, title)
     {

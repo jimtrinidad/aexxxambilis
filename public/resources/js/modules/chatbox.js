@@ -3,6 +3,8 @@ function Chatbox() {
     // because this is overwritten on jquery events
     var self = this;
 
+    this.from_delivery_notif = false;
+
     this.isTabActive = true;
     this.currentUser;
     this.totalUnread = 0;
@@ -93,6 +95,11 @@ function Chatbox() {
             }
 
             self.unlockBodyScroll();
+
+            if (self.from_delivery_notif) {
+                $('#neworderModal').modal('show');
+                self.from_delivery_notif = false;
+            }
         });
 
         // select thread
@@ -343,6 +350,12 @@ function Chatbox() {
     */
     this.openChatbox = function(ID)
     {
+
+        // hide delivery notif
+        if (self.from_delivery_notif) {
+            $('#neworderModal').modal('hide');
+        }
+
         self.abortRequest();
         self.activeThread = false;
         self.receiverID = false;
@@ -351,6 +364,9 @@ function Chatbox() {
         $(".chatbubble .messages").show();
         $('.chatbubble .recent-threads li').removeClass('active');
         self.findThreadByID(ID);
+
+        // open recent tab
+        $('a[data-toggle="tab"]:last').tab('show');
 
         setTimeout(function(){
             self.lockBodyScroll();
@@ -616,6 +632,8 @@ function Chatbox() {
                 },
                 success: function(response) {
                     if (response.status) {
+
+                        console.log(response);
 
                         if (response.code == 2 && $('#thread_' + response.thread_id).length) {
                             // if type is group, and same participants exists, ask if want to use it or create a new group

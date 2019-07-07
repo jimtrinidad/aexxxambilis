@@ -41,3 +41,18 @@
     </div>
   </div>
 </div>
+
+<div class="modal" id="viewOrderStatusModal" tabindex="-1" role="dialog" aria-labelledby="viewOrderStatusModal" style="/*z-index: 1041;*/">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content" style="background: #fff;">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="text-bold">Order Progress</p>
+          <hr>
+          <div class="order_status_cont"></div>
+        </div>
+    </div>
+  </div>
+</div>

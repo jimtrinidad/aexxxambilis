@@ -161,3 +161,68 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="setDeliveredOrderModal" tabindex="-1" role="dialog" aria-labelledby="setDeliveredOrderModal">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content">
+      <form id="setDeliveredOrderForm" name="setDeliveredOrderForm" class="modalForm" action="<?php echo site_url('account/set_order_delivered') ?>">
+        <input type="hidden" name="order_id" id="order_id">
+        <div class="modal-header">
+          <strong class="modal-title text-b-red">Set Order as Delivered</strong>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div id="error_message_box" class="hide">
+            <div class="error_messages alert alert-danger text-danger" role="alert"></div>
+          </div>
+
+          <div class="row gutter-5">
+            <div class="col-12">
+                <label class="control-label" for="file">Receipt / Acknowledgement</label>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Image</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="file" name="file" accept="image/*">
+                  <label class="custom-file-label text-truncate" for="file">Choose file</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label class="control-label" for="Remarks">Remarks</label>
+                <textarea class="form-control" id="Remarks" name="Remarks" rows="2"></textarea>
+                <span class="help-block hidden"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="reset" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success text-white">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="orderStatusModal" tabindex="-1" role="dialog" aria-labelledby="orderStatusModal" style="/*z-index: 1041;*/">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content" style="background: #fff;">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="text-bold">Order Progress</p>
+          <hr>
+          <div class="order_status_cont"></div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -400,6 +400,8 @@ class Marketplace extends CI_Controller
                     $delivery_method  = 3; // not applicable
                     $require_delivery = false;
 
+                    $stores_sub_total = array();
+
                     foreach ($cart_items as &$item) {
                         $product = $this->appdb->getRowObject('StoreItems', $item['id']);
                         $item['distribution'] = profit_distribution($product->Price, $product->CommissionValue, $product->CommissionType);
@@ -419,152 +421,175 @@ class Marketplace extends CI_Controller
                             $require_delivery = true;
                             $delivery_method = 2;
                         }
+
+
+                        $subamount = $item['price'] * $item['qty'];
+                        $stores_sub_total[$product->StoreID] = (isset($stores_sub_total[$product->StoreID]) ? ($stores_sub_total[$product->StoreID] + $subamount) : $subamount);
                     }
 
+                    // print_data($stores_sub_total);
                     // print_data($distribution);
                     // print_data($cart_items);
 
-                    $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+                    $mininum_order = false;
+                    foreach ($stores_sub_total as $store_id => $s_tot) {
+                        $storeData = $this->appdb->getRowObject('StoreDetails', $store_id);
+                        if ($s_tot < $storeData->MinimumOrder) {
+                            $mininum_order = $storeData->Name .  ' requires a minimum amount of ' . peso($storeData->MinimumOrder);
+                            break;
+                        }
+                    }
 
-                    if ($address) {
+                    if ($mininum_order != false) {
+                        $return_data = array(
+                                'status'    => false,
+                                'message'   => $mininum_order
+                            );
+                    } else {
+
+                        $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+
+                        if ($address) {
 
 
-                        $latest_balance = get_latest_wallet_balance(current_user());
-                        $order_amount   = $this->cart->total();
+                            $latest_balance = get_latest_wallet_balance(current_user());
+                            $order_amount   = $this->cart->total();
 
-                        if ($order_amount > 0) {
+                            if ($order_amount > 0) {
 
-                            if ($latest_balance >= $order_amount) {
+                                if ($latest_balance >= $order_amount) {
 
-                                $delivery_man = null;
-                                if ($require_delivery) {
-                                    $delivery_man = find_delivery_agent($address);
-                                }
+                                    $delivery_man = null;
+                                    if ($require_delivery) {
+                                        $delivery_man = find_delivery_agent($address);
+                                    }
 
-                                if (($require_delivery && $delivery_man) || $require_delivery === false) {
+                                    if (($require_delivery && $delivery_man) || $require_delivery === false) {
 
-                                    $orderData = array(
-                                        'Code'          => microsecID(true),
-                                        'OrderBy'       => current_user(),
-                                        'AddressID'     => $address->id,
-                                        'PaymentMethod' => 1, // test, default ewallet
-                                        'DeliveryMethod'=> $delivery_method,
-                                        'ItemCount'     => $this->cart->total_items(),
-                                        'TotalAmount'   => $order_amount,
-                                        'Status'        => 1, // processing
-                                        'Distribution'  => json_encode($distribution),
-                                        'DeliveryAgent' => $delivery_man,
-                                        'DateOrdered'   => datetime(),
-                                        'LastUpdate'    => datetime(),
-                                    );
+                                        $orderData = array(
+                                            'Code'          => microsecID(true),
+                                            'OrderBy'       => current_user(),
+                                            'AddressID'     => $address->id,
+                                            'PaymentMethod' => 1, // test, default ewallet
+                                            'DeliveryMethod'=> $delivery_method,
+                                            'ItemCount'     => $this->cart->total_items(),
+                                            'TotalAmount'   => $order_amount,
+                                            'Status'        => 1, // processing
+                                            'Distribution'  => json_encode($distribution),
+                                            'DeliveryAgent' => $delivery_man,
+                                            'DateOrdered'   => datetime(),
+                                            'LastUpdate'    => datetime(),
+                                        );
 
-                                    $this->db->trans_start();
+                                        $this->db->trans_start();
 
-                                    if (($ID = $this->appdb->saveData('Orders', $orderData))) {
+                                        if (($ID = $this->appdb->saveData('Orders', $orderData))) {
 
-                                        $has_error = false;
+                                            $has_error = false;
 
-                                        $cart_items = array_values($cart_items);
+                                            $cart_items = array_values($cart_items);
 
-                                        // add order items
-                                        foreach ($cart_items as $k => $i) {
-                                            $orderItemData = array(
-                                                'OrderID'       => $ID,
-                                                'ItemID'        => $i['id'],
-                                                'ItemName'      => $i['name'],
-                                                'Price'         => $i['price'],
-                                                'Quantity'      => $i['qty'],
-                                                'Distribution'  => json_encode($i['distribution'])
-                                            );
+                                            // add order items
+                                            foreach ($cart_items as $k => $i) {
+                                                $orderItemData = array(
+                                                    'OrderID'       => $ID,
+                                                    'ItemID'        => $i['id'],
+                                                    'ItemName'      => $i['name'],
+                                                    'Price'         => $i['price'],
+                                                    'Quantity'      => $i['qty'],
+                                                    'Distribution'  => json_encode($i['distribution'])
+                                                );
 
-                                            if (!$this->appdb->saveData('OrderItems', $orderItemData)) {
-                                                $has_error = true;
-                                                break;
+                                                if (!$this->appdb->saveData('OrderItems', $orderItemData)) {
+                                                    $has_error = true;
+                                                    break;
+                                                }
                                             }
-                                        }
 
-                                        if ($has_error) {
-                                            $return_data = array(
-                                                'status'    => false,
-                                                'message'   => 'Saving order item failed. Please try again later.'
-                                            );
-                                        } else {
-
-                                            $transactionData = array(
-                                                'Code'          => microsecID(),
-                                                'AccountID'     => current_user(),
-                                                'ReferenceNo'   => $orderData['Code'],
-                                                'Description'   => 'Made a purchase - Order #' . $orderData['Code'],
-                                                'Date'          => date('Y-m-d H:i:s'),
-                                                'Amount'        => $order_amount,
-                                                'Type'          => 'Debit',
-                                                'EndingBalance' => ($latest_balance - $order_amount)
-                                            );
-
-                                            if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
-                                                
-
-                                                // distribute upon order completion
-                                                // if ($this->distribute_rewards($ID)) {
-                                                    $return_data = array(
-                                                        'status'    => true,
-                                                        'message'   => 'Order has been placed successfully.',
-                                                        'id'        => $orderData['Code']
-                                                    );
-
-                                                    // clean the cart
-                                                    $this->cart->destroy();
-                                                // } else {
-                                                //     $return_data = array(
-                                                //         'status'    => false,
-                                                //         'message'   => 'Order transaction failed.',
-                                                //     );
-                                                // }
-
-                                            } else {
+                                            if ($has_error) {
                                                 $return_data = array(
                                                     'status'    => false,
-                                                    'message'   => 'Order transaction failed.',
+                                                    'message'   => 'Saving order item failed. Please try again later.'
                                                 );
+                                            } else {
+
+                                                $transactionData = array(
+                                                    'Code'          => microsecID(),
+                                                    'AccountID'     => current_user(),
+                                                    'ReferenceNo'   => $orderData['Code'],
+                                                    'Description'   => 'Made a purchase - Order #' . $orderData['Code'],
+                                                    'Date'          => date('Y-m-d H:i:s'),
+                                                    'Amount'        => $order_amount,
+                                                    'Type'          => 'Debit',
+                                                    'EndingBalance' => ($latest_balance - $order_amount)
+                                                );
+
+                                                if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
+                                                    
+
+                                                    // distribute upon order completion
+                                                    // if ($this->distribute_rewards($ID)) {
+                                                        $return_data = array(
+                                                            'status'    => true,
+                                                            'message'   => 'Order has been placed successfully.',
+                                                            'id'        => $orderData['Code']
+                                                        );
+
+                                                        // clean the cart
+                                                        $this->cart->destroy();
+                                                    // } else {
+                                                    //     $return_data = array(
+                                                    //         'status'    => false,
+                                                    //         'message'   => 'Order transaction failed.',
+                                                    //     );
+                                                    // }
+
+                                                } else {
+                                                    $return_data = array(
+                                                        'status'    => false,
+                                                        'message'   => 'Order transaction failed.',
+                                                    );
+                                                }
+                                                
                                             }
-                                            
+
+                                        } else {
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Saving order failed. Please try again later.'
+                                            );
                                         }
+
+                                        $this->db->trans_complete();
 
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
-                                            'message'   => 'Saving order failed. Please try again later.'
+                                            'message'   => 'Our sincere apologies! Our delivery agents are currently all engaged at the moment and may take a few minutes to assgin the nearest delivery available in your area. Please try again later!'
                                         );
                                     }
-
-                                    $this->db->trans_complete();
 
                                 } else {
                                     $return_data = array(
                                         'status'    => false,
-                                        'message'   => 'Our sincere apologies! Our delivery agents are currently all engaged at the moment and may take a few minutes to assgin the nearest delivery available in your area. Please try again later!'
+                                        'message'   => 'Insufficient wallet balance.'
                                     );
                                 }
 
                             } else {
                                 $return_data = array(
                                     'status'    => false,
-                                    'message'   => 'Insufficient wallet balance.'
+                                    'message'   => 'Invalid order.'
                                 );
                             }
 
                         } else {
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => 'Invalid order.'
+                                'message'   => 'Shipping address is not set.'
                             );
                         }
 
-                    } else {
-                        $return_data = array(
-                            'status'    => false,
-                            'message'   => 'Shipping address is not set.'
-                        );
                     }
                 } else {
                     $return_data = array(

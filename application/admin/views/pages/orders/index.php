@@ -16,8 +16,8 @@
               <th>Amount</th>
               <th>Company</th>
               <th>DeliveryAgent</th>
-              <th>Status</th>
               <th>Date</th>
+              <th>Status</th>
               <th class="c"></th>
             </tr>
           </thead>
@@ -42,8 +42,8 @@
                 echo '<td>' . peso($c['TotalAmount']) . '</td>';
                 echo '<td>' . peso($d->company) . '</td>';
                 echo '<td>' . $agent . '</td>';
-                echo '<td>' . lookup('order_status', $c['Status']) . '</td>';
                 echo '<td>' . date('y/m/d', strtotime($c['DateOrdered'])) . '</td>';
+                echo '<td><a href="javascript:;" onClick="General.viewOrderStatus('.$c['Code'].')">' . lookup('order_status', $c['Status']) . '</a></td>';
                 echo '<td>';
                   echo   '<div class="box-tools">
                           <div class="input-group pull-right" style="width: 10px;">
@@ -69,3 +69,14 @@
 </div>
 
 <?php view('pages/orders/modals'); ?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+  })
+</script>

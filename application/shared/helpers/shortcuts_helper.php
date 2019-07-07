@@ -313,7 +313,13 @@ function user_account_details($id = false, $connections = true)
 
 	if ($user) {
 		$user->fullname = user_full_name($user, 0);
+
 		$user->agent = lookup_row('DeliveryAgents', $user->id, 'UserID');
+
+		if ($user->agent) {
+			// check if theres a new order to notify agent
+			$user->new_delivery_order = get_new_delivery_order($user->id);
+		}
 
 		$store = $ci->appdb->getRowObjectWhere('StoreDetails', array('OwnerID' => $user->id, 'Status' => 1));
 
@@ -900,7 +906,7 @@ function refund_order($order_id)
 }
 
 
-function record_order_status($order_id, $status, $remarks = false)
+function record_order_status($order_id, $status, $remarks = false, $image = false)
 {
 
 	$ci =& get_instance();
@@ -908,11 +914,16 @@ function record_order_status($order_id, $status, $remarks = false)
 	$saveData = array(
 		'OrderID'	 => $order_id,
 		'Status'	 => $status,
-		'Datetime' => datetime()
+		'Datetime'   => datetime(),
+		'UpdatedBy'	 => current_user()
 	);
 
 	if ($remarks) {
 		$saveData['Remarks'] = $remarks;
+	}
+
+	if ($image) {
+		$saveData['Image'] = $image;
 	}
 
 	return $ci->appdb->saveData('OrderStatus', $saveData);
@@ -960,24 +971,31 @@ function find_delivery_agent($address)
 
 	// find all agents in the area
 	$ci =& get_instance();
-	$sql = "SELECT UserID
-					FROM DeliveryAgentCoverageAddress
-					WHERE Barangay = ?
-					OR (Barangay = '' AND City = ?)";
+	$sql = "SELECT a.UserID
+			FROM DeliveryAgentCoverageAddress  a
+            JOIN DeliveryAgents s ON s.UserID = a.UserID
+			WHERE s.Status = 1
+				AND (
+					Barangay = ?
+					OR (Barangay = '' AND City = ?)
+				)";
 	$results = $ci->db->query($sql, array($address->Barangay, $address->City))->result_array();
 
 	$userids = array();
 	foreach ($results as $r) {
-		$userids[] = $r['UserID'];
+		if (current_user() != $r['UserID']) {
+			$userids[] = $r['UserID'];
+		}
 	}
 
 	if (count($userids)) {
 		// all agent with no/lowest active order and lowest completed order
-		$sql = "SELECT DeliveryAgent, SUM(IF(Status <= 3, 1, 0)) AS Active, SUM(IF(Status = 4, 1, 0)) AS Completed FROM Orders
-						WHERE DeliveryAgent IS NOT NULL
-						AND DeliveryAgent IN (".implode(',', $userids).")
-						GROUP BY DeliveryAgent
-						ORDER BY Active, Completed";
+		$sql = "SELECT DeliveryAgent, SUM(IF(Status <= 3, 1, 0)) AS Active, SUM(IF(Status = 4, 1, 0)) AS Completed 
+				FROM Orders
+				WHERE DeliveryAgent IS NOT NULL
+					AND DeliveryAgent IN (".implode(',', $userids).")
+				GROUP BY DeliveryAgent
+				ORDER BY Active, Completed";
 
 		$items  = $ci->db->query($sql)->result_array();
 		$found	= array();
@@ -1001,5 +1019,42 @@ function find_delivery_agent($address)
 	}
 	
 	return false;
+
+}
+
+
+function get_new_delivery_order($user)
+{
+	$ci =& get_instance();
+	$sql = 'SELECT *
+			FROM Orders
+			WHERE DeliveryMethod = ?
+				AND DeliveryAgent = ?
+				AND NotifiedAgent = ?
+			ORDER BY id DESC';
+
+	$results = $ci->db->query($sql, array(2, $user, 0))->result_array();
+
+	$records = array();
+	foreach ($results as $r) {
+		$user    		= $ci->appdb->getRowObject('Users', $r['OrderBy']);
+		$addressData    = $ci->appdb->getRowObject('UserAddress', $r['AddressID']);
+
+		$addressData->names = lookup_address($addressData);
+
+		$records[] = (object) array(
+			'order_id'	 => $r['id'],
+			'order_code' => $r['Code'],
+			'order_date' => $r['DateOrdered'],
+			'name'		 => $user->Firstname . ' ' . $user->Lastname,
+			'photo'		 => photo_filename($user->Photo),
+			'email'      => $user->EmailAddress,
+            'mobile'     => ($user->DialCode ? '+' . $user->DialCode : '') . $user->Mobile,
+            'user_id'    => $user->PublicID,
+            'address'	 => ucwords(strtolower($addressData->Street . ', Barangay ' . $addressData->names['Barangay'] . ', ' . $addressData->names['MuniCity'] . ', ' . $addressData->names['Province']))
+		);
+	}
+
+	return $records;
 
 }

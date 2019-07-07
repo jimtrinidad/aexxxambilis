@@ -114,7 +114,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.6/loadingoverlay.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/js/intlTelInput.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/js/utils.js"></script>
-    <script src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo time()?>"></script>
+    <script src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo recache()?>"></script>
 
     <script type="text/javascript">
       // var input = document.querySelector("#Mobile");
@@ -163,7 +163,7 @@
     <?php
       if (isset($jsModules)) {
         foreach ($jsModules as $jsModule) {
-          echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. time() .'"></script>';
+          echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. recache() .'"></script>';
         }
       }
     ?>

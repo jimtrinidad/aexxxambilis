@@ -34,6 +34,23 @@ class Order extends CI_Controller
 
             $orderData->Distribution = json_decode($orderData->Distribution);
 
+            $agent = false;
+
+            if ($orderData->DeliveryMethod == 2 && $orderData->DeliveryAgent) {
+                $agentData       = $this->appdb->getRowObject('Users', $orderData->DeliveryAgent);
+                if ($agentData) {
+                    $agent = (object) array(
+                        'name'      => $agentData->Firstname . ' ' . $agentData->Lastname,
+                        'photo'     => photo_filename($agentData->Photo),
+                        'email'     => $agentData->EmailAddress,
+                        'mobile'    => ($agentData->DialCode ? '+' . $agentData->DialCode : '') . $agentData->Mobile,
+                        'id'        => $agentData->PublicID
+                    );
+                }
+            }
+
+            $viewData['agent'] = $agent;
+
             $viewData['orderData']  = $orderData;
             $viewData['userData']   = $userData;
             $viewData['address']    = $addressData;

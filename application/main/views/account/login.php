@@ -82,12 +82,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.6/loadingoverlay.min.js"></script>
-	<script src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo time()?>"></script>
+	<script src="<?php echo public_url(); ?>resources/js/modules/utils.js?<?php echo recache()?>"></script>
 
 	<?php
     if (isset($jsModules)) {
       foreach ($jsModules as $jsModule) {
-        echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. time() .'"></script>';
+        echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. recache() .'"></script>';
       }
     }
   ?>

@@ -54,6 +54,66 @@
 			<?php } ?>
 		</div>
 
+
+
+		<?php 
+		// DELIVERY NOTIFICATION
+		if (isset($accountInfo->new_delivery_order) && $accountInfo->new_delivery_order) { 
+		?>
+	    <div class="modal" id="neworderModal" tabindex="-1" role="dialog" aria-labelledby="neworderModal" style="/*z-index: 1041;*/">
+		  <div class="modal-dialog modal-md modal-dialog-centered">
+		    <div class="modal-content" style="background: #fff;">
+		      	<div class="modal-body">
+		      		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			            <span aria-hidden="true">&times;</span>
+			        </button>
+	      			<p class="text-bold text-success">We have found you a Client!</p>
+	      			<hr>
+		      		<?php foreach ($accountInfo->new_delivery_order as $i) { ?>
+						<div class="order-info">
+							<div class="d-inline-block float-left">
+								<img src="<?php echo public_url('assets/profile/') . $i->photo ?>" class="img-fluid" style="max-width: 60px;">
+							</div>
+							<div class="d-inline-block float-left ml-2"  style="width: calc(100% - 70px)">
+								<p class="text-bold text-info"><?php echo $i->name; ?></p>
+								<small>
+									<p><?php echo $i->address; ?></p>
+									<div class="float-left">
+									<p><a href="tel:<?php echo $i->mobile; ?>" ><i class="fa fa-mobile"></i> <?php echo $i->mobile; ?></a></p>
+									<p><a href="javascript:;" onclick="Chatbox.from_delivery_notif = true;Chatbox.openChatbox('<?php echo $i->user_id ?>')"><i class="fa fa-envelope"></i> Send a message</a></p>
+									</div>
+								</small>
+							</div>
+							<a style="margin-top: -31px;" href="<?php echo site_url('account/order_delivery_detail/' . $i->order_code) ?>" class="text-white float-right btn btn-info btn-sm">Open</a>
+							<div class="clearfix"></div>
+						</div>
+						<hr>
+		      		<?php } ?>
+		      	</div>
+		    </div>
+		  </div>
+		</div>
+		<style type="text/css">
+			#neworderModal .modal-body .order-info p {
+				padding: 0;
+				margin: 0;
+			}
+			#neworderModal .modal-body p a {
+				text-decoration: none;
+				cursor: pointer;
+				color: #0e6c9c;
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#neworderModal').modal({
+		            backdrop : 'static',
+		            // keyboard : false
+		        });
+			})
+		</script>
+		<?php } ?>
+
 		<?php view('snippets/chat'); ?>
 		<?php } ?>
 
@@ -68,12 +128,12 @@
 		<script src="<?php echo public_url(); ?>resources/js/modules/wallet.js?<?php echo recache()?>"></script>
 
 		<?php
-      if (isset($jsModules)) {
-        foreach ($jsModules as $jsModule) {
-          echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. recache() .'"></script>';
-        }
-      }
-    ?>
+	      if (isset($jsModules)) {
+	        foreach ($jsModules as $jsModule) {
+	          echo '<script src="'. public_url() .'resources/js/modules/'. $jsModule .'.js?'. recache() .'"></script>';
+	        }
+	      }
+	    ?>
 	
   </body>
 </html>

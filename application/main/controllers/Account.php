@@ -92,11 +92,13 @@ class Account extends CI_Controller
         // response_json(get_user_connections(current_user()));
         // response_json(straight_connections(get_user_connections(current_user())));
 
-        $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
-        $delivery_man = find_delivery_agent($address);
+        // $address = $this->appdb->getRowObjectWhere('UserAddress', array('UserID' => current_user(), 'Status' => 1));
+        // $delivery_man = find_delivery_agent($address);
 
-        print_data($address);
-        var_dump($delivery_man);
+        // print_data($address);
+        // var_dump($delivery_man);
+
+        print_data(get_new_delivery_order(current_user()));
 
     }
 
@@ -401,6 +403,58 @@ class Account extends CI_Controller
         response_json($return_data);
     }
 
+    public function update_agent_status($code)
+    {
+
+        check_authentication();
+
+        if ($code) {
+            $user = $this->appdb->getRowObjectWhere('Users', array('RegistrationID' => $code, 'id' => current_user()));
+            if ($user) {
+                $status = get_post('status');
+                if ($status == 'true' || $status == 'false') {
+
+                    $agentData = $this->appdb->getRowObject('DeliveryAgents', $user->id, 'UserID');
+
+                    $updateData = array(
+                        'id'          => $agentData->id,
+                        'Status'      => ($status == 'true' ? 1 : 2),
+                        'LastUpdate'  => date('Y-m-d H:i:s')
+                    );
+
+                    if ($this->appdb->saveData('DeliveryAgents', $updateData)) {
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Account status has been updated.'
+                        );
+                    } else {
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating account status failed.'
+                        );
+                    }
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Invalid account status.'
+                    );
+                }
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Invalid account code.'
+                );
+            }
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid account code.'
+            );
+        }
+
+        response_json($return_data);
+    }
+
     public function delivery_coverage()
     {
         check_authentication();
@@ -542,6 +596,8 @@ class Account extends CI_Controller
                     'email'  => $user->EmailAddress,
                     'mobile' => $user->Mobile
                 );
+
+                $o['Statuses'] = $this->appdb->getRecords('OrderStatus', array('OrderID' => $o['id']));
             }
 
             $viewData['orders'] = $orders;
@@ -562,6 +618,9 @@ class Account extends CI_Controller
 
         $orderData = $this->appdb->getRowObjectWhere('Orders', array('Code' => $code, 'DeliveryAgent' => current_user()));
         if ($orderData) {
+
+            // update order as read
+            $this->appdb->saveData('Orders', array('NotifiedAgent' => 1, 'id' => $orderData->id));
 
             $userData = user_account_details();
 
@@ -585,7 +644,8 @@ class Account extends CI_Controller
             $o['user'] = array(
                 'name'   => $user->Firstname . ' ' . $user->Lastname,
                 'email'  => $user->EmailAddress,
-                'mobile' => $user->Mobile
+                'mobile' => ($user->DialCode ? '+' . $user->DialCode : '') . $user->Mobile,
+                'user_id'=> $user->PublicID
             );
 
             $items   = $this->appdb->getRecords('OrderItems', array('OrderID' => $orderData->id));
@@ -635,6 +695,115 @@ class Account extends CI_Controller
             redirect();
         }
 
+    }
+
+    public function get_order_status($code)
+    {
+        check_authentication();
+
+        $order = $this->appdb->getRowObjectWhere('Orders', array('DeliveryAgent' => current_user(), 'Code' => $code));
+        if ($order) {
+            $items   = $this->appdb->getRecords('OrderStatus', array('OrderID' => $order->id), 'id');
+            foreach ($items as &$i) {
+                $i['Status']   = lookup('order_status', $i['Status']);
+                $i['Datetime'] = date('m/d/y H:i', strtotime($i['Datetime']));
+                if ($i['Image']) {
+                    $i['Image'] = public_url('assets/uploads/') . upload_filename($i['Image']);
+                } else {
+                    $i['Image'] = false;
+                }
+                
+                $user    = $this->appdb->getRowObject('Users', $i['UpdatedBy']);
+                if ($user) {
+                    $i['UpdatedBy'] = $user->Firstname . ' ' . $user->Lastname;
+                }
+            }
+            $return_data = array(
+                'status'  => true,
+                'data'    => $items
+            );
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid order'
+            );
+        }
+        response_json($return_data);
+    }
+
+
+    public function set_order_delivered()
+    {
+        check_authentication();
+
+        $orderData = $this->appdb->getRowObjectWhere('Orders', array('Code' => post('order_id'), 'DeliveryAgent' => current_user()));
+        if ($orderData) {
+
+            $randomName = md5(microsecID());
+
+            // validate file upload
+            $this->load->library('upload', array(
+                'upload_path'   => UPLOADS_DIRECTORY,
+                'allowed_types' => 'gif|jpg|png',
+                // 'max_size'      => '1000', // 1mb
+                // 'max_width'     => '1024',
+                // 'max_height'    => '768',
+                'overwrite'     => true,
+                'file_name'     => $randomName
+            ));
+
+            if (empty($_FILES['file']['name'])) {
+                $return_data = array(
+                    'status'    => false,
+                    'fields'    => array('file' => 'Receipt/Acknowledgement  is required.')
+                );
+            } else if ($this->upload->do_upload('file') == false) {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Uploading failed.',
+                    'fields'    => array('file' => $this->upload->display_errors('',''))
+                );
+            } else {
+
+                $this->db->trans_begin();
+
+                // do save
+                $uploadData     = $this->upload->data();
+
+                if (record_order_status($orderData->id, 3, post('Remarks'), $uploadData['file_name'])) {
+
+                    $saveData = array(
+                        'id'            => $orderData->id,
+                        'Status'        => 3,
+                        'LastUpdate'    => date('Y-m-d H:i:s')  
+                    );
+
+                    if ($this->appdb->saveData('Orders', $saveData)) {
+                        $this->db->trans_commit();
+                        $return_data = array(
+                            'status'    => true,
+                            'message'   => 'Order has been set to delivered.'
+                        );
+                    } else {
+                        $this->db->trans_rollback();
+                        $return_data = array(
+                            'status'    => false,
+                            'message'   => 'Updating order failed.'
+                        );
+                    }
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Updating order status failed.'
+                    );
+                }
+
+            }
+
+        }
+
+        response_json($return_data);
     }
 
 

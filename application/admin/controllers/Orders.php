@@ -76,6 +76,23 @@ class Orders extends CI_Controller
 
             $orderData->Distribution = json_decode($orderData->Distribution);
 
+            $agent = false;
+
+            if ($orderData->DeliveryMethod == 2 && $orderData->DeliveryAgent) {
+                $agentData       = $this->appdb->getRowObject('Users', $orderData->DeliveryAgent);
+                if ($agentData) {
+                    $agent = (object) array(
+                        'name'      => $agentData->Firstname . ' ' . $agentData->Lastname,
+                        'photo'     => photo_filename($agentData->Photo),
+                        'email'     => $agentData->EmailAddress,
+                        'mobile'    => ($agentData->DialCode ? '+' . $agentData->DialCode : '') . $agentData->Mobile,
+                        'id'        => $agentData->PublicID
+                    );
+                }
+            }
+
+            $viewData['agent'] = $agent;
+
             $viewData['orderData']  = $orderData;
             $viewData['userData']   = $userData;
             $viewData['address']    = $addressData;
@@ -130,19 +147,26 @@ class Orders extends CI_Controller
 
                     if (isset($saveData['Status'])) {
 
-                        record_order_status($orderData->id, $status, post('status_remarks'));
+                        if (record_order_status($orderData->id, $status, post('status_remarks'))) {
 
-                        if ($this->appdb->saveData('Orders', $saveData)) {
-                            $this->db->trans_commit();
-                            $return_data = array(
-                                'status'    => true,
-                                'message'   => 'Order has been updated.'
-                            );
+                            if ($this->appdb->saveData('Orders', $saveData)) {
+                                $this->db->trans_commit();
+                                $return_data = array(
+                                    'status'    => true,
+                                    'message'   => 'Order has been updated.'
+                                );
+                            } else {
+                                $this->db->trans_rollback();
+                                $return_data = array(
+                                    'status'    => false,
+                                    'message'   => 'Updating order failed.'
+                                );
+                            }
+
                         } else {
-                            $this->db->trans_rollback();
                             $return_data = array(
                                 'status'    => false,
-                                'message'   => 'Updating order failed.'
+                                'message'   => 'Updating order status failed.'
                             );
                         }
                     }
@@ -168,6 +192,39 @@ class Orders extends CI_Controller
             );
         }
 
+        response_json($return_data);
+    }
+
+    public function get_order_status($code)
+    {
+
+        $order = $this->appdb->getRowObjectWhere('Orders', array('Code' => $code));
+        if ($order) {
+            $items   = $this->appdb->getRecords('OrderStatus', array('OrderID' => $order->id), 'id');
+            foreach ($items as &$i) {
+                $i['Status']   = lookup('order_status', $i['Status']);
+                $i['Datetime'] = date('m/d/y H:i', strtotime($i['Datetime']));
+                if ($i['Image']) {
+                    $i['Image'] = public_url('assets/uploads/') . upload_filename($i['Image']);
+                } else {
+                    $i['Image'] = false;
+                }
+
+                $user    = $this->appdb->getRowObject('Users', $i['UpdatedBy']);
+                if ($user) {
+                    $i['UpdatedBy'] = $user->Firstname . ' ' . $user->Lastname;
+                }
+            }
+            $return_data = array(
+                'status'  => true,
+                'data'    => $items
+            );
+        } else {
+            $return_data = array(
+                'status'    => false,
+                'message'   => 'Invalid order'
+            );
+        }
         response_json($return_data);
     }
 

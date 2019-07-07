@@ -73,6 +73,7 @@ class Store extends CI_Controller
                     'Contact'   => get_post('Contact'),
                     'Email'     => get_post('Email'),
                     'Slug'      => $slug,
+                    'MinimumOrder' => get_post('MinimumOrder'),
                     'Province'  => get_post('SDProvince'),
                     'City'      => get_post('SDCity'),
                     'Barangay'  => get_post('SDBarangay'),

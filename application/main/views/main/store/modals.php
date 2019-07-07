@@ -25,6 +25,10 @@
 						<input type="text" class="form-control" name="Email" id="Email" placeholder="Email">
 					</div>
           <div class="form-group">
+            <label>Minimum Order Amount</label>
+            <input type="number" class="form-control" name="MinimumOrder" id="MinimumOrder" placeholder="Minimum Order Amount">
+          </div>
+          <div class="form-group">
             <label class="control-label" for="SDProvince">Province</label>
             <select id="SDProvince" name="SDProvince" class="form-control" onChange="General.loadCityOptions('#SDCity', this, '#SDBarangay')">
               <option value="">--</option>

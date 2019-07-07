@@ -4,7 +4,6 @@
 	
 		<div class="col-xs-6">
 			<div class="balance-info">
-				<p><?php echo date('F d, Y', strtotime($orderData->DateOrdered)) ?></p>
 				<strong class="text-b-red"><?php echo strtoupper($userData->Lastname . ', ' . $userData->Firstname) ?></strong>
 				<p class="text-bold">CONTACT DETAILS</p>
 				<p><?php echo $userData->Mobile; ?></p>
@@ -14,11 +13,24 @@
 				<p><?php echo $address->Street . ', Barangay ' . $address->data['Barangay']; ?>, </p>
 				<p><?php echo $address->data['MuniCity'] . ', ' . $address->data['Province']; ?></p>
 				<br />
+				<?php if ($agent) { ?>
+				<p class="text-bold">DELIVERY AGENT</p>
+				<div>
+					<div class="d-inline-block pull-left">
+						<img src="<?php echo public_url('assets/profile/') . $agent->photo ?>" class="img-fluid" style="max-width: 60px;">
+					</div>
+					<div class="d-inline-block pull-left" style="margin-left: 10px">
+						<p class="text-bold text-info"><?php echo $agent->name; ?></p>
+						<p><a href="tel:<?php echo $agent->mobile; ?>" ><i class="fa fa-mobile"></i> <?php echo $agent->mobile; ?></a></p>
+					</div>
+				</div>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="col-xs-6 text-right balance-info">
 			<img src="<?php echo public_url('assets/qr/') . get_qr_file($orderData->Code); ?>" width="100" />
 			<p class="text-bold mt-2">TRANSACTION # <?php echo $orderData->Code ?></p>
+			<p><strong>ORDER DATE:</strong> <?php echo date('F d, Y', strtotime($orderData->DateOrdered)) ?></p>
 			<p><strong>STATUS:</strong> <?php echo lookup('order_status', $orderData->Status) ?></p>
 			<p><strong>PAYMENT:</strong> <?php echo lookup('payment_method', $orderData->PaymentMethod) ?></p>
 		</div>

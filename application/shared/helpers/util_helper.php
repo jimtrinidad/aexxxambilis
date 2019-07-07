@@ -61,7 +61,8 @@ function is_current_url($controller, $method = false)
 }
 
 function recache() {
-    return time();
+    // return time();
+    return strtotime(date('Y-m-d', time()));
 }
 
 
@@ -283,9 +284,9 @@ function profit_distribution($srp, $commision, $type, $distribution_only = false
     $profit_dist        = array(
         'profit'         => $profit,
         'company'        => $profit * 0.30,
-        'investor'       => $profit * 0.25,
-        'referral'       => $profit * 0.30,
-        'delivery'       => $profit * 0.05,
+        'investor'       => $profit * 0.10,
+        'referral'       => $profit * 0.25,
+        'delivery'       => $profit * 0.25,
         'cashback'       => $profit * 0.02,
         'shared_rewards' => $profit * 0.08,
     );
@@ -322,7 +323,7 @@ function partner_commision_rate($c)
         return 21;
     } else if ($c >= 72 && $c <= 80) {
         return 24;
-    } else if ($c >= 80 && $c <= 100) {
+    } else if ($c >= 81 && $c <= 100) {
         return 27;
     }
 

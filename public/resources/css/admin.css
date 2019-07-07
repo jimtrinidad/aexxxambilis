@@ -175,3 +175,9 @@ table.table-middle >tfoot>tr>td {
   height: 0 !important;
 }
 /* END */
+
+
+#invoiceModal .modal-body p {
+  padding: 0;
+  margin: 0;
+}

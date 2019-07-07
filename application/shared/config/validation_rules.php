@@ -83,6 +83,7 @@ $config['save_store_profile'] = array(
 	array('SDCity', 'City/Municipal', 'trim|required'),
 	array('SDBarangay', 'Barangay', 'trim|required'),
 	array('Address', 'Street', 'trim|required'),
+	array('MinimumOrder', 'Minimum order amount', 'trim|required|numeric|greater_than_equal_to[0]'),
 );
 
 $config['store_address'] = array(

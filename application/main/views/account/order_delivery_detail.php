@@ -5,8 +5,9 @@
 				<p><?php echo date('F d, Y', strtotime($orderData->DateOrdered)) ?></p>
 				<strong class="text-b-red"><?php echo strtoupper($orderData->user->name) ?></strong>
 				<p class="text-bold">CONTACT DETAILS</p>
-				<p><?php echo $orderData->user->mobile; ?></p>
 				<p><?php echo $orderData->user->email; ?></p>
+				<p><a href="tel:<?php echo $orderData->user->mobile; ?>" ><i class="fa fa-mobile"></i> <?php echo $orderData->user->mobile; ?></a></p>
+				<p><a href="javascript:;" onclick="Chatbox.openChatbox('<?php echo $orderData->user->user_id ?>')"><i class="fa fa-envelope"></i> Send a message</a></p>
 				<br />
 				<p class="text-bold">DELIVERY ADDRESS</p>
 				<p><?php echo $orderData->Address->Street . ', Barangay ' . $orderData->Address->Names->Barangay; ?>, </p>
@@ -19,6 +20,12 @@
 			<p class="text-bold mt-2">TRANSACTION # <?php echo $orderData->Code ?></p>
 			<p><strong>STATUS:</strong> <?php echo lookup('order_status', $orderData->Status) ?></p>
 			<p><strong>PAYMENT:</strong> <?php echo lookup('payment_method', $orderData->PaymentMethod) ?></p>
+
+			<?php
+			if ($orderData->Status <= 2) {
+              	echo '<br><a class="btn btn-success btn-sm m- text-white" onClick="Account.markDelivered('. $orderData->Code .')">Delivered</a>';
+            }
+			?>
 		</div>
 	</div>
 
@@ -84,3 +91,5 @@
 	</div>
 
 </div>
+
+<?php view('account/modals') ?>

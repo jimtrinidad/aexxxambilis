@@ -39,7 +39,7 @@ function Account() {
             self.register(this);
         });
 
-        $('#deliveryAgentApplicationForm').submit(function(e) {
+        $('#deliveryAgentApplicationForm, #setDeliveredOrderForm').submit(function(e) {
             e.preventDefault();
             Utils.save_form(this, function(){
                 location.reload();
@@ -85,6 +85,10 @@ function Account() {
                     </div>
                 </div>`);
             });
+        });
+
+        $('.deliveryAgentStatusToggle').change(function(e){
+            self.updateAgentStatus(this);
         });
 
     }
@@ -238,6 +242,92 @@ function Account() {
         Utils.show_form_modal(modal, form, false, function(){
             Utils.set_form_input_value(form, self.info);
             $(form).find('.custom-file-label').text('Choose file');
+        });
+    }
+
+    this.updateAgentStatus = function(elem)
+    {
+        var checkbox    = $(elem);
+        var data        = checkbox.data();
+        var status      = checkbox.is(":checked");
+        $.ajax({
+            url: window.base_url('account/update_agent_status/' + data.code),
+            type: 'get',
+            data: {'status' : status},
+            success: function (response) {
+                if (!response.status) {
+                    // failed
+                    bootbox.alert(response.message, function(){
+                        location.reload();
+                    })
+                }
+            }
+        });
+    }
+
+    this.markDelivered = function(code)
+    {
+        var form  = '#setDeliveredOrderForm';
+        var modal = '#setDeliveredOrderModal';
+        Utils.show_form_modal(modal, form, false, function(){
+            $(form).find('#order_id').val(code);
+            $(form).find('.custom-file-label').text('Choose file');
+        });
+    }
+
+    this.viewOrderStatus = function(code)
+    {
+        $.LoadingOverlay("show");
+
+        $.get(window.base_url('account/get_order_status/' + code)).done(function(response) {
+
+            if (response.status) {
+
+                var $modalObj = $('#orderStatusModal');
+
+                if (Object.keys(response.data).length) {
+                    var tpl = '';
+
+                    $.each(response.data, function(i,e) {
+
+                        var by = '';
+                        if (e.UpdatedBy && e.UpdatedBy != '') {
+                            by = `<div class="small float-right text-green">By: ${e.UpdatedBy}</div>`;
+                        }
+
+                        tpl += `<div class="text-bold text-info">
+                                    ${e.Status} <span class="small text-black ml-2">${e.Datetime}</span>
+                                    ${by}
+                                </div>`;
+
+                        if (e.Remarks && e.Remarks != '') {
+                            tpl += `<div class="small float-left"><b>Remarks:</b> <span>${e.Remarks}</span></div>`;
+                        }
+
+                        if (e.Image && e.Image != '') {
+                            // tpl += `<div class="float-right"><img src="${e.Image}" class="img-fluid" style="max-width: 300px;"></div>`;
+                            tpl += `<div class="float-right">
+                                        <a href="${e.Image}" data-toggle="lightbox" data-gallery="example-gallery">
+                                            <img src="${e.Image}" class="img-fluid" style="max-width:150px;">
+                                        </a>
+                                  </div>`;
+                        }
+
+                        tpl += '<div class="clearfix"></div><hr/>';
+                    });
+
+                    $modalObj.find('.order_status_cont').html(tpl)
+                } else {
+                    $modalObj.find('.order_status_cont').html('<td>No record found.</td>');
+                }
+                
+                $modalObj.modal({
+                    backdrop : 'static',
+                    keyboard : false
+                });
+
+            }
+            $.LoadingOverlay("hide");
         });
     }
 

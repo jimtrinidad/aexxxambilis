@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/chatbox.css?<?php echo time()?>" type="text/css"> 
+<link rel="stylesheet" href="<?php echo public_url(); ?>resources/css/chatbox.css?<?php echo recache()?>" type="text/css"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/css/emojione.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js-bootstrap-css/1.2.1/typeaheadjs.min.css" />
@@ -211,11 +211,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.jquery.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script> -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js"></script>.
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.1/emojionearea.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/draggabilly/2.2.0/draggabilly.pkgd.min.js"></script>
 
 <script type="text/javascript" src="<?php echo public_url(); ?>resources/js/typeahead-multiselect.js"></script>
 
-<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/chatbox.js?<?php echo time()?>"></script>
+<script type="text/javascript" src="<?php echo public_url(); ?>resources/js/modules/chatbox.js?<?php echo recache()?>"></script>

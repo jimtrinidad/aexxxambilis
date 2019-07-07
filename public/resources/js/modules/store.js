@@ -75,12 +75,13 @@ function Store() {
         var modal = '#storeProfileModal';
         Utils.show_form_modal(modal, form, false, function(){
             if (self.profile) {
-                console.log(self.profile);
+                // console.log(self.profile);
                 Utils.set_form_input_value(form, {
                     'Name'    : self.profile.Name,
                     'Address' : self.profile.Address,
                     'Contact' : self.profile.Contact,
                     'Email'   : self.profile.Email,
+                    'MinimumOrder'   : self.profile.MinimumOrder,
                     'SDProvince': self.profile.Province
                 });
 
