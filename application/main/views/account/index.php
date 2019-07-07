@@ -158,6 +158,7 @@
 
       label.btn.btn-xs {
     	padding: 2px 3px;
+    	cursor: pointer;
       }
 
     </style>
