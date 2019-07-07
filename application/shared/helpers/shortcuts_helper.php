@@ -1031,9 +1031,10 @@ function get_new_delivery_order($user)
 			WHERE DeliveryMethod = ?
 				AND DeliveryAgent = ?
 				AND NotifiedAgent = ?
+				AND Status < ?
 			ORDER BY id DESC';
 
-	$results = $ci->db->query($sql, array(2, $user, 0))->result_array();
+	$results = $ci->db->query($sql, array(2, $user, 0, 3))->result_array();
 
 	$records = array();
 	foreach ($results as $r) {
