@@ -963,7 +963,7 @@ class Account extends CI_Controller
                     if (($ID = $this->appdb->saveData('Users', $insertData))) {
                         $return_data = array(
                             'status'    => true,
-                            'message'   => 'Account registration successful. You will can now login your account.',
+                            'message'   => 'Account registration successful. You can now login your account.',
                             'id'        => $ID
                         );
                     } else {
