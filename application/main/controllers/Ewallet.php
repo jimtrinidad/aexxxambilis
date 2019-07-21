@@ -378,6 +378,12 @@ class Ewallet extends CI_Controller
 
                                     $total_amount     = $amount + ((int) $ecresponse['ServiceCharge']);
 
+                                    // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
+                                    if ($new_balance === false) {
+                                        $new_balance = $current_balance - $total_amount;
+                                        log_message('error', $ecparams['ClientReference'] . ' - transaction new balance failed. deduct exact amount.');
+                                    }
+
                                     $saveData = array(
                                         'Code'          => microsecID(true),
                                         'AccountID'     => current_user(),
@@ -549,6 +555,12 @@ class Ewallet extends CI_Controller
 
                                     $total_amount     = $amount + ((int) $ecresponse['servicecharge']);
 
+                                    // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
+                                    if ($new_balance === false) {
+                                        $new_balance = $current_balance - $total_amount;
+                                        log_message('error', $ecresponse['serviceref'] . ' - transaction new balance failed. deduct exact amount.');
+                                    }
+
                                     $saveData = array(
                                         'Code'          => microsecID(true),
                                         'AccountID'     => current_user(),
@@ -705,6 +717,12 @@ class Ewallet extends CI_Controller
 
                                     $new_balance = $this->ecpay->gate_check_balance();
 
+                                    // in case new balance check failed, use the current banlance minus transaction amount. will result to no rewards to distribute
+                                    if ($new_balance === false) {
+                                        $new_balance = $current_balance - $amount;
+                                        log_message('error', $ecresponse['TraceNo'] . ' - transaction new balance failed. deduct exact amount.');
+                                    }
+
                                     $this->db->trans_start();
 
                                     $desc   = 'eLoad: ' . $service->TelcoName . ' - ' . $service->TelcoTag . ' ('. get_post('Number') .') ' . ($ecresponse['StatusMessage'] ?? '');
@@ -772,7 +790,8 @@ class Ewallet extends CI_Controller
                                 } else {
                                     $return_data = array(
                                         'status'    => false,
-                                        'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . ($ecresponse['StatusCode'] ?? 'x') . ' )') : 'Transaction failed. Please try again later',
+                                        'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . (isset($ecresponse['StatusCode']) && is_numeric($ecresponse['StatusCode']) ? (int) $ecresponse['StatusCode'] : 'x') . ' )') : 'Transaction failed. Please try again later',
+                                        'data' => $ecresponse
                                     );
                                 }
 
