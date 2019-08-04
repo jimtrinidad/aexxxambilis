@@ -352,107 +352,117 @@ class Ewallet extends CI_Controller
 
                             if ($current_balance !== false) {
 
-                                $ecparams   = array(
-                                    'BillerTag'       => $biller->BillerTag,
-                                    'AccountNo'       => get_post('AccountNo'),
-                                    'Identifier'      => get_post('Identifier'),
-                                    'Amount'          => $amount,
-                                    'ClientReference' => microsecID(true)
-                                );
+                                if ($amount < $current_balance) {
 
-                                $ecresponse = $this->ecpay->bills_payment_transact($ecparams);
-                                // $ecresponse = array(
-                                //     'Status'    => 0,
-                                //     'Message'       => 'Success!',
-                                //     'ServiceCharge' => '15.00'
-                                // );
-
-                                if (isset($ecresponse['Status']) && $ecresponse['Status'] == 0) {
-
-                                    $new_balance = $this->ecpay->ecpay_check_balance();
-
-                                    $this->db->trans_start();
-
-                                    $desc = lookup('biller_type', $biller->Type);
-                                    $desc = $desc . ' Payment - ' . $biller->Description . ' - ' . ($ecresponse['Message'] ?? ' Success');
-
-                                    $total_amount     = $amount + ((int) $ecresponse['ServiceCharge']);
-
-                                    // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
-                                    if ($new_balance === false) {
-                                        $new_balance = $current_balance - $total_amount;
-                                        log_message('error', $ecparams['ClientReference'] . ' - transaction new balance failed. deduct exact amount.');
-                                    }
-
-                                    $saveData = array(
-                                        'Code'          => microsecID(true),
-                                        'AccountID'     => current_user(),
-                                        'ReferenceNo'   => $ecparams['ClientReference'],
-                                        'Description'   => $desc,
-                                        'Date'          => date('Y-m-d H:i:s'),
-                                        'Amount'        => $total_amount,
-                                        'Type'          => 'Debit',
-                                        'EndingBalance' => ($latest_balance - $total_amount),
-                                        'Details'       => json_encode($ecresponse),
+                                    $ecparams   = array(
+                                        'BillerTag'       => $biller->BillerTag,
+                                        'AccountNo'       => get_post('AccountNo'),
+                                        'Identifier'      => get_post('Identifier'),
+                                        'Amount'          => $amount,
+                                        'ClientReference' => microsecID(true)
                                     );
 
-                                    if ($this->appdb->saveData('WalletTransactions', $saveData)) {
-                                        $invoice_data = array(
-                                            'Merchant'          => $biller->Description,
-                                            clean_text($biller->FirstField)    => get_post('AccountNo'),
-                                            clean_text($biller->SecondField)   => get_post('Identifier'),
-                                            'Reference Number'  => $saveData['ReferenceNo'],
-                                            'Amount'            => peso($amount),
-                                            'Transaction Fee'   => peso($ecresponse['ServiceCharge']),
-                                            'Transaction Date'  => datetime(),
-                                        );
+                                    $ecresponse = $this->ecpay->bills_payment_transact($ecparams);
+                                    // $ecresponse = array(
+                                    //     'Status'    => 0,
+                                    //     'Message'       => 'Success!',
+                                    //     'ServiceCharge' => '15.00'
+                                    // );
 
-                                        if ($ecresponse['ServiceCharge'] == 0) {
-                                            unset($invoice_data['Transaction Fee']);
+                                    if (isset($ecresponse['Status']) && $ecresponse['Status'] == 0) {
+
+                                        $new_balance = $this->ecpay->ecpay_check_balance();
+
+                                        $this->db->trans_start();
+
+                                        $desc = lookup('biller_type', $biller->Type);
+                                        $desc = $desc . ' Payment - ' . $biller->Description . ' - ' . ($ecresponse['Message'] ?? ' Success');
+
+                                        $total_amount     = $amount + ((int) $ecresponse['ServiceCharge']);
+
+                                        // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
+                                        if ($new_balance === false) {
+                                            $new_balance = $current_balance - $total_amount;
+                                            log_message('error', $ecparams['ClientReference'] . ' - transaction new balance failed. deduct exact amount.');
                                         }
 
-                                        // save transaction and distribute reward
-                                        $trans_id = ecpay_save_transaction(array(
-                                            'code'          => $saveData['Code'],
-                                            'merch_type'    => ($biller->Type == 2 ? 3 : 2), // biller type 2 = ticket,
-                                            'merch_id'      => $biller->id,
-                                            'merch_name'    => $biller->Description,
-                                            'amount'        => $amount,
-                                            'prev_bal'      => $current_balance,
-                                            'new_bal'       => $new_balance,
-                                            'fee'           => $ecresponse['ServiceCharge'],
-                                            'user'          => current_user(),
-                                            'refno'         => $saveData['ReferenceNo'],
-                                            'trans_date'    => $saveData['Date'],
-                                            'ecrequest'     => $ecparams,
-                                            'ecresponse'    => $ecresponse,
-                                            'invoice'       => $invoice_data
-                                        ));
-
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => 'Payment transaction has been made.',
-                                            'image'     => public_url('assets/logo/' ) . logo_filename($biller->Image),
-                                            'data'      => $invoice_data,
-                                            'rewards'   => get_rewards(array(
-                                                            'OrderID'       => $trans_id,
-                                                            'TransactType'  => ($biller->Type == 2 ? 3 : 2)
-                                                        ), 'Type')
+                                        $saveData = array(
+                                            'Code'          => microsecID(true),
+                                            'AccountID'     => current_user(),
+                                            'ReferenceNo'   => $ecparams['ClientReference'],
+                                            'Description'   => $desc,
+                                            'Date'          => date('Y-m-d H:i:s'),
+                                            'Amount'        => $total_amount,
+                                            'Type'          => 'Debit',
+                                            'EndingBalance' => ($latest_balance - $total_amount),
+                                            'Details'       => json_encode($ecresponse),
                                         );
+
+                                        if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                                            $invoice_data = array(
+                                                'Merchant'          => $biller->Description,
+                                                clean_text($biller->FirstField)    => get_post('AccountNo'),
+                                                clean_text($biller->SecondField)   => get_post('Identifier'),
+                                                'Reference Number'  => $saveData['ReferenceNo'],
+                                                'Amount'            => peso($amount),
+                                                'Transaction Fee'   => peso($ecresponse['ServiceCharge']),
+                                                'Transaction Date'  => datetime(),
+                                            );
+
+                                            if ($ecresponse['ServiceCharge'] == 0) {
+                                                unset($invoice_data['Transaction Fee']);
+                                            }
+
+                                            // save transaction and distribute reward
+                                            $trans_id = ecpay_save_transaction(array(
+                                                'code'          => $saveData['Code'],
+                                                'merch_type'    => ($biller->Type == 2 ? 3 : 2), // biller type 2 = ticket,
+                                                'merch_id'      => $biller->id,
+                                                'merch_name'    => $biller->Description,
+                                                'amount'        => $amount,
+                                                'prev_bal'      => $current_balance,
+                                                'new_bal'       => $new_balance,
+                                                'fee'           => $ecresponse['ServiceCharge'],
+                                                'user'          => current_user(),
+                                                'refno'         => $saveData['ReferenceNo'],
+                                                'trans_date'    => $saveData['Date'],
+                                                'ecrequest'     => $ecparams,
+                                                'ecresponse'    => $ecresponse,
+                                                'invoice'       => $invoice_data
+                                            ));
+
+                                            $return_data = array(
+                                                'status'    => true,
+                                                'message'   => 'Payment transaction has been made.',
+                                                'image'     => public_url('assets/logo/' ) . logo_filename($biller->Image),
+                                                'data'      => $invoice_data,
+                                                'rewards'   => get_rewards(array(
+                                                                'OrderID'       => $trans_id,
+                                                                'TransactType'  => ($biller->Type == 2 ? 3 : 2)
+                                                            ), 'Type')
+                                            );
+
+                                        } else {
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Saving transaction failed.'
+                                            );
+                                        }
+
+                                        $this->db->trans_complete();
 
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
-                                            'message'   => 'Saving transaction failed.'
+                                            'message'   => isset($ecresponse['Message']) ? ($ecresponse['Message'] . ' ( ' . ($ecresponse['Status'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
                                         );
                                     }
 
-                                    $this->db->trans_complete();
-
                                 } else {
+                                    // insuffucient ec wallet balance
                                     $return_data = array(
                                         'status'    => false,
-                                        'message'   => isset($ecresponse['Message']) ? ($ecresponse['Message'] . ' ( ' . ($ecresponse['Status'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
+                                        'message'   => 'The system is performing updates and development. Please try again soon.'
                                     );
                                 }
 
@@ -529,107 +539,117 @@ class Ewallet extends CI_Controller
 
                             if ($current_balance !== false) {
 
-                                $ecparams   = array(
-                                    'ServiceType'     => $service->Services,
-                                    'AccountNo'       => get_post('AccountNo'),
-                                    'Identifier'      => get_post('Identifier'),
-                                    'Amount'          => $amount,
-                                    'ClientReference' => microsecID(true)
-                                );
-                                $ecresponse = $this->ecpay->ecash_transact($ecparams);
-                                // $ecresponse = json_decode('{"statusid":"0","description":"Success","refno":"DD57A6E897B1","servicecharge":10.00,"serviceref":"R0000004148"}', true);
+                                if ($amount < $current_balance) {
 
-                                if (isset($ecresponse['statusid']) && $ecresponse['statusid'] == 0) {
-
-                                    if ($service->WalletType == 1) {
-                                        // ecpay wallet
-                                        $new_balance = $this->ecpay->ecpay_check_balance();
-                                    } else if ($service->WalletType == 2) {
-                                        // gate wallet
-                                        $new_balance = $this->ecpay->gate_check_balance();
-                                    }
-
-                                    $this->db->trans_start();
-
-                                    $desc   = 'Money Padala - ' . $service->Name . ' - ' . ($ecresponse['description'] ?? '');
-
-                                    $total_amount     = $amount + ((int) $ecresponse['servicecharge']);
-
-                                    // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
-                                    if ($new_balance === false) {
-                                        $new_balance = $current_balance - $total_amount;
-                                        log_message('error', $ecresponse['serviceref'] . ' - transaction new balance failed. deduct exact amount.');
-                                    }
-
-                                    $saveData = array(
-                                        'Code'          => microsecID(true),
-                                        'AccountID'     => current_user(),
-                                        'ReferenceNo'   => $ecresponse['serviceref'] ?? $ecparams['ClientReference'],
-                                        'Description'   => $desc,
-                                        'Date'          => date('Y-m-d H:i:s'),
-                                        'Amount'        => $total_amount,
-                                        'Type'          => 'Debit',
-                                        'EndingBalance' => ($latest_balance - $total_amount),
-                                        'Details'       => json_encode($ecresponse),
+                                    $ecparams   = array(
+                                        'ServiceType'     => $service->Services,
+                                        'AccountNo'       => get_post('AccountNo'),
+                                        'Identifier'      => get_post('Identifier'),
+                                        'Amount'          => $amount,
+                                        'ClientReference' => microsecID(true)
                                     );
+                                    $ecresponse = $this->ecpay->ecash_transact($ecparams);
+                                    // $ecresponse = json_decode('{"statusid":"0","description":"Success","refno":"DD57A6E897B1","servicecharge":10.00,"serviceref":"R0000004148"}', true);
 
-                                    if ($this->appdb->saveData('WalletTransactions', $saveData)) {
-                                        $invoice_data = array(
-                                            'Merchant'          => $service->Description,
-                                            clean_text($service->FirstField)    => get_post('AccountNo'),
-                                            clean_text($service->SecondField)   => get_post('Identifier'),
-                                            'Reference Number'  => $saveData['ReferenceNo'],
-                                            'Amount'            => peso($amount),
-                                            'Transaction Fee'   => peso($ecresponse['servicecharge']),
-                                            'Transaction Date'  => datetime(),
-                                        );
+                                    if (isset($ecresponse['statusid']) && $ecresponse['statusid'] == 0) {
 
-                                        if ($ecresponse['servicecharge'] == 0) {
-                                            unset($invoice_data['Transaction Fee']);
+                                        if ($service->WalletType == 1) {
+                                            // ecpay wallet
+                                            $new_balance = $this->ecpay->ecpay_check_balance();
+                                        } else if ($service->WalletType == 2) {
+                                            // gate wallet
+                                            $new_balance = $this->ecpay->gate_check_balance();
                                         }
 
-                                        // save transaction and distribute reward
-                                        $trans_id = ecpay_save_transaction(array(
-                                            'code'          => $saveData['Code'],
-                                            'merch_type'    => 5,
-                                            'merch_id'      => $service->id,
-                                            'merch_name'    => $service->Description,
-                                            'amount'        => $amount,
-                                            'prev_bal'      => $current_balance,
-                                            'new_bal'       => $new_balance,
-                                            'fee'           => $ecresponse['servicecharge'],
-                                            'user'          => current_user(),
-                                            'refno'         => $saveData['ReferenceNo'],
-                                            'trans_date'    => $saveData['Date'],
-                                            'ecrequest'     => $ecparams,
-                                            'ecresponse'    => $ecresponse,
-                                            'invoice'       => $invoice_data
-                                        ));
+                                        $this->db->trans_start();
 
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => $service->Name . ' transaction has been made.',
-                                            'image'     => public_url('assets/logo/' ) . logo_filename($service->Image),
-                                            'data'      => $invoice_data,
-                                            'rewards'   => get_rewards(array(
-                                                            'OrderID'       => $trans_id,
-                                                            'TransactType'  => 5
-                                                        ), 'Type')
+                                        $desc   = 'Money Padala - ' . $service->Name . ' - ' . ($ecresponse['description'] ?? '');
+
+                                        $total_amount     = $amount + ((int) $ecresponse['servicecharge']);
+
+                                        // in case new balance check failed, use the current balance minus transaction amount. will result to no rewards to distribute
+                                        if ($new_balance === false) {
+                                            $new_balance = $current_balance - $total_amount;
+                                            log_message('error', $ecresponse['serviceref'] . ' - transaction new balance failed. deduct exact amount.');
+                                        }
+
+                                        $saveData = array(
+                                            'Code'          => microsecID(true),
+                                            'AccountID'     => current_user(),
+                                            'ReferenceNo'   => $ecresponse['serviceref'] ?? $ecparams['ClientReference'],
+                                            'Description'   => $desc,
+                                            'Date'          => date('Y-m-d H:i:s'),
+                                            'Amount'        => $total_amount,
+                                            'Type'          => 'Debit',
+                                            'EndingBalance' => ($latest_balance - $total_amount),
+                                            'Details'       => json_encode($ecresponse),
                                         );
+
+                                        if ($this->appdb->saveData('WalletTransactions', $saveData)) {
+                                            $invoice_data = array(
+                                                'Merchant'          => $service->Description,
+                                                clean_text($service->FirstField)    => get_post('AccountNo'),
+                                                clean_text($service->SecondField)   => get_post('Identifier'),
+                                                'Reference Number'  => $saveData['ReferenceNo'],
+                                                'Amount'            => peso($amount),
+                                                'Transaction Fee'   => peso($ecresponse['servicecharge']),
+                                                'Transaction Date'  => datetime(),
+                                            );
+
+                                            if ($ecresponse['servicecharge'] == 0) {
+                                                unset($invoice_data['Transaction Fee']);
+                                            }
+
+                                            // save transaction and distribute reward
+                                            $trans_id = ecpay_save_transaction(array(
+                                                'code'          => $saveData['Code'],
+                                                'merch_type'    => 5,
+                                                'merch_id'      => $service->id,
+                                                'merch_name'    => $service->Description,
+                                                'amount'        => $amount,
+                                                'prev_bal'      => $current_balance,
+                                                'new_bal'       => $new_balance,
+                                                'fee'           => $ecresponse['servicecharge'],
+                                                'user'          => current_user(),
+                                                'refno'         => $saveData['ReferenceNo'],
+                                                'trans_date'    => $saveData['Date'],
+                                                'ecrequest'     => $ecparams,
+                                                'ecresponse'    => $ecresponse,
+                                                'invoice'       => $invoice_data
+                                            ));
+
+                                            $return_data = array(
+                                                'status'    => true,
+                                                'message'   => $service->Name . ' transaction has been made.',
+                                                'image'     => public_url('assets/logo/' ) . logo_filename($service->Image),
+                                                'data'      => $invoice_data,
+                                                'rewards'   => get_rewards(array(
+                                                                'OrderID'       => $trans_id,
+                                                                'TransactType'  => 5
+                                                            ), 'Type')
+                                            );
+
+                                        } else {
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Transaction failed.'
+                                            );
+                                        }
+
+                                        $this->db->trans_complete();
 
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
-                                            'message'   => 'Transaction failed.'
+                                            'message'   => isset($ecresponse['description']) ? ($ecresponse['description'] . ' ( ' . ($ecresponse['statusid'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
                                         );
                                     }
 
-                                    $this->db->trans_complete();
-
                                 } else {
+                                    // insuffucient ec wallet balance
                                     $return_data = array(
                                         'status'    => false,
-                                        'message'   => isset($ecresponse['description']) ? ($ecresponse['description'] . ' ( ' . ($ecresponse['statusid'] ?? 'x') . ' )') : 'Transaction failed. Please try again later'
+                                        'message'   => 'The system is performing updates and development. Please try again soon.'
                                     );
                                 }
 
@@ -698,100 +718,110 @@ class Ewallet extends CI_Controller
 
                             if ($current_balance !== false) {
 
-                                $ecparams   = array(
-                                    'Telco'        => $service->TelcoName,
-                                    'CellphoneNo'  => get_post('Number'),
-                                    'ExtTag'       => $service->ExtTag,
-                                    'Amount'       => $amount,
-                                    'Token'        => md5($this->ecpay->branch_id . get_post('Number') . $amount . date('mdy'))
-                                );
-                                $ecresponse = $this->ecpay->telco_transact($ecparams);
-                                // $ecresponse = array(
-                                //     'StatusCode'    => 0,
-                                //     'StatusMessage' => 'Success!',
-                                //     'TraceNo'       => 123123123,
-                                // );
+                                if ($amount < $current_balance) {
 
-
-                                if (isset($ecresponse['StatusCode']) && $ecresponse['StatusCode'] == 0) {
-
-                                    $new_balance = $this->ecpay->gate_check_balance();
-
-                                    // in case new balance check failed, use the current banlance minus transaction amount. will result to no rewards to distribute
-                                    if ($new_balance === false) {
-                                        $new_balance = $current_balance - $amount;
-                                        log_message('error', $ecresponse['TraceNo'] . ' - transaction new balance failed. deduct exact amount.');
-                                    }
-
-                                    $this->db->trans_start();
-
-                                    $desc   = 'eLoad: ' . $service->TelcoName . ' - ' . $service->TelcoTag . ' ('. get_post('Number') .') ' . ($ecresponse['StatusMessage'] ?? '');
-                                    $saveData = array(
-                                        'Code'          => microsecID(true),
-                                        'AccountID'     => current_user(),
-                                        'ReferenceNo'   => $ecresponse['TraceNo'] ?? $ecparams['Token'],
-                                        'Description'   => $desc,
-                                        'Date'          => datetime(),
-                                        'Amount'        => $amount,
-                                        'Type'          => 'Debit',
-                                        'EndingBalance' => ($latest_balance - $amount),
-                                        'Details'       => json_encode($ecresponse),
+                                    $ecparams   = array(
+                                        'Telco'        => $service->TelcoName,
+                                        'CellphoneNo'  => get_post('Number'),
+                                        'ExtTag'       => $service->ExtTag,
+                                        'Amount'       => $amount,
+                                        'Token'        => md5($this->ecpay->branch_id . get_post('Number') . $amount . date('mdy'))
                                     );
+                                    $ecresponse = $this->ecpay->telco_transact($ecparams);
+                                    // $ecresponse = array(
+                                    //     'StatusCode'    => 0,
+                                    //     'StatusMessage' => 'Success!',
+                                    //     'TraceNo'       => 123123123,
+                                    // );
 
-                                    if ($this->appdb->saveData('WalletTransactions', $saveData)) {
 
-                                        $invoice_data = array(
-                                            'Telco'             => $service->TelcoName,
-                                            'Type'              => $service->TelcoTag,
-                                            'Number'            => get_post('Number'),
-                                            'Amount'            => peso($amount),
-                                            'Trace Number'      => $ecresponse['TraceNo'],
-                                            'Transaction Date'  => datetime(),
+                                    if (isset($ecresponse['StatusCode']) && $ecresponse['StatusCode'] == 0) {
+
+                                        $new_balance = $this->ecpay->gate_check_balance();
+
+                                        // in case new balance check failed, use the current banlance minus transaction amount. will result to no rewards to distribute
+                                        if ($new_balance === false) {
+                                            $new_balance = $current_balance - $amount;
+                                            log_message('error', $ecresponse['TraceNo'] . ' - transaction new balance failed. deduct exact amount.');
+                                        }
+
+                                        $this->db->trans_start();
+
+                                        $desc   = 'eLoad: ' . $service->TelcoName . ' - ' . $service->TelcoTag . ' ('. get_post('Number') .') ' . ($ecresponse['StatusMessage'] ?? '');
+                                        $saveData = array(
+                                            'Code'          => microsecID(true),
+                                            'AccountID'     => current_user(),
+                                            'ReferenceNo'   => $ecresponse['TraceNo'] ?? $ecparams['Token'],
+                                            'Description'   => $desc,
+                                            'Date'          => datetime(),
+                                            'Amount'        => $amount,
+                                            'Type'          => 'Debit',
+                                            'EndingBalance' => ($latest_balance - $amount),
+                                            'Details'       => json_encode($ecresponse),
                                         );
 
-                                        // save transaction and distribute reward
-                                        $trans_id = ecpay_save_transaction(array(
-                                            'code'          => $saveData['Code'],
-                                            'merch_type'    => 4,
-                                            'merch_id'      => $service->id,
-                                            'merch_name'    => ($service->TelcoName . ' - ' . $service->TelcoTag),
-                                            'amount'        => $amount,
-                                            'prev_bal'      => $current_balance,
-                                            'new_bal'       => $new_balance,
-                                            'fee'           => 0,
-                                            'user'          => current_user(),
-                                            'refno'         => $saveData['ReferenceNo'],
-                                            'trans_date'    => $saveData['Date'],
-                                            'ecrequest'     => $ecparams,
-                                            'ecresponse'    => $ecresponse,
-                                            'invoice'       => $invoice_data
-                                        ));
+                                        if ($this->appdb->saveData('WalletTransactions', $saveData)) {
 
-                                        $return_data = array(
-                                            'status'    => true,
-                                            'message'   => 'Mobile loading transaction has been made.',
-                                            'image'     => public_url('resources/images/telco/' ) . strtolower($service->TelcoName) . '.jpg',
-                                            'data'      => $invoice_data,
-                                            'rewards'   => get_rewards(array(
-                                                            'OrderID'       => $trans_id,
-                                                            'TransactType'  => 4
-                                                        ), 'Type')
-                                        );
+                                            $invoice_data = array(
+                                                'Telco'             => $service->TelcoName,
+                                                'Type'              => $service->TelcoTag,
+                                                'Number'            => get_post('Number'),
+                                                'Amount'            => peso($amount),
+                                                'Trace Number'      => $ecresponse['TraceNo'],
+                                                'Transaction Date'  => datetime(),
+                                            );
+
+                                            // save transaction and distribute reward
+                                            $trans_id = ecpay_save_transaction(array(
+                                                'code'          => $saveData['Code'],
+                                                'merch_type'    => 4,
+                                                'merch_id'      => $service->id,
+                                                'merch_name'    => ($service->TelcoName . ' - ' . $service->TelcoTag),
+                                                'amount'        => $amount,
+                                                'prev_bal'      => $current_balance,
+                                                'new_bal'       => $new_balance,
+                                                'fee'           => 0,
+                                                'user'          => current_user(),
+                                                'refno'         => $saveData['ReferenceNo'],
+                                                'trans_date'    => $saveData['Date'],
+                                                'ecrequest'     => $ecparams,
+                                                'ecresponse'    => $ecresponse,
+                                                'invoice'       => $invoice_data
+                                            ));
+
+                                            $return_data = array(
+                                                'status'    => true,
+                                                'message'   => 'Mobile loading transaction has been made.',
+                                                'image'     => public_url('resources/images/telco/' ) . strtolower($service->TelcoName) . '.jpg',
+                                                'data'      => $invoice_data,
+                                                'rewards'   => get_rewards(array(
+                                                                'OrderID'       => $trans_id,
+                                                                'TransactType'  => 4
+                                                            ), 'Type')
+                                            );
+
+                                        } else {
+                                            $return_data = array(
+                                                'status'    => false,
+                                                'message'   => 'Saving transaction failed.'
+                                            );
+                                        }
+
+                                        $this->db->trans_complete();
 
                                     } else {
                                         $return_data = array(
                                             'status'    => false,
-                                            'message'   => 'Saving transaction failed.'
+                                            'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . (isset($ecresponse['StatusCode']) && is_numeric($ecresponse['StatusCode']) ? (int) $ecresponse['StatusCode'] : 'x') . ' )') : 'Transaction failed. Please try again later',
+                                            'data' => $ecresponse
                                         );
                                     }
 
-                                    $this->db->trans_complete();
-
                                 } else {
+                                    // insuffucient ec wallet balance
                                     $return_data = array(
                                         'status'    => false,
-                                        'message'   => isset($ecresponse['StatusMessage']) ? ($ecresponse['StatusMessage'] . ' ( ' . (isset($ecresponse['StatusCode']) && is_numeric($ecresponse['StatusCode']) ? (int) $ecresponse['StatusCode'] : 'x') . ' )') : 'Transaction failed. Please try again later',
-                                        'data' => $ecresponse
+                                        'message'   => 'The system is performing updates and development. Please try again soon.'
                                     );
                                 }
 
