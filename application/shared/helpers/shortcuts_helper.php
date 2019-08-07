@@ -540,21 +540,22 @@ function ecpay_save_transaction($data)
 	$distribution	= ec_profit_distribution($commission);
 
 	$transactionData = array(
-		'Code'					=> $data['code'],
-		'MerchantType'	=> $data['merch_type'],
+		'Code'				=> $data['code'],
+		'MerchantType'		=> $data['merch_type'],
 		'MerchantID'		=> $data['merch_id'],
-		'MerchantName'	=> $data['merch_name'],
-		'Amount'				=> $data['amount'],
-		'ServiceCharge'	=> $data['fee'],
-		'Commission'		=> $commission,
+		'MerchantName'		=> $data['merch_name'],
+		'Amount'			=> $data['amount'],
+		'ServiceCharge'		=> $data['fee'],
+		'Commission'		=> ($commission > 0 ? $commission : 0),
 		'NetAmount'			=> $deducted,
-		'UserID'				=> $data['user'],
+		'UserID'			=> $data['user'],
 		'ReferenceNo'		=> $data['refno'],
 		'TransactionDate'	=> $data['trans_date'],
 		'ECRequestData'		=> json_encode($data['ecrequest']),
 		'ECResponseData'	=> json_encode($data['ecresponse']),
-		'InvoiceData'			=> json_encode($data['invoice']),
-		'RewardDistribution' => json_encode($distribution),
+		'InvoiceData'		=> json_encode($data['invoice']),
+		'RewardDistribution'=> json_encode($distribution),
+		'RawData'			=> json_encode($data)
 	);
 
 	if (($ID = $ci->appdb->saveData('ECPayTransactions', $transactionData))) {
