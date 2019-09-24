@@ -3,10 +3,10 @@
 $config['email']['info'] = Array(
 	'useragent'	=> '',
     'protocol' 	=> 'smtp',
-    'smtp_host' => 'mail.mgov.ph',
+    'smtp_host' => 'mail.goldenhumus.com',
     'smtp_port' => 465,
-    'smtp_user' => 'info@mgov.ph',
-    'smtp_pass' => 'S%uE}_e@Sr}N',
+    'smtp_user' => 'ambilis@goldenhumus.com',
+    'smtp_pass' => 'RmO0tNEIcFjK',
     'mailtype'  => 'html', 
     'charset'   => 'iso-8859-1',
     'smtp_crypto'	=> 'ssl'
