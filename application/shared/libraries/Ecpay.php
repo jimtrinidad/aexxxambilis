@@ -60,8 +60,8 @@ class Ecpay
             'bills'     => 'https://ecpay.ph/wsbillpay/',
             'ecash'     => 'https://ecpay.ph/wsecash/',
             'telco'     => 'https://ecpay.ph/wstopupv2/',
-            'link'      => 'https://myecpay.ph/webservice/ECLINK/'
-            // 'link'      => 'https://ecpay.ph/uat/eclink/'
+            // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
+            'link'      => 'https://ecpay.ph/uat/eclink/'
         );
 
     }
