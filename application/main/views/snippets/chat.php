@@ -28,7 +28,8 @@
 				    	<?php
 				    	if (isset($accountInfo->connections)) {
 				    		foreach ($accountInfo->connections as $c) {
-				    			echo '<li data-id="'.$c['publicID'].'">
+				    			if ($c['level'] <= 4) {
+				    				echo '<li data-id="'.$c['publicID'].'">
 				    							<img width="40" height="40" src="'.public_url('assets/profile') . photo_filename($c['photo']) .'" title="'.$c['name'].'">
 				    							<span class="xs-only"></span>
 			    							 	<div class="info">
@@ -36,6 +37,7 @@
 			    							 		<div class="status">Level '.$c['level'].'</div>
 			    							 	</div>
 				    						</li>';
+				    			}
 				    		}
 				    	}
 				    	?>

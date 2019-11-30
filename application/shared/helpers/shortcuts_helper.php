@@ -451,7 +451,7 @@ function get_transactions($userID, $limit = 50)
 /**
 * get downline
 */
-function get_user_connections($userID, $level = 0)
+function get_user_connections($userID, $level = 0, $max_level = 8)
 {
 	$ci =& get_instance();
 	$connections = array();
@@ -459,7 +459,7 @@ function get_user_connections($userID, $level = 0)
 	$referred_users = $ci->appdb->getRecords('Users', array('Referrer' => $userID));
 	// print_r($referred_users);
 
-	if ($level < 8) {
+	if ($level < $max_level) {
 		$level++;
 	}
 
@@ -471,7 +471,7 @@ function get_user_connections($userID, $level = 0)
 				'id'					=> $referred_user['id'],
 				'name'				=> $referred_user['Firstname'] . ' ' . $referred_user['Lastname'],
 				'photo'				=> $referred_user['Photo'],
-				'connections'	=> get_user_connections($referred_user['id'], $level)
+				'connections'	=> get_user_connections($referred_user['id'], $level, $max_level)
 		);
 		// $connections   = array_merge($connections, get_user_connections($referred_user['id']));
 	}
