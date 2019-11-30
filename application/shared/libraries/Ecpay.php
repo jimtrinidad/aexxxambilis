@@ -52,12 +52,16 @@ class Ecpay
         $this->account_id   = $authentication_config['account_id'];
         $this->username     = $authentication_config['username'];
         $this->password     = $authentication_config['password'];
+        $this->mc           = 'AMBILIS';
+        $this->mk           = '06689C5EF7ED43C7911C8612873FC90E';
 
         $this->post_urls    = array(
             // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
             'bills'     => 'https://ecpay.ph/wsbillpay/',
             'ecash'     => 'https://ecpay.ph/wsecash/',
-            'telco'     => 'https://ecpay.ph/wstopupv2/'
+            'telco'     => 'https://ecpay.ph/wstopupv2/',
+            'link'      => 'https://myecpay.ph/webservice/ECLINK/'
+            // 'link'      => 'https://ecpay.ph/uat/eclink/'
         );
 
     }
@@ -323,6 +327,42 @@ class Ecpay
     // END TELCO
 
 
+
+    // ECLINK
+
+    public function fetch_eclink_payments($data)
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['link'],
+            'action'    => 'http://ECPay/WSTopUp/Transact'
+        );
+
+        $date = date('m-d-Y', strtotime($data['date']));
+
+        $header = '<AuthHeader xmlns="https://ecpay.ph/eclink">
+                        <merchantCode>'. $this->mc .'</merchantCode>
+                        <merchantKey>'. $this->mk .'</merchantKey>
+                    </AuthHeader>';
+
+        $body   = '<FetchPayments xmlns="https://ecpay.ph/eclink">
+                        <strdate>'. $date .'</strdate>
+                    </FetchPayments>';
+
+        $response = $this->request($params, $body, $header);
+
+        print_r($response);
+        // if (isset($response->TransactResponse)) {
+        //     return json_decode(json_encode($response->TransactResponse->TransactResult), true);
+        // } else {
+        //     logger('[telco_transact] : Cannot connect to host.');
+        // }
+
+        return false;
+    }
+
+    // END ECLINK
+
+
     // CHECK BALANCE
 
     public function ecpay_check_balance($fields = array())
@@ -382,6 +422,7 @@ class Ecpay
     }
 
     // END CHECK BALANCE
+
 
     private function default_body_params($branch = false)
     {

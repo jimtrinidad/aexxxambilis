@@ -46,13 +46,9 @@ class Account extends CI_Controller
         // echo "transact\n";
         // $no = '99668612848';
         // $amount = '10';
-        // $data = $this->ecpay->telco_transact(array(
-        //     'Telco'        => 'GLOBE',
-        //     'CellphoneNo'  => $no,
-        //     'ExtTag'       => 'LD',
-        //     'Amount'       => $amount,
-        //     'Token'        => md5($this->ecpay->branch_id . $no . $amount . date('mdy'))
-        // ));
+        $data = $this->ecpay->fetch_eclink_payments(array(
+            'date'        => '2019-11-30',
+        ));
         // print_data($data);
         // // echo "after\n";
         // $data = $this->ecpay->gate_check_balance();
