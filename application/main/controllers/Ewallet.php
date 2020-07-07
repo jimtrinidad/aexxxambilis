@@ -227,6 +227,21 @@ class Ewallet extends CI_Controller
         response_json($return_data);
     }
 
+    public function commit_load_payment()
+    {
+        if (validate('eclink_payment') == FALSE) {
+            $return_data = array(
+                'status'    => false,
+                // 'message'   => 'Some fields have errors.',
+                'fields'    => validation_error_array()
+            );
+        } else {
+            
+        }
+
+        response_json($return_data);
+    }
+
 
     public function encash()
     {
