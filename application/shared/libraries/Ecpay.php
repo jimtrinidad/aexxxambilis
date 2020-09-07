@@ -449,7 +449,7 @@ class Ecpay
             die('Invalid soap request params');
         }
 
-        $debug = true;
+        $debug = false;
 
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
