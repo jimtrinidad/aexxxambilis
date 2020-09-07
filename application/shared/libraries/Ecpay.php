@@ -396,7 +396,7 @@ class Ecpay
     public function gate_check_balance($fields = array())
     {
         $params = array(
-            'post_url'  => $this->post_urls['telco'], 
+            'post_url'  => $this->post_urls['telco'],
             'action'    => 'http://ECPay/WSTopUp/CheckBalance'
         );
 
@@ -505,7 +505,7 @@ class Ecpay
         $response2 = str_replace("</soap:Body>","",$response1);
 
         // // convertingc to XML
-        return simplexml_load_string($response2);
+        return @simplexml_load_string($response2);
     }
 
 }
