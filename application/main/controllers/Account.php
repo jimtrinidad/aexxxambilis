@@ -41,15 +41,25 @@ class Account extends CI_Controller
         // $data = $this->ecpay->ecpay_check_balance();
         // print_data($data);
         // echo "before\n";
-        // $data = $this->ecpay->gate_check_balance();
-        // print_data($data);
+        $data = $this->ecpay->gate_check_balance();
+        print_data($data);exit;
         // echo "transact\n";
         // $no = '99668612848';
         // $amount = '10';
-        $data = $this->ecpay->fetch_eclink_payments(array(
-            'date'        => '2019-11-30',
+
+        // $data = $this->ecpay->eclink_fetch_payments(array(
+        //     'date'        => '2019-11-30',
+        // ));
+        $data = $this->ecpay->eclink_commit_payment(array(
+            'referenceno' => '12345678',
+            'amount'      => round(50, 2),
+            'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
+            'remarks'     => 'test commit'
         ));
-        // print_data($data);
+        $data = $this->ecpay->eclink_confirm_payment(array(
+            'referenceno' => '12345678',
+        ));
+        print_data($data);
         // // echo "after\n";
         // $data = $this->ecpay->gate_check_balance();
         // var_dump($data);
@@ -94,7 +104,7 @@ class Account extends CI_Controller
         // print_data($address);
         // var_dump($delivery_man);
 
-        print_data(get_new_delivery_order(current_user()));
+        // print_data(get_new_delivery_order(current_user()));
 
     }
 
