@@ -59,7 +59,7 @@ class Ecpay
             // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
             'bills'     => 'https://ecpay.ph/wsbillpay/',
             'ecash'     => 'https://ecpay.ph/wsecash/',
-            // 'telco'     => 'https://ecpay.ph/wstopupv2/',
+            'telco_old' => 'https://ecpay.ph/wstopupv2/',
             'telco'     => 'https://s2s.OneECPay.com/wstopupv2/',
             // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
             'link'      => 'https://ecpay.ph/uat/eclink/'
@@ -396,7 +396,7 @@ class Ecpay
     public function gate_check_balance($fields = array())
     {
         $params = array(
-            'post_url'  => $this->post_urls['telco'],
+            'post_url'  => $this->post_urls['telco_old'],
             'action'    => 'http://ECPay/WSTopUp/CheckBalance'
         );
 
