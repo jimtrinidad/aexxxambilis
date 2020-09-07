@@ -396,8 +396,8 @@ class Ecpay
     public function gate_check_balance($fields = array())
     {
         $params = array(
-            'post_url'  => $this->post_urls['telco_old'],
-            'action'    => 'http://ECPay/WSTopUp/CheckBalance'
+            'post_url'  => $this->post_urls['telco'],
+            'action'    => $this->post_urls['telco'] . 'CheckBalance'
         );
 
         $body   = '<CheckBalance xmlns="http://ECPay/WSTopUp">' .
