@@ -397,7 +397,7 @@ class Ecpay
     {
         $params = array(
             'post_url'  => $this->post_urls['telco'],
-            'action'    => $this->post_urls['telco'] . 'CheckBalance'
+            'action'    => 'http://ECPay/WSTopUp/CheckBalance'
         );
 
         $body   = '<CheckBalance xmlns="http://ECPay/WSTopUp">' .
