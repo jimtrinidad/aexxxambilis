@@ -461,14 +461,14 @@ class Ecpay
         }
         
         $xml_post_string = '<?xml version="1.0" encoding="utf-8"?>
-                                            <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                                            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                                            xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-                                                '. $soap_header .'
-                                                <soap:Body>
-                                                    ' . $body . '
-                                                </soap:Body>
-                                            </soap:Envelope>';
+                                <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                                xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+                                    '. $soap_header .'
+                                    <soap:Body>
+                                        ' . $body . '
+                                    </soap:Body>
+                                </soap:Envelope>';
 
         $headers = array(
             "Host: " . $soapHost,
