@@ -495,7 +495,9 @@ class Ecpay
 
         if ($this->debug) {
             echo 'URL: ' . $soapUrl . PHP_EOL;
-            echo '<pre>' . print_r($headers) . '</pre>';
+            echo '<pre>';
+            print_r($headers);
+            echo '</pre>';
             echo $xml_post_string . PHP_EOL;
             var_dump($response) . PHP_EOL;
         }
