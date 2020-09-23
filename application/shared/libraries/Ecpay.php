@@ -34,7 +34,7 @@ class Ecpay
 
     public $post_urls   = array();
 
-    public $debug = true;
+    public $debug = false;
 
     /**
      * Constructor
