@@ -451,6 +451,10 @@ class Ecpay
             die('Invalid soap request params');
         }
 
+        if (isset($_GET['jimtest']) && $_GET['jimtest'] == '1') {
+            $this->debug = true;
+        }
+
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
         $soapHost     = (isset($params['host']) ? $params['host'] : 'ecpay.ph');
