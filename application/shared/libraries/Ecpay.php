@@ -57,10 +57,10 @@ class Ecpay
 
         $this->post_urls    = array(
             // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
-            'bills'     => 'https://s2s.OneECPay.com/wsbillpay/',
-            'ecash'     => 'https://s2s.OneECPay.com/wsecash/',
+            'bills'     => 'https://s2s.oneecpay.com/wsbillpay/',
+            'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
             // 'telco_old' => 'https://ecpay.ph/wstopupv2/',
-            'telco'     => 'https://s2s.OneECPay.com/wstopupv2/',
+            'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
             // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
             'link'      => 'https://ecpay.ph/uat/eclink/'
         );
@@ -449,7 +449,7 @@ class Ecpay
             die('Invalid soap request params');
         }
 
-        $debug = false;
+        $debug = true;
 
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
