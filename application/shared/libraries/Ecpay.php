@@ -500,7 +500,7 @@ class Ecpay
             print_r($headers);
             echo PHP_EOL;
             echo PHP_EOL;
-            echo $xml_post_string . PHP_EOL;
+            echo htmlentities($xml_post_string) . PHP_EOL;
             echo '</pre>';
             var_dump($response) . PHP_EOL;
         }
