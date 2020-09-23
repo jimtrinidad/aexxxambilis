@@ -57,9 +57,9 @@ class Ecpay
 
         $this->post_urls    = array(
             // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
-            'bills'     => 'https://ecpay.ph/wsbillpay/',
-            'ecash'     => 'https://ecpay.ph/wsecash/',
-            'telco_old' => 'https://ecpay.ph/wstopupv2/',
+            'bills'     => 'https://s2s.OneECPay.com/wsbillpay/',
+            'ecash'     => 'https://s2s.OneECPay.com/wsecash/',
+            // 'telco_old' => 'https://ecpay.ph/wstopupv2/',
             'telco'     => 'https://s2s.OneECPay.com/wstopupv2/',
             // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
             'link'      => 'https://ecpay.ph/uat/eclink/'
