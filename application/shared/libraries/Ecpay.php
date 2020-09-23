@@ -34,6 +34,8 @@ class Ecpay
 
     public $post_urls   = array();
 
+    public $debug = true;
+
     /**
      * Constructor
      */
@@ -449,8 +451,6 @@ class Ecpay
             die('Invalid soap request params');
         }
 
-        $debug = true;
-
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
         $soapHost     = (isset($params['host']) ? $params['host'] : 'ecpay.ph');
@@ -493,9 +493,9 @@ class Ecpay
         $response = curl_exec($ch); 
         curl_close($ch);
 
-        if ($debug) {
+        if ($this->debug) {
             echo 'URL: ' . $soapUrl . PHP_EOL;
-            print_r($headers);
+            echo '<pre>' . print_r($headers) . '</pre>';
             echo $xml_post_string . PHP_EOL;
             var_dump($response) . PHP_EOL;
         }
