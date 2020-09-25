@@ -30,7 +30,7 @@ class Ecpay
     public $username;
     public $password;
 
-    public $default_host = 'ecpay.ph';
+    public $default_host = 's2s.oneecpay.com';
 
     public $post_urls   = array();
 
@@ -61,7 +61,7 @@ class Ecpay
             // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
             'bills'     => 'https://s2s.oneecpay.com/wsbillpay/',
             'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
-            // 'telco_old' => 'https://ecpay.ph/wstopupv2/',
+            // 'telco'     => 'https://ecpay.ph/wstopupv2/',
             'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
             // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
             'link'      => 'https://ecpay.ph/uat/eclink/'
@@ -457,7 +457,7 @@ class Ecpay
 
         $soapUrl      = $params['post_url'];
         $soapAction   = $params['action'];
-        $soapHost     = (isset($params['host']) ? $params['host'] : 'ecpay.ph');
+        $soapHost     = (isset($params['host']) ? $params['host'] : $this->default_host);
         $soap_header  = '';
 
         if ($header) {
