@@ -38,9 +38,9 @@ class Account extends CI_Controller
         //     'Amount'        => 10,
         //     'ClientReference'   => microsecID(true)
         // ));
-        // $data = $this->ecpay->ecpay_check_balance();
-        // print_data($data);
-        // echo "before\n";
+        $data = $this->ecpay->ecpay_check_balance();
+        print_data($data);
+        echo "before\n";
         $data = $this->ecpay->gate_check_balance();
         print_data($data);exit;
         // echo "transact\n";
