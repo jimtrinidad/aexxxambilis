@@ -63,8 +63,8 @@ class Ecpay
             'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
             // 'telco'     => 'https://ecpay.ph/wstopupv2/',
             'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
-            // 'link'      => 'https://myecpay.ph/webservice/ECLINK/'
-            'link'      => 'https://ecpay.ph/uat/eclink/'
+            'link'      => 'https://myecpay.ph/webservice/ECLINK/'
+            // 'link'      => 'https://ecpay.ph/uat/eclink/'
         );
 
     }
@@ -332,6 +332,74 @@ class Ecpay
 
 
     // ECLINK
+
+    public function eclink_commit_payment($fields = array())
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['link'],
+            'action'    => 'https://ecpay.ph/eclink/CommitPayment'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $header = '<AuthHeader xmlns="https://ecpay.ph/eclink">
+                        <merchantCode>'. $this->mc .'</merchantCode>
+                        <merchantKey>'. $this->mk .'</merchantKey>
+                    </AuthHeader>';
+
+        $body   = '<CommitPayment xmlns="https://ecpay.ph/eclink">
+                        '. $other_fields .'
+                    </CommitPayment>';
+
+        return $response = $this->request($params, $body, $header);
+        if (isset($response->CommitPaymentResponse)) {
+            $returnData = json_decode(json_encode($response->CommitPaymentResponse->CommitPaymentResult), true);
+            if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
+                return true;
+            } else {
+                logger('[eclink_commit_payment] : Failed transaction. (' . ($returnData[0]['resultCode'] ?? '-') .')');
+            }
+        } else {
+            logger('[eclink_commit_payment] : Cannot connect to host.');
+        }
+
+        return false;
+    }
+
+    public function eclink_confirm_payment($fields = array())
+    {
+        $params = array(
+            'post_url'  => $this->post_urls['link'],
+            'action'    => 'https://ecpay.ph/eclink/ConfirmPayment'
+        );
+
+        $other_fields = '';
+        foreach ($fields as $k => $v) {
+            $other_fields .= "<{$k}>{$v}</$k>\n";
+        }
+
+        $header = '<AuthHeader xmlns="https://ecpay.ph/eclink">
+                        <merchantCode>'. $this->mc .'</merchantCode>
+                        <merchantKey>'. $this->mk .'</merchantKey>
+                    </AuthHeader>';
+
+        $body   = '<ConfirmPayment xmlns="https://ecpay.ph/eclink">
+                        '. $other_fields .'
+                    </ConfirmPayment>';
+
+        $response = $this->request($params, $body, $header);
+        // print_r($response);
+        if (isset($response->ConfirmPaymentResponse)) {
+            return json_decode(json_encode($response->ConfirmPaymentResponse->ConfirmPaymentResult), true);
+        } else {
+            logger('[eclink_confirm_payment] : Cannot connect to host.');
+        }
+
+        return false;
+    }
 
     public function fetch_eclink_payments($data)
     {

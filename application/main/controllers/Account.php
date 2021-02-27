@@ -38,11 +38,11 @@ class Account extends CI_Controller
         //     'Amount'        => 10,
         //     'ClientReference'   => microsecID(true)
         // ));
-        $data = $this->ecpay->ecpay_check_balance();
-        print_data($data);
-        echo "before\n";
-        $data = $this->ecpay->gate_check_balance();
-        print_data($data);exit;
+        // $data = $this->ecpay->ecpay_check_balance();
+        // print_data($data);
+        // echo "before\n";
+        // $data = $this->ecpay->gate_check_balance();
+        // print_data($data);exit;
         // echo "transact\n";
         // $no = '99668612848';
         // $amount = '10';
@@ -56,9 +56,9 @@ class Account extends CI_Controller
             'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
             'remarks'     => 'test commit'
         ));
-        $data = $this->ecpay->eclink_confirm_payment(array(
-            'referenceno' => '12345678',
-        ));
+        // $data = $this->ecpay->eclink_confirm_payment(array(
+        //     'referenceno' => '12345678',
+        // ));
         print_data($data);
         // // echo "after\n";
         // $data = $this->ecpay->gate_check_balance();
