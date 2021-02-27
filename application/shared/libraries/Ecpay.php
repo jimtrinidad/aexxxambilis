@@ -390,7 +390,7 @@ class Ecpay
                         '. $other_fields .'
                     </ConfirmPayment>';
 
-        $response = $this->request($params, $body, $header);
+        return $response = $this->request($params, $body, $header);
         // print_r($response);
         if (isset($response->ConfirmPaymentResponse)) {
             return json_decode(json_encode($response->ConfirmPaymentResponse->ConfirmPaymentResult), true);
