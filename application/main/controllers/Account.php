@@ -50,12 +50,12 @@ class Account extends CI_Controller
         // $data = $this->ecpay->eclink_fetch_payments(array(
         //     'date'        => '2019-11-30',
         // ));
-        // $data = $this->ecpay->eclink_commit_payment(array(
-        //     'referenceno' => '12345678',
-        //     'amount'      => round(50, 2),
-        //     'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
-        //     'remarks'     => 'test commit'
-        // ));
+        $data = $this->ecpay->eclink_commit_payment(array(
+            'referenceno' => '12345678',
+            'amount'      => round(50, 2),
+            'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
+            'remarks'     => 'test commit'
+        ));
         $data = $this->ecpay->eclink_confirm_payment(array(
             'referenceno' => '12345678',
         ));
