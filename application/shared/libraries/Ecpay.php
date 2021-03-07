@@ -578,6 +578,8 @@ class Ecpay
             var_dump($response) . PHP_EOL;
         }
 
+        logger("[$soapAction] Response:  $response.");
+
         // // converting
         $response1 = str_replace("<soap:Body>","",$response);
         $response2 = str_replace("</soap:Body>","",$response1);
