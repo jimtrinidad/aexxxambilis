@@ -61,8 +61,8 @@ class Ecpay
             'bills'     => 'https://s2s.oneecpay.com/wsbillpay/',
             'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
             'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
-            'link'      => 'https://s2s.oneecpay.com/eclink/',
-            // 'link'      => 'https://myecpay.ph/webservice/ECLINK/', // test server
+            // 'link'      => 'https://s2s.oneecpay.com/eclink/',
+            'link'      => 'https://myecpay.ph/webservice/ECLINK/', // test server
         );
 
     }
