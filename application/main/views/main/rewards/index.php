@@ -26,8 +26,14 @@
     <div class="content">
       <div class="row">
         <div class="col-3 text-center icon-container">
-          <a href="javascript:;" onclick="Wallet.addDeposit()">
+          <a href="<?php echo site_url('ewallet') ?>">
             <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
+            <span>eWallet</span>
+          </a>
+        </div>
+        <div class="col-3 text-center icon-container">
+          <a href="javascript:;" onclick="Wallet.addDeposit()">
+            <img src="<?php echo public_url(); ?>resources/images/icons/cashin.png" />
             <span>Fund my Wallet</span>
           </a>
         </div>
@@ -35,12 +41,6 @@
           <a href="javascript:;" onclick="Wallet.encashRequest()">
             <img src="<?php echo public_url(); ?>resources/images/icons/encash-money.png" />
             <span>Encash</span>
-          </a>
-        </div>
-        <div class="col-3 text-center icon-container">
-          <a href="<?php echo site_url('rewards') ?>">
-            <img src="<?php echo public_url(); ?>resources/images/icons/rewards-money.png" />
-            <span>Rewards</span>
           </a>
         </div>
         <div class="col-3 text-center icon-container">

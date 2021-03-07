@@ -119,4 +119,9 @@ class Get extends CI_Controller
       response_json($return_data);
     }
 
+    public function outlets()
+    {
+      response_json(json_decode(file_get_contents(dirname(APPPATH) . '/shared/config/partneroutlets.json'), true), 1000);
+    }
+
 }

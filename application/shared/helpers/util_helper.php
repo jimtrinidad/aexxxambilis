@@ -61,8 +61,8 @@ function is_current_url($controller, $method = false)
 }
 
 function recache() {
-    // return time();
-    return strtotime(date('Y-m-d', time()));
+    return time();
+    // return strtotime(date('Y-m-d', time()));
 }
 
 

@@ -5,6 +5,8 @@ function Wallet() {
 
     this.itemData = {};
     this.rewardData = false;
+    this.payment_outlets = false;
+    this.payment_match = false;
 
     /**
      * Initialize events
@@ -67,6 +69,7 @@ function Wallet() {
                 }
             });
         });
+        
 
         $('#depositForm').submit(function(e) {
             e.preventDefault();
@@ -86,6 +89,39 @@ function Wallet() {
                 callback: function (r) {
                     if (r) {
                         Utils.save_form(_this);
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+
+        $('#outletPaymentForm').submit(function(e) {
+            e.preventDefault();
+            var _this = this;
+            bootbox.confirm({
+                message: "CONFIRM TRANSACTION?",
+                buttons: {
+                    confirm: {
+                        label: 'Confirm',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (r) {
+                    if (r) {
+                        Utils.save_form(_this, function(res){
+                            $('#committedPaymentModal #commitRefNo').text(res.data.referenceNo);
+                            $('#committedPaymentModal #commitAmount').text(res.data.total);
+                            $('#committedPaymentModal #commitExpiration').text(res.data.expiration);
+                            $('#committedPaymentModal').modal({
+                                backdrop : 'static',
+                                keyboard : false
+                            });
+                            $('#outletPaymentModal').modal('hide');
+                        });
                     }
                 }
             });
@@ -126,6 +162,22 @@ function Wallet() {
         return match;
     }
 
+    this.computePaymentOutletFee = function(elem)
+    {
+        var fee    = 0;
+        var amount = parseInt(elem.value);
+        if (amount > 0) {
+            fee = Math.round((amount * 0.02), 2);
+        } else {
+            fee = 0;
+        }
+
+        var total = amount + fee;
+        
+        $('#outletPaymentModal .outletFee').text((fee > 0 ? fee + ' PHP' : ''));
+        $('#outletPaymentModal .outletTotal').text((total > 0 ? total + ' PHP' : ''));
+    }
+
 
     /**
     * add
@@ -133,11 +185,73 @@ function Wallet() {
     this.addDeposit = function()
     {   
 
+        $('#outletPaymentModal').modal('hide');
         var form  = '#depositForm';
         var modal = '#depositModal';
         Utils.show_form_modal(modal, form, false, function(){
 
         });
+
+    }
+
+    this.payViaOutlet = function()
+    {
+
+        $('#depositModal').modal('hide');
+        var form  = '#outletPaymentForm';
+        var modal = '#outletPaymentModal';
+        Utils.show_form_modal(modal, form, false, function(){
+            
+        });
+        
+        // reset outlet
+        $('.match_outlet_results').html('');
+        // get outlet if not set
+        if (!self.payment_outlets)
+        {
+            $.get(window.public_url('get/outlets')).done(function(response) {
+                self.payment_outlets = response;
+            });
+        }
+        
+
+    }
+
+    this.findOutlet = function(obj)
+    {
+        var keyword = $(obj).val();
+        var output  = '';
+        var match   = 0;
+        if(keyword === '')  {
+            $('.match_outlet_results').html('');
+            $('.outlet_match_count').html('');
+            return;
+        }
+
+        if(self.payment_match != null) {
+            clearTimeout(self.payment_match);
+        }
+        self.payment_match = setTimeout(function() {
+            
+            var pattern = '(?=.*' + keyword.split(/\,|\s/).join(')(?=.*') + ')';
+            
+            $.each(self.payment_outlets, function(i, v) {
+                if (v.d.search(new RegExp(pattern,'gi')) != -1) {
+                    match += 1;
+                    output += `<div class="d-flex flex-row justify-content-between mb-1">
+                                <div class="d-flex flex-column p-1">
+                                    <p class="mb-1">${v.c}</p> 
+                                    <small class="text-muted">${v.d}</small>
+                                </div>
+                            </div>`;
+                }
+            });
+
+
+            $('.match_outlet_results').html(output);
+            $('.outlet_match_count').html(match + ' match location(s)');
+
+        },200);
 
     }
 
@@ -150,7 +264,7 @@ function Wallet() {
         var form  = '#encashForm';
         var modal = '#encashModal';
         Utils.show_form_modal(modal, form, false, function(){
-
+            
         });
 
     }

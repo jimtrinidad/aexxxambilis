@@ -58,13 +58,11 @@ class Ecpay
         $this->mk           = '06689C5EF7ED43C7911C8612873FC90E';
 
         $this->post_urls    = array(
-            // 'bills'     => 'https://myecpay.ph/UAT/billspayment/service1.asmx',
             'bills'     => 'https://s2s.oneecpay.com/wsbillpay/',
             'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
-            // 'telco'     => 'https://ecpay.ph/wstopupv2/',
             'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
-            'link'      => 'https://myecpay.ph/webservice/ECLINK/'
-            // 'link'      => 'https://ecpay.ph/uat/eclink/'
+            'link'      => 'https://s2s.oneecpay.com/eclink/',
+            // 'link'      => 'https://myecpay.ph/webservice/ECLINK/', // test server
         );
 
     }
@@ -354,7 +352,7 @@ class Ecpay
                         '. $other_fields .'
                     </CommitPayment>';
 
-        return $response = $this->request($params, $body, $header);
+        $response = $this->request($params, $body, $header);
         if (isset($response->CommitPaymentResponse)) {
             $returnData = json_decode(json_encode($response->CommitPaymentResponse->CommitPaymentResult), true);
             if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
@@ -390,10 +388,13 @@ class Ecpay
                         '. $other_fields .'
                     </ConfirmPayment>';
 
-        return $response = $this->request($params, $body, $header);
-        // print_r($response);
+        $response = $this->request($params, $body, $header);
         if (isset($response->ConfirmPaymentResponse)) {
-            return json_decode(json_encode($response->ConfirmPaymentResponse->ConfirmPaymentResult), true);
+            $returnData = json_decode(json_encode($response->ConfirmPaymentResponse->ConfirmPaymentResult), true);
+            logger('[eclink_confirm_payment] : Response:' . ($returnData[0]['result'] ?? '-'));
+            if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
+                return true;
+            }
         } else {
             logger('[eclink_confirm_payment] : Cannot connect to host.');
         }

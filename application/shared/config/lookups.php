@@ -108,4 +108,16 @@ $config['ecpay_wallet_type'] = array(
     2 => 'GATE',
 );
 
+$config['eclink_reloading_status'] = array(
+    0 => 'Pending',
+    1 => 'Completed',
+    2 => 'Expired'
+);
+
+$config['deposit_transfer_status'] = array(
+    0 => 'Pending',
+    1 => 'Verified',
+    2 => 'Declined'
+);
+
 $config['countries'] = json_decode(file_get_contents(dirname(__FILE__) . '/countrycodes.json'), true);

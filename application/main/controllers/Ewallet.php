@@ -117,14 +117,53 @@ class Ewallet extends CI_Controller
         $page_limit = 500;
         $page_start = (int) $this->uri->segment(3);
 
+        // transfer
         $where = array(
             'AccountID'    => current_user()
         );
-        $order = 'DateAdded DESC';
 
+        $order = 'DateAdded DESC';
         $results = $this->appdb->getRecords('WalletDeposits', $where, $order);
 
-        $viewData['transactions']    = $results;
+        // payment outlet
+        $eclink_results = $this->appdb->getRecords('ECLinkPayments', $where, $order);
+
+        $merged_results = array();
+        foreach ($results as $result) {
+            $merged_results[] = array(
+                'code'          => $result['Code'],
+                'reference_no'  => $result['ReferenceNo'],
+                'amount'        => $result['Amount'],
+                'payment'       => $result['Bank'],
+                'status'        => lookup('deposit_transfer_status', $result['Status']),
+                'status_id'     => $result['Status'],
+                'slip'          => $result['Photo'],
+                'transaction_date'  => date('Y-m-d H:i a', strtotime($result['TransactionDate'])),
+                'completed_date'    => date('y/m/d h:i a', strtotime($result['VerifiedDate'])),
+                'date_added'        => strtotime($result['DateAdded']),
+            );
+        }
+
+        foreach ($eclink_results as $result) {
+            $merged_results[] = array(
+                'code'          => $result['Code'],
+                'reference_no'  => $result['ReferenceNo'],
+                'amount'        => $result['Amount'],
+                'payment'       => 'Payment Outlet',
+                'status'        => lookup('eclink_reloading_status', $result['Status']),
+                'status_id'     => $result['Status'],
+                'slip'          => false,
+                'transaction_date'  => date('Y-m-d H:i a', strtotime($result['DateAdded'])),
+                'completed_date'    => date('y/m/d h:i a', strtotime($result['LastModified'])),
+                'date_added'        => strtotime($result['DateAdded']),
+            );
+        }
+
+        usort($merged_results, function($a, $b){
+            return $a['date_added'] < $b['date_added'];
+        });
+
+        $viewData['transactions']    = $merged_results;
 
         view('main/ewallet/deposits', $viewData, 'templates/main');
     }
@@ -229,14 +268,68 @@ class Ewallet extends CI_Controller
 
     public function commit_load_payment()
     {
-        if (validate('eclink_payment') == FALSE) {
+        if (validate('commit_eclink_payment') == FALSE) {
             $return_data = array(
                 'status'    => false,
                 // 'message'   => 'Some fields have errors.',
                 'fields'    => validation_error_array()
             );
         } else {
-            
+            $referenceNo = strtoupper(random_password(15));
+            $expiration  = date('Y-m-d H:i:s', strtotime('+1 day'));
+            $amount      = get_post('Amount');
+            $remarks     = get_post('Remarks');
+
+            $fee         = round($amount * 0.02, 2);
+            $total       = $amount + $fee;
+
+            $ecparams   = array(
+                'referenceno' => $referenceNo,
+                'amount'      => $total,
+                'expirydate'  => $expiration,
+                'remarks'     => $remarks
+            );
+            $ecresponse = $this->ecpay->eclink_commit_payment($ecparams);
+            if ($ecresponse) {
+                $saveData = array(
+                    'Code'          => microsecID(true),
+                    'AccountID'     => current_user(),
+                    'ReferenceNo'   => $referenceNo,
+                    'Amount'        => $amount,
+                    'Fee'           => $fee,
+                    'Total'         => $total,
+                    'Expiration'    => $expiration,
+                    'Status'        => 0, // pending
+                    'DateAdded'     => datetime(),
+                );
+
+                if ($this->appdb->saveData('ECLinkPayments', $saveData)) {
+
+                    $return_data = array(
+                        'status'    => true,
+                        'message'   => 'Payment commitment has been made.',
+                        'data'      => array(
+                            'referenceNo'   => $referenceNo,
+                            'amount'        => number_format($amount, 2),
+                            'fee'           => number_format($fee, 2),
+                            'total'         => number_format($total, 2),
+                            'expiration'    => date('h:i A, F j Y', strtotime($expiration)),
+                        )
+                    );
+
+                } else {
+                    $return_data = array(
+                        'status'    => false,
+                        'message'   => 'Saving transaction failed.'
+                    );
+                }
+
+            } else {
+                $return_data = array(
+                    'status'    => false,
+                    'message'   => 'Unable to generate payment reference number. Please try again later.'
+                );
+            }
         }
 
         response_json($return_data);

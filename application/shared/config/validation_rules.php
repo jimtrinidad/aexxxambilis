@@ -109,7 +109,12 @@ $config['add_deposit'] = array(
 	array('Branch', 'Location', 'trim|required'),
 	array('ReferenceNo', 'Transaction number', 'trim|required'),
 	array('Date', 'Transaction date', 'trim|required'),
-	array('Amount', 'Fund amount', 'trim|required|numeric')
+	array('Amount', 'Fund amount', 'trim|required|numeric|greater_than[0]')
+);
+
+$config['commit_eclink_payment'] = array(
+	array('Amount', 'Amount', 'trim|required|numeric|greater_than[0]'),
+	array('Remarks', 'Remarks', 'trim|max_length[50]'),
 );
 
 $config['encash_request'] = array(

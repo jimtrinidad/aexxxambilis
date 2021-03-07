@@ -221,9 +221,6 @@ function Utils() {
 
         $(formSelector).find('.custom-file-input').next('.custom-file-label').text('');
 
-        if (todo_fnc) {
-            todo_fnc();
-        }
         if (modal_title) {
             $(modalSector).find('.modal-title').html(modal_title);    
         }
@@ -231,6 +228,12 @@ function Utils() {
         $(modalSector).modal({
             backdrop : 'static',
             keyboard : false
+        }).one('shown.bs.modal', function(){
+            // execute call back after modal show
+            $('body').addClass('modal-open'); // fix when swithing open modals
+            if (todo_fnc) {
+                todo_fnc();
+            }
         });
     }
 

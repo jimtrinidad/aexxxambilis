@@ -27,7 +27,7 @@
       <div class="row justify-content-center">
         <div class="col-3 text-center icon-container">
           <a href="javascript:;" onclick="Wallet.addDeposit()">
-            <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
+            <img src="<?php echo public_url(); ?>resources/images/icons/cashin.png" />
             <span>Fund my Wallet</span>
           </a>
         </div>

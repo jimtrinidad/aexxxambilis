@@ -25,10 +25,10 @@
     
     <div class="content">
       <div class="row justify-content-center">
-        <div class="col-3 text-center icon-container">
-          <a href="<?php echo site_url('ewallet') ?>">
-            <img src="<?php echo public_url(); ?>resources/images/icons/wallet.png" />
-            <span>eWallet</span>
+      <div class="col-3 text-center icon-container">
+          <a href="javascript:;" onclick="Wallet.addDeposit()">
+            <img src="<?php echo public_url(); ?>resources/images/icons/cashin.png" />
+            <span>Fund my Wallet</span>
           </a>
         </div>
         <div class="col-3 text-center icon-container">
@@ -112,27 +112,27 @@
       <tbody>
         <?php
             foreach ($transactions as $c) {
-              echo "<tr class='text-left' id='deposit_{$c['Code']}'>";
-                echo '<td scope="row">' . $c['TransactionDate'] . '</td>';
-                // echo '<td>' . $c['Code'] . '</td>';
-                echo '<td>' . $c['ReferenceNo'] . '</td>';
-                echo '<td>' . peso($c['Amount']) . '</td>';
-                echo '<td>' . $c['Bank'] . '</td>';
+              echo "<tr class='text-left' id='deposit_{$c['code']}'>";
+                echo '<td scope="row">' . $c['transaction_date'] . '</td>';
+                // echo '<td>' . $c['code'] . '</td>';
+                echo '<td>' . $c['reference_no'] . '</td>';
+                echo '<td>' . peso($c['amount']) . '</td>';
+                echo '<td>' . $c['payment'] . '</td>';
                 echo '<td>';
-                  if ($c['Photo']) {
-                    echo '<a href="'.public_url('assets/uploads/') . upload_filename($c['Photo']).'" data-toggle="lightbox" data-gallery="example-gallery">
-                          <img src="'.public_url('assets/uploads/') . upload_filename($c['Photo']).'" class="img-fluid" style="max-width:50px;">
+                  if ($c['slip']) {
+                    echo '<a href="'.public_url('assets/uploads/') . upload_filename($c['slip']).'" data-toggle="lightbox" data-gallery="example-gallery">
+                          <img src="'.public_url('assets/uploads/') . upload_filename($c['slip']).'" class="img-fluid" style="max-width:50px;">
                       </a>';
                   }
                 echo '</td>';
                 echo '<td>';
-                if ($c['Status'] == 0) {
-                  echo '<span class="text-warning">Pending</span>';
-                } else if ($c['Status'] == 1) {
-                  echo '<span class="text-success">Verified</span><br>';
-                  echo date('m/d h:i a', strtotime($c['VerifiedDate']));
-                } else if ($c['Status'] == 2) {
-                  echo '<span class="text-danger">Declined</span>';
+                if ($c['status_id'] == 0) {
+                  echo '<span class="text-warning">'.$c['status'].'</span>';
+                } else if ($c['status_id'] == 1) {
+                  echo '<span class="text-success">'.$c['status'].'</span><br>';
+                  echo $c['completed_date'];
+                } else if ($c['status_id'] == 2) {
+                  echo '<span class="text-danger">'.$c['status'].'</span>';
                 }
                 echo '</td>';
               echo '</tr>';
