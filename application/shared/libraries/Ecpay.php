@@ -393,7 +393,7 @@ class Ecpay
             $returnData = json_decode($response->ConfirmPaymentResponse->ConfirmPaymentResult, true);
             logger('[eclink_confirm_payment] : Response:' . ($returnData[0]['result'] ?? '-'));
             if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
-                return json_decode($returnData[0]['result'], true)[0]; // return full data
+                return json_decode($returnData[0]['result'], true)[0] ?? false; // return full data
             }
         } else {
             logger('[eclink_confirm_payment] : Cannot connect to host.');
