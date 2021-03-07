@@ -355,7 +355,6 @@ class Ecpay
         $response = $this->request($params, $body, $header);
         if (isset($response->CommitPaymentResponse)) {
             $returnData = json_decode($response->CommitPaymentResponse->CommitPaymentResult, true);
-            logger(json_encode($returnData));
             if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
                 return true;
             } else {
@@ -391,7 +390,7 @@ class Ecpay
 
         $response = $this->request($params, $body, $header);
         if (isset($response->ConfirmPaymentResponse)) {
-            $returnData = json_decode(json_encode($response->ConfirmPaymentResponse->ConfirmPaymentResult), true);
+            $returnData = json_decode($response->ConfirmPaymentResponse->ConfirmPaymentResult, true);
             logger('[eclink_confirm_payment] : Response:' . ($returnData[0]['result'] ?? '-'));
             if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
                 return true;
