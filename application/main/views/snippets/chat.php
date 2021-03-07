@@ -30,7 +30,7 @@
 				    		foreach ($accountInfo->connections as $c) {
 				    			if ($c['level'] <= 4) {
 				    				echo '<li data-id="'.$c['publicID'].'">
-				    							<img width="40" height="40" src="'.public_url('assets/profile') . photo_filename($c['photo']) .'" title="'.$c['name'].'">
+				    							<img width="40" height="40" loading="lazy" src="'.public_url('assets/profile') . photo_filename($c['photo']) .'" title="'.$c['name'].'">
 				    							<span class="xs-only"></span>
 			    							 	<div class="info">
 			    							 		<div class="user">'.$c['name'].'</div>
