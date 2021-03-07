@@ -355,6 +355,7 @@ class Ecpay
         $response = $this->request($params, $body, $header);
         if (isset($response->CommitPaymentResponse)) {
             $returnData = json_decode(json_encode($response->CommitPaymentResponse->CommitPaymentResult), true);
+            logger(json_encode($returnData));
             if (isset($returnData[0]['resultCode']) && $returnData[0]['resultCode'] == 0) {
                 return true;
             } else {
