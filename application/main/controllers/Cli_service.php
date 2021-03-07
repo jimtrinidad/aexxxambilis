@@ -50,39 +50,43 @@ class Cli_service extends CI_Controller
 				);
 				$ecresponse = $this->ecpay->eclink_confirm_payment($ecparams);
 				if ($ecresponse) {
-					// add amount to user wallet
-					$updateData = array(
-						'id'           => $commit['id'],
-						'Status'       => 1,
-						'LastModified' => datetime()
-					);
-	
-					$this->db->trans_begin();
-	
-					if ($this->appdb->saveData('ECLinkPayments', $updateData)) {
-						$latest_balance = get_latest_wallet_balance($commit['AccountID']);
-						$new_balance    = $latest_balance + $commit['Amount'];
-	
-						$transactionData = array(
-							'Code'          => $commit['Code'],
-							'AccountID'     => $commit['AccountID'],
-							'ReferenceNo'   => $commit['ReferenceNo'],
-							'Date'          => date('Y-m-d h:i:s'),
-							'Description'   => 'Fund my wallet - Via Payment Outlet',
-							'Amount'        => $commit['Amount'],
-							'Type'          => 'Credit',
-							'EndingBalance' => $new_balance
+					print_r($ecresponse);
+					// check payment status
+					if (isset($ecresponse['PaymentStatus']) && $ecresponse['PaymentStatus'] === 0) {
+						// add amount to user wallet
+						$updateData = array(
+							'id'           => $commit['id'],
+							'Status'       => 1,
+							'LastModified' => datetime()
 						);
-	
-						if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
-							logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - has been credited.');
-							$this->db->trans_commit();
+		
+						$this->db->trans_begin();
+		
+						if ($this->appdb->saveData('ECLinkPayments', $updateData)) {
+							$latest_balance = get_latest_wallet_balance($commit['AccountID']);
+							$new_balance    = $latest_balance + $commit['Amount'];
+		
+							$transactionData = array(
+								'Code'          => $commit['Code'],
+								'AccountID'     => $commit['AccountID'],
+								'ReferenceNo'   => $commit['ReferenceNo'],
+								'Date'          => date('Y-m-d h:i:s'),
+								'Description'   => 'Fund my wallet - Via Payment Outlet',
+								'Amount'        => $commit['Amount'],
+								'Type'          => 'Credit',
+								'EndingBalance' => $new_balance
+							);
+		
+							if ($this->appdb->saveData('WalletTransactions', $transactionData)) {
+								logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - has been credited.');
+								$this->db->trans_commit();
+							} else {
+								logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - saving transaction failed.');
+								$this->db->trans_rollback();
+							}
 						} else {
-							logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - saving transaction failed.');
-							$this->db->trans_rollback();
+							logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - updating payment failed.');
 						}
-					} else {
-						logger('[ECLinkPayments] ' . $commit['ReferenceNo'] . ' - updating payment failed.');
 					}
 				}
 			} else {
