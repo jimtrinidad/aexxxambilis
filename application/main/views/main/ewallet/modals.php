@@ -189,7 +189,7 @@
               </p>
               <p>
                 Pay at any of our payment outlets using the details below.<br><br>
-                Merchant name: <b>AMBILISMOBILE</b><br>
+                Merchant name: <b>AMBILIS MOBILE CREDITS</b><br>
                 Reference number: <b><span id="commitRefNo"></span></b><br>
                 Amount to pay: <b>PHP: <span id="commitAmount"></span></b>
               </p>
