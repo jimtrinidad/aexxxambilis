@@ -54,15 +54,17 @@ class Ecpay
         $this->account_id   = $authentication_config['account_id'];
         $this->username     = $authentication_config['username'];
         $this->password     = $authentication_config['password'];
-        $this->mc           = 'AMBILIS';
-        $this->mk           = '06689C5EF7ED43C7911C8612873FC90E';
+        // $this->mc           = 'AMBILIS';
+        // $this->mk           = '06689C5EF7ED43C7911C8612873FC90E';
+        $this->mc           = 'AMBILIS_MO';
+        $this->mk           = '741989AF834CRAMF6E9B0FC7B99EBE29';
 
         $this->post_urls    = array(
             'bills'     => 'https://s2s.oneecpay.com/wsbillpay/',
             'ecash'     => 'https://s2s.oneecpay.com/wsecash/',
             'telco'     => 'https://s2s.oneecpay.com/wstopupv2/',
-            // 'link'      => 'https://s2s.oneecpay.com/eclink/',
-            'link'      => 'https://myecpay.ph/webservice/ECLINK/', // test server
+            'link'      => 'https://s2s.oneecpay.com/eclink/',
+            // 'link'      => 'https://myecpay.ph/webservice/ECLINK/', // test server
         );
 
     }
