@@ -275,7 +275,7 @@ class Ewallet extends CI_Controller
                 'fields'    => validation_error_array()
             );
         } else {
-            $referenceNo = strtoupper(random_password(15));
+            $referenceNo = strtoupper(random_password(13));
             $expiration  = date('Y-m-d H:i:s', strtotime('+1 day'));
             $amount      = get_post('Amount');
             $remarks     = get_post('Remarks');
