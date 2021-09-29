@@ -117,7 +117,7 @@
             <div class="col-12">
               <div class="form-group">
                 <label class="control-label" for="Amount">Enter amount you want to add on your wallet.</label>
-                <input class="form-control"  type="number" min="0" max="50000" step=".01" name="Amount" id="Amount" placeholder="0" onkeyup="Wallet.computePaymentOutletFee(this)">
+                <input class="form-control" style="padding: 20px 10px;font-size: 40px;font-weight: bold;"  type="number" min="0" max="50000" step=".01" name="Amount" id="Amount" placeholder="0" onkeyup="Wallet.computePaymentOutletFee(this)">
                 <span class="help-block hidden"></span>
               </div>
             </div>
@@ -130,15 +130,15 @@
             </div>
             <div class="col-12">
               <div class="form-group bottom-line">
-                <div class="control-label float-left label">Partner outlet fee</div>
+                <div class="control-label float-left label">Partner outlet estimated fee.</div>
                 <div class="float-right outletFee"></div>
                 <div class="clearfix"></div>
               </div>
             </div>
             <div class="col-12">
               <div class="form-group bottom-line">
-                <div class="control-label float-left label">Total amount to pay</div>
-                <div class="float-right outletTotal"></div>
+                <div class="control-label float-left label">Estimated amount to pay.</div>
+                <div class="float-right outletTotal" style="font-weight: bold;font-size: 20px;"></div>
                 <div class="clearfix"></div>
               </div>
             </div>
@@ -191,7 +191,7 @@
                 Pay at any of our payment outlets using the details below.<br><br>
                 Merchant name: <b>AMBILIS MOBILE CREDITS</b><br>
                 Reference number: <b><span id="commitRefNo"></span></b><br>
-                Amount to pay: <b>PHP: <span id="commitAmount"></span></b>
+                Amount: <b>PHP: <span id="commitAmount"></span></b>
               </p>
               <p>
               Check the nearest <a class="font-weight-bold" href="http://www.ecpay.com.ph/partner-outlet-finder" target="_blank">payment outlets</a> in your area.

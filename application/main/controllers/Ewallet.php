@@ -283,13 +283,16 @@ class Ewallet extends CI_Controller
             $fee         = round($amount * 0.02, 2);
             $total       = $amount + $fee;
 
+            // total and fee is just for reference
             $ecparams   = array(
                 'referenceno' => $referenceNo,
-                'amount'      => $total,
+                'amount'      => $amount,
                 'expirydate'  => $expiration,
                 'remarks'     => $remarks
             );
+
             $ecresponse = $this->ecpay->eclink_commit_payment($ecparams);
+            // $ecresponse = true;
             if ($ecresponse) {
                 $saveData = array(
                     'Code'          => microsecID(true),

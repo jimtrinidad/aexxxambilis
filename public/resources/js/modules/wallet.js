@@ -114,7 +114,7 @@ function Wallet() {
                     if (r) {
                         Utils.save_form(_this, function(res){
                             $('#committedPaymentModal #commitRefNo').text(res.data.referenceNo);
-                            $('#committedPaymentModal #commitAmount').text(res.data.total);
+                            $('#committedPaymentModal #commitAmount').text(res.data.amount);
                             $('#committedPaymentModal #commitExpiration').text(res.data.expiration);
                             $('#committedPaymentModal').modal({
                                 backdrop : 'static',
