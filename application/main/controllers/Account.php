@@ -57,7 +57,7 @@ class Account extends CI_Controller
         //     'remarks'     => 'test commit'
         // ));
         $data = $this->ecpay->eclink_confirm_payment(array(
-            'referenceno' => '4GSZTPXXVZRIFWO',
+            'referenceno' => $argv[3] ?? false,
         ));
         print_data($data);
         // // echo "after\n";
