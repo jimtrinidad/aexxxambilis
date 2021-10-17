@@ -9,7 +9,7 @@ class Account extends CI_Controller
 		parent::__construct();
 	}
 
-    public function test() {
+    public function test($var1 = false) {
         // $item = (array) $this->appdb->getRowObject('StoreItems', get_post('c'), 'Code');
         // print_data(profit_distribution($item['Price'], $item['CommissionValue'], $item['CommissionType']));
         
@@ -56,9 +56,9 @@ class Account extends CI_Controller
         //     'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
         //     'remarks'     => 'test commit'
         // ));
-        var_dump($argv);
+        var_dump($var1);
         $data = $this->ecpay->eclink_confirm_payment(array(
-            'referenceno' => $argv[3] ?? false,
+            'referenceno' => $var1 ?? false,
         ));
         print_data($data);
         // // echo "after\n";
