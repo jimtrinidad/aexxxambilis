@@ -56,6 +56,7 @@ class Account extends CI_Controller
         //     'expirydate'  => date('Y-m-d H:i:s', strtotime('+1 day')),
         //     'remarks'     => 'test commit'
         // ));
+        var_dump($argv);
         $data = $this->ecpay->eclink_confirm_payment(array(
             'referenceno' => $argv[3] ?? false,
         ));
